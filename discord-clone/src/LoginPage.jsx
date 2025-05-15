@@ -1,5 +1,7 @@
 import LoginPageBg from './assets/login-page-bg.svg'
 import FormContainer from './FormContainer'
+import Discordlogo from './assets/login-page-discord-logo.svg'
+
 export default function LoginPage() {
     let stylesLogin= {
         backgroundImage: `url(${LoginPageBg})`,
@@ -17,10 +19,17 @@ export default function LoginPage() {
         height: "416px",
         backgroundColor: "#36393F",
         borderRadius: "10px",
-
+    }
+    let logoStyle={
+        position: "absolute",
+        top: "50px",
+        left: "50px"
     }
     return (
         <div style={stylesLogin}>
+            <div style={logoStyle}>
+                <img src={Discordlogo} alt="Discord-logo" />
+            </div>
             <div style={styles}>
                <FormContainer/>
             </div>
