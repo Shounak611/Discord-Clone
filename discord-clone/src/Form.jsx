@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom"
 import UserInfo from "./UserInfo"
 import Button from "./Button"
 import LoginpageLinks from "./LoginpageLinks"
@@ -23,8 +24,9 @@ export default function Form(){
                 <LoginpageLinks text="Forgot your password?" linkAddress=""/>
                 <Button/>
                 <p style={{color:"#B9BBBE",display:"inline"}}>Need an account</p>
+                <Link to = "/register">
                 <LoginpageLinks style={{display:"inline"}} text="Register" linkAddress=""/>
-                
+                </Link>
             </form>
 
         </div>

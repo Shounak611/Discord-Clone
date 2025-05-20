@@ -8,7 +8,7 @@ export default function UserInfo({ text, inptype }) {
         backgroundColor: "#1E1F22",
         color: "white",
         border: "1px solid #1E1F22",
-        borderRadius: "4px",
+        borderRadius: "8px",
         padding: "10px 0px",
         fontSize: "16px",
         width: "100%",
@@ -18,7 +18,8 @@ export default function UserInfo({ text, inptype }) {
         height: "24px",
         color: "#FFFFFF",
         fontFamily: "gg sans, Noto Sans, sans-serif",
-
+        textTransform: "uppercase",
+        marginBottom: "5px",
     }
     return (
         <div style={styles}>
