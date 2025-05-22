@@ -1,0 +1,24 @@
+.containerStyles {
+    width: 416px;
+    height: 72px;
+    color: white;
+}
+
+.inpboxStyle {
+    background-Color: #1E1F22;
+    color: white;
+    border: 1px solid #1E1F22;
+    border-radius: 8px;
+    padding: 10px 0px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.labelingStyle {
+    width: 416px;
+    height: 24px;
+    color: #FFFFFF;
+    font-family: gg sans, Noto Sans, sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}

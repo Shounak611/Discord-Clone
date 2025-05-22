@@ -1,5 +1,5 @@
 import QrCode from "./QrCode"
-import LoginpageLinks from "./LoginpageLinks"
+import LoginpageLinks from "./PageLinks"
 
 export default function QrContainer(){
     let containerStyle={

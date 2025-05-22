@@ -1,23 +1,13 @@
 import UserInfo from "./UserInfo"
+import './css/RegisterForm.css'
 
 export default function RegisterForm(){
-    let headingStyle = {
-        width: "416px",
-        height: "30px",
-        color: "white",
-        fontFamily: "gg sans, Noto Sans, sans-serif",
-        textAlign: "center",
-    }
-    let formStyle ={
-        width: "416px",
-        height: "620px",
-    }
     return (
         <>
-        <div style={headingStyle}>
+        <div className='headingStyle'>
          <h2>Create an account</h2>
         </div>
-        <div style={formStyle}>
+        <div className='formStyle'>
           <UserInfo text="Email" inptype="email"/>
           <UserInfo text="display name" inptype="text"/>
           <UserInfo text="username" inptype="text"/>

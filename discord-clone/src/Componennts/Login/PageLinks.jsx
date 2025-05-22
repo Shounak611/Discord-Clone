@@ -1,6 +1,6 @@
-export default function LoginpageLinks({text,linkAddress}) {
+export default function PageLinks({text,linkAddress}) {
     let styles = {
-        color: "#5865F2",
+        color: "rgb(168, 175, 245)",
         fontSize: "14px",
         textDecoration: "none",
         display: "inline",

@@ -1,0 +1,12 @@
+.headingStyle {
+    width: 416px;
+    height: 30px;
+    color: white;
+    font-family: gg sans, Noto Sans, sans-serif;
+    text-align: center;
+}
+
+.formStyle {
+    width: 416px;
+    height: 620px;
+}

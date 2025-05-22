@@ -1,4 +1,4 @@
-import Qrlogo from './assets/login-page-qr-logo.png'
+import Qrlogo from '../../assets/login-page-qr-logo.png'
 
 export default function QrCode(){
     let qrStyle={

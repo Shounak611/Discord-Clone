@@ -1,0 +1,24 @@
+.stylesLogin {
+    background-image: url('../../assets/login-page-bg.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stylesFormContainer {
+    width: 784px;
+    height: 416px;
+    background-color: #36393F;
+    border-radius: 10px;
+}
+
+.logoStyle {
+    position: absolute;
+    top: 50px;
+    left: "50px";
+}

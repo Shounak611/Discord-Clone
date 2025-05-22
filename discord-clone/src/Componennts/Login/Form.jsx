@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom"
 import UserInfo from "./UserInfo"
 import Button from "./Button"
-import LoginpageLinks from "./LoginpageLinks"
+import LoginpageLinks from "./PageLinks"
 
 export default function Form(){
     let formStyles={
@@ -23,7 +23,7 @@ export default function Form(){
                 <UserInfo text ="PASSWORD" inptype="password" />
                 <LoginpageLinks text="Forgot your password?" linkAddress=""/>
                 <Button/>
-                <p style={{color:"#B9BBBE",display:"inline"}}>Need an account</p>
+                <p style={{color:"#B9BBBE",display:"inline"}}>Need an account</p>&nbsp;&nbsp;&nbsp;
                 <Link to = "/register">
                 <LoginpageLinks style={{display:"inline"}} text="Register" linkAddress=""/>
                 </Link>
