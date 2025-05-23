@@ -1,0 +1,17 @@
+ .formStyle {
+     width: 410px;
+     height: 350px !important;
+     padding: 20px;
+ }
+
+ .containerStyle {
+     display: flex;
+     flex-direction: row;
+     justify-content: space-around;
+ }
+
+ .qrStyle {
+     height: 350px;
+     width: 240px;
+     padding: 20px;
+ }

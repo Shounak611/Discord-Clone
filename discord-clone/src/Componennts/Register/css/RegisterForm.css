@@ -1,12 +1,41 @@
+.containerStyle{
+    color: white;
+    font-family: gg sans, Noto Sans, sans-serif;
+    display: flex;
+    flex-direction: column !important;
+    justify-content: space-evenly;
+    align-items: center;
+    
+}
 .headingStyle {
     width: 416px;
     height: 30px;
-    color: white;
-    font-family: gg sans, Noto Sans, sans-serif;
     text-align: center;
 }
 
 .formStyle {
     width: 416px;
     height: 620px;
+}
+
+h6{
+    color: grey;
+    padding: 3px 0;
+    display: inline;
+}
+
+.checkBox{
+    width: 24px;
+    height: 24px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.caution{
+    display: flex;
+    align-items: center;
+}
+
+.lastLink{
+    margin-top: 20px;
 }

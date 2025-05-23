@@ -1,0 +1,19 @@
+ .containerStyle {
+     display: flex;
+     flex-direction: column !important;
+     justify-content: space-around;
+     align-items: center;
+     font-family: gg sans, Noto Sans, sans-serif;
+     padding-top: 10px;
+ }
+
+ .desStyle {
+     width: 240px;
+     color: white;
+     text-align: center;
+ }
+
+ .imgStyle {
+     width: 176px;
+     height: 176px;
+ }

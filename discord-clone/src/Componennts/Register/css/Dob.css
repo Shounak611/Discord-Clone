@@ -1,0 +1,15 @@
+.eachSelect{
+    background-color: #1E1F22;
+    color: white;
+    width: 130px;
+    height: 40px;
+    border-radius: 8px;
+    padding: 10px 0px;
+    border-color: #1E1F22;
+    text-align: center;
+}
+
+.selectContainer{
+    display: flex;
+    justify-content: space-between;
+}

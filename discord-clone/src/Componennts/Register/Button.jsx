@@ -1,8 +1,8 @@
-export default function Button() {
-    
+import './css/Button.css'
+export default function Button({text}) {
     return (
         <>
-            <button className="btnStyle" type="submit">Log In</button>
+            <button className="btnStyle" type="submit">{text}</button>
         </>
     )
 }

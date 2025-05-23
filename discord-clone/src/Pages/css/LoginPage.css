@@ -12,7 +12,7 @@
 
 .stylesFormContainer {
     width: 784px;
-    height: 416px;
+    height: 416px !important;
     background-color: #36393F;
     border-radius: 10px;
 }

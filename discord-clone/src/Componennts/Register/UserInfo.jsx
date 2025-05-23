@@ -3,7 +3,7 @@ import './css/UserInfo.css'
 export default function UserInfo({ text, inptype }) {
     return (
         <div className='containerStyles'>
-            <label className='labelingStyle'>{text}</label><span style={{ color: "#F04747" }}>*</span> <br />
+            <label htmlFor={inptype} className='labelingStyle'>{text}</label><span style={{ color: "#F04747" }}>*</span> <br />
             <input type={inptype} className='inpboxStyle' required />
         </div>
     )
