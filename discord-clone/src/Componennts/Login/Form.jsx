@@ -19,7 +19,7 @@ export default function Form(){
                 <Button text="Log in"/>
                 <p style={{color:"#B9BBBE",display:"inline"}}>Need an account</p>&nbsp;&nbsp;&nbsp;
                 <Link to = "/register">
-                <LoginpageLinks style={{display:"inline"}} text="Register" linkAddress=""/>
+                <LoginpageLinks style={{display:"inline"}} text="Register" linkAddress="#"/>
                 </Link>
             </form>
 

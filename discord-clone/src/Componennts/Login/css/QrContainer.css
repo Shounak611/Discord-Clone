@@ -1,6 +1,6 @@
- .containerStyle {
+ .QrcontainerStyle {
      display: flex;
-     flex-direction: column !important;
+     flex-direction: column ;
      justify-content: space-around;
      align-items: center;
      font-family: gg sans, Noto Sans, sans-serif;

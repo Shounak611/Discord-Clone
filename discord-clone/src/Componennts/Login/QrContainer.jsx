@@ -5,7 +5,7 @@ import Qrlogo from "./Qrlogo"
 export default function QrContainer() {
 
     return (
-        <div className='containerStyle'style={{display:"flex",flexDirection:"column"}}>
+        <div className='QrcontainerStyle'style={{display:"flex",flexDirection:"column"}}>
             <div className='imgStyle'>
                 <Qrlogo/>
             </div>

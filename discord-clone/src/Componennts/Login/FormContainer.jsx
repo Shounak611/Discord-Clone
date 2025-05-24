@@ -4,7 +4,7 @@ import './css/FormContainer.css'
 
 export default function FormContainer(){
     return (
-        <div className='containerStyle'>
+        <div className='formcontainerStyle'>
             <div className='formStyle'>
                <Form/>
             </div>

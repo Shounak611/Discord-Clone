@@ -1,7 +1,8 @@
-.containerStyles {
+.inpcontainerStyles {
     width: 416px;
     height: 72px;
     color: white;
+    margin: 1px;
 }
 
 .inpboxStyle {
