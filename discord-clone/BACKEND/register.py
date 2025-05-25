@@ -1,10 +1,10 @@
 from datetime import date
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel,EmailStr
 from database import SessionLocal
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
+# from passlib.context import CryptContext
 from starlette import status
 from models import Users
 
@@ -21,7 +21,7 @@ def get_db():
         db.close()
 
 db_dependency = Annotated[Session,Depends(get_db)]
-bcrypt_context = CryptContext(schemes=["bcrypt"],deprecated = "auto")
+# bcrypt_context = CryptContext(schemes=["bcrypt"],deprecated = "auto")
 
 class Register_request(BaseModel):
     email : EmailStr
@@ -36,11 +36,14 @@ async def read_all(db: db_dependency):
 
 @router.post("/registration",status_code=status.HTTP_201_CREATED)
 async def registration(db : db_dependency,reg_req : Register_request):
+    existing_user = db.query(Users).filter(Users.email == reg_req.email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
     new_user = Users(
         email = reg_req.email,
         display_name = reg_req.display_name,
         username = reg_req.username,
-        hashed_password = bcrypt_context.hash(reg_req.password),
+        hashed_password = reg_req.password,
         dob = reg_req.dob,
     )
     db.add(new_user)

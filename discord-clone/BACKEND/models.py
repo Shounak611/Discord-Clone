@@ -10,3 +10,4 @@ class Users(Base):
     username = Column(String)
     hashed_password = Column(String)
     dob = Column(Date)
+
