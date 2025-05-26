@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 from starlette import status
 from models import Users
+from passlib.context import CryptContext
 
 
 router = APIRouter(
@@ -20,21 +21,22 @@ def get_db():
         db.close()
 
 db_dependency = Annotated[Session,Depends(get_db)]
+bcrypt_context = CryptContext(schemes=["bcrypt"],deprecated = "auto")
 
-class login_request(BaseModel):
+class LoginRequest(BaseModel):
     email : EmailStr
     password : str
 
 def check_user(request,model):
-    if model.hashed_password != request.password:
+    if not bcrypt_context.verify(request.password,model.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="INVALID USER")
     return True
 
 @router.post("/",status_code=status.HTTP_200_OK)
-async def get_page(db: db_dependency,req:login_request):
+async def get_page(db: db_dependency,req:LoginRequest):
     user_model = db.query(Users).filter(Users.email == req.email).first()
     if user_model is None:
         raise HTTPException(status_code=404,detail="USER NOT FOUND")
     res=check_user(req,user_model)
     if res:
-        return {"WELCOME USER"}
+        return {"message":"WELCOME USER"}
