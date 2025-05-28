@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import UserInfo from "./UserInfo"
 import Button from "./Button"
 import LoginpageLinks from "./PageLinks"
@@ -10,6 +11,7 @@ import axios from "axios";
 export default function Form() {
     const [mail, setMail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,8 +19,9 @@ export default function Form() {
             const res = await axios.post("http://localhost:8000/login", {
                 email:mail,
                 password:password,
-            });
+            })
             alert("Login successful!");
+            navigate("/home");
         } catch (err) {
             alert("Login failed: " + err.response?.data?.detail || "Error");
         }

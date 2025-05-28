@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserInfo from "./UserInfo";
 import './css/RegisterForm.css';
@@ -12,7 +13,7 @@ export default function RegisterForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [dob, setDob] = useState({ day: "", month: "", year: "" });
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dobString = `${dob.year}-${dob.month.toString().padStart(2, "0")}-${dob.day.toString().padStart(2, "0")}`;
@@ -25,6 +26,7 @@ export default function RegisterForm() {
         dob:dobString,
       });
       alert("Registration successful!");
+      navigate("/login");
     } catch (err) {
       alert("Registration failed: " + (err.response?.data?.detail || err.message));
     }

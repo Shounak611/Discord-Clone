@@ -1,0 +1,21 @@
+.styleHome {
+    margin: 0;
+    padding: 0;
+}
+
+.homeContainer{
+    display: flex;
+}
+
+.leftBox{
+    width: 376px;
+    background-color: black;
+    overflow: hidden;
+    height: calc(100vh - 32px);
+}
+
+.rightBox{
+    width: calc(100% - 376px) ;
+    background-color: rgb(14, 13, 13);
+    height: calc(100vh - 32px);
+}
