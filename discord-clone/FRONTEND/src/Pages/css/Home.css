@@ -22,3 +22,9 @@
     background-color: rgb(14, 13, 13);
     height: calc(100vh - 32px);
 }
+
+.displayName{
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}

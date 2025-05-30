@@ -4,7 +4,6 @@ import './css/LeftFriends.css'
 
 export default function LeftFriends() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResult, setSearchResult] = useState(null);
     const [error, setError] = useState(null);
 
     const handleSearch = async () => {
@@ -14,12 +13,9 @@ export default function LeftFriends() {
             if (!response.ok) throw new Error('Friend not found');
             const data = await response.json();
             alert(`User found: ${data.username} (${data.display_name})`);
-            setSearchResult(null);
-            setError(null);
         } catch (err) {
             alert(`Error:${err.message}`)
             setError(err.message);
-            setSearchResult(null);
         }
     };
 

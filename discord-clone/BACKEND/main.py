@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-import models,register,login , searchFriend
+import models,register,login , searchFriend,getUser
 from database import engine
 from starlette.middleware.cors import CORSMiddleware
 
@@ -18,3 +18,4 @@ models.Base.metadata.create_all(bind=engine)
 app.include_router(register.router)
 app.include_router(login.router)
 app.include_router(searchFriend.router)
+app.include_router(getUser.router)

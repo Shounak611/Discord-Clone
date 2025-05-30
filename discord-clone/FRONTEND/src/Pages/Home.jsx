@@ -3,6 +3,7 @@ import TopNav from "../Componennts/Home/TopNav"
 import LeftNav from "../Componennts/Home/LeftNav"
 import LeftMid from "../Componennts/Home/LeftMid"
 import RightBox from "../Componennts/Home/RightBox"
+import Displayname from "../Componennts/Home/Displayname"
 import './css/Home.css'
 
 
@@ -21,6 +22,7 @@ export default function Home(){
                     <RightBox selected={selectedOption}/>           
                 </div>
             </div>
+            <div className="displayName"><Displayname/></div>
         </div>
     )
 }

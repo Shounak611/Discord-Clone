@@ -21,9 +21,11 @@ export default function Form() {
                 password:password,
             })
             alert("Login successful!");
+            localStorage.setItem("email",mail);
             navigate("/home");
         } catch (err) {
-            alert("Login failed: " + err.response?.data?.detail || "Error");
+            alert("Login failed!!" );
+            console.log(err);
         }
     };
 

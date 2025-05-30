@@ -1,13 +1,13 @@
+import cartoon from '../../assets/inpCartoon.svg'
 import LoginpageLinks from "./PageLinks"
 import './css/QrContainer.css'
-import Qrlogo from "./Qrlogo"
 
 export default function QrContainer() {
 
     return (
         <div className='QrcontainerStyle'style={{display:"flex",flexDirection:"column"}}>
             <div className='imgStyle'>
-                <Qrlogo/>
+                <img className='loginCartoon' src={cartoon} alt="cartoon" />
             </div>
             <div className='desStyle'>
                 <h3>Log in with QR Code</h3>
