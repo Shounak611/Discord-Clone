@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel,EmailStr
+from pydantic import BaseModel,EmailStr, Field
 from database import SessionLocal
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
@@ -27,7 +27,7 @@ class Register_request(BaseModel):
     email : EmailStr
     display_name : str
     username : str
-    password : str
+    password : str =Field(min_length=6)
     dob : date
 
 @router.get("/",status_code=status.HTTP_200_OK)

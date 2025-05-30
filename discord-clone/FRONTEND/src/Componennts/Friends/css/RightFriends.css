@@ -1,0 +1,11 @@
+.rightFriendsC{
+    width: 320px;
+    padding: auto;
+    height: calc(100vh -82px) ;
+    /* border-left: 1px solid rgb(61, 59, 59); */
+}
+
+.paraRightFriends{
+    text-align: center;
+    
+}

@@ -1,6 +1,8 @@
 .styleHome {
     margin: 0;
     padding: 0;
+    font-family: 'Inter', 'Poppins', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    color: white;
 }
 
 .homeContainer{
@@ -9,9 +11,10 @@
 
 .leftBox{
     width: 376px;
-    background-color: black;
+    background-color: rgb(10, 4, 4);
     overflow: hidden;
     height: calc(100vh - 32px);
+    display: flex;
 }
 
 .rightBox{

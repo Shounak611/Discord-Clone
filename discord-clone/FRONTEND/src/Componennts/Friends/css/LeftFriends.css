@@ -1,0 +1,60 @@
+.leftFriendsC{
+    width: calc(100% - 421px);
+    height: calc(100vh -82px);
+    /* border-right: 1px solid rgb(61, 59, 59); */
+}
+
+.leftFriendsUpper{
+    height: 142px;
+    width: 100%;
+    border-bottom: 1px solid rgb(61, 59, 59);
+    padding: 20px 30px;
+}
+
+
+.inputWithButton {
+  display: flex;
+  border: none;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #1e1f22;
+  width: 100%;
+  height: 52px;
+  align-items: center;
+}
+
+.inputWithButton:focus-within {
+  border: 1px solid #5865f2;
+}
+
+.inputWithButton input {
+  border: none;
+  outline: none;
+  padding: 10px;
+  background-color: transparent;
+  color: white;
+  font-size: 14px;
+  flex: 1;
+}
+
+.inputWithButton button {
+  background-color: #5865f2;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  height: 32px;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.inputWithButton button:hover {
+  background-color: #4752c4;
+}
+
+.cartoonLeftFriends{
+    z-index: 4;
+    position: absolute;
+    left: 20px;
+}

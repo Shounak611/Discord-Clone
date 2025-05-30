@@ -1,0 +1,10 @@
+.friendsC{
+    height: 100%;
+}
+
+.friendsSubC{
+    display: flex;
+    justify-content: space-between;
+    height: calc(10vh - 82px);
+    width: 100%;
+}
