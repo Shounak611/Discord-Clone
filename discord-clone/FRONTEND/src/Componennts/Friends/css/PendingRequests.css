@@ -1,0 +1,46 @@
+.leftFriendsC{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+h3{
+    margin-left: 20px;
+}
+.friendRequestCard{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.friendRequestCardL{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.friendRequestCardR{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.friendRequestCardR button{
+    padding: 6px 12px;
+    background-color: #aee665;
+    border: none;
+    color: rgb(22, 2, 2);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#danger{
+    background-color: red;
+    color: white;
+}
+
+.iconsize{
+    width: 40px;
+    height: 40px;
+    margin-left: 20px;
+}

@@ -10,12 +10,10 @@ export default function Displayname(){
     const [displayName, setDisplayName] = useState("");
     const [username, setUsername] = useState("");
     const email = localStorage.getItem("email");
-    console.log(email);
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const res = await axios.get(`http://localhost:8000/get_user?email=${encodeURIComponent(email)}`);
-                console.log(res);
                 setUsername(res.data.username);
                 setDisplayName(res.data.display_name);
             } catch (error) {

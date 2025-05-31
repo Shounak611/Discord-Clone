@@ -1,0 +1,10 @@
+.logoutC{
+    height: 35px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    background-color: rgb(104, 106, 232);
+    padding: 0 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}

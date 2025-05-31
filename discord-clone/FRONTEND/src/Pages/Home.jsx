@@ -4,6 +4,7 @@ import LeftNav from "../Componennts/Home/LeftNav"
 import LeftMid from "../Componennts/Home/LeftMid"
 import RightBox from "../Componennts/Home/RightBox"
 import Displayname from "../Componennts/Home/Displayname"
+import Logout from "../Componennts/Home/Logout"
 import './css/Home.css'
 
 
@@ -23,6 +24,7 @@ export default function Home(){
                 </div>
             </div>
             <div className="displayName"><Displayname/></div>
+            <div className="logout"><Logout/></div>
         </div>
     )
 }

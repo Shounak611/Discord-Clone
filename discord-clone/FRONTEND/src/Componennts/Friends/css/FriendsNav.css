@@ -40,13 +40,19 @@
     display: flex;
     align-items: center;
     font-size: 15px;
-    background-color: rgb(29, 29, 29);
-    color: rgb(129, 129, 224);
+    background-color: rgb(104, 106, 232);
     padding: 0 15px;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.lnc2:active{
+    background-color: rgb(29, 29, 29);
+    color: rgb(129, 129, 224);
 }
 
 .dot{
     width: 30px;
     height: 30px;
 }
+

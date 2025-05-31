@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import cartoon from '../../assets/inpCartoon.svg'
 import './css/LeftFriends.css'
+import axios from 'axios';
 
 export default function LeftFriends() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -8,13 +9,21 @@ export default function LeftFriends() {
 
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
+        const senderEmail = localStorage.getItem("email");
+
         try {
-            const response = await fetch(`http://localhost:8000/search-friend?name=${encodeURIComponent(searchQuery)}`);
-            if (!response.ok) throw new Error('Friend not found');
-            const data = await response.json();
-            alert(`User found: ${data.username} (${data.display_name})`);
+            const response = await axios.get(`http://localhost:8000/search-friend?name=${encodeURIComponent(searchQuery)}`);
+            const data = response.data;
+
+            const sendReq = await axios.post('http://localhost:8000/friend/send-request', {
+                sender_email: senderEmail,
+                receiver_username: data.username,
+            });
+
+            alert("Friend request sent successfully!");
         } catch (err) {
-            alert(`Error:${err.message}`)
+            console.error(err);
+            alert(`Error: ${err.response?.data?.detail || err.message}`);
             setError(err.message);
         }
     };

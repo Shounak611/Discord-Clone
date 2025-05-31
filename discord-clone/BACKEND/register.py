@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel,EmailStr, Field
+from pydantic import BaseModel,EmailStr, Field, field_validator
 from database import SessionLocal
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
@@ -29,6 +29,16 @@ class Register_request(BaseModel):
     username : str
     password : str =Field(min_length=6)
     dob : date
+
+    @field_validator("password")
+    def validate_strong_password(cls, v):
+        import re
+        if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', v):
+            raise ValueError(
+                "Password must be at least 8 characters long and include at least one uppercase letter, "
+                "one lowercase letter, one digit, and one special character."
+            )
+        return v
 
 @router.get("/",status_code=status.HTTP_200_OK)
 async def read_all(db: db_dependency):

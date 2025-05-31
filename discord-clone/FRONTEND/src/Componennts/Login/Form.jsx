@@ -40,10 +40,8 @@ export default function Form() {
                 <UserInfo text="PASSWORD" value={password} inptype="password" onChange={setPassword} />
                 <LoginpageLinks text="Forgot your password?" linkAddress="#" />
                 <Button text="Log in"/>
-                <p style={{ color: "#B9BBBE", display: "inline" }}>Need an account</p>&nbsp;&nbsp;&nbsp;
-                <Link to="/register">
-                    <LoginpageLinks style={{ display: "inline" }} text="Register" linkAddress="#" />
-                </Link>
+                <p className="needAcc">Need an account</p>&nbsp;&nbsp;&nbsp;      
+                <LoginpageLinks text="Register" linkAddress="/register" />
             </form>
 
         </div>

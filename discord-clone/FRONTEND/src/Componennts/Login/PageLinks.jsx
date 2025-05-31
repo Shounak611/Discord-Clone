@@ -1,9 +1,10 @@
 import './css/PageLinks.css'
+import { Link } from 'react-router-dom';
 
-export default function PageLinks({text,linkAddress}) {
+export default function PageLinks({ text, linkAddress, style = {} }) {
     return (
-        <div style={{display:"inline"}} >
-            <a className='linkStyles' href={linkAddress}>{text}</a>
-        </div>
-    )
+        <Link className='linkStyles' to={linkAddress}>
+            {text}
+        </Link>
+    );
 }

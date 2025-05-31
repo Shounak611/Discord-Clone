@@ -1,16 +1,22 @@
+import { useState } from 'react';
 import FriendsNav from '../Friends/FriendsNav'
 import LeftFriends from '../Friends/LeftFriends'
 import RightFriends from '../Friends/RightFriends'
+import PendingRequests from '../Friends/PendingRequests'
+import SentRequests from '../Friends/SentRequests'
 import './css/Friends.css'
 
-export default function Friends(){
-    return(
+export default function Friends() {
+    const [tab, setTab] = useState('add');
 
+    return (
         <div className='friendsC'>
-            <FriendsNav/>
+            <FriendsNav setTab={setTab} />
             <div className='friendsSubC'>
-                <LeftFriends/>
-                <RightFriends/>
+                {tab === 'add' && <LeftFriends />}
+                {tab === 'sent' && <SentRequests />}
+                {tab === 'pending' && <PendingRequests />}
+                <RightFriends />
             </div>
         </div>
     )
