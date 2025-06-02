@@ -8,18 +8,18 @@ export default function LeftFriends() {
     const [error, setError] = useState(null);
 
     const handleSearch = async () => {
-        if (!searchQuery.trim()) return;
+        if (!searchQuery.trim()) {
+            alert("You must fill the username first")
+            return;
+        }
         const senderEmail = localStorage.getItem("email");
 
         try {
-            const response = await axios.get(`http://localhost:8000/search-friend?name=${encodeURIComponent(searchQuery)}`);
-            const data = response.data;
 
             const sendReq = await axios.post('http://localhost:8000/friend/send-request', {
                 sender_email: senderEmail,
-                receiver_username: data.username,
+                receiver_username: searchQuery.trim(),
             });
-
             alert("Friend request sent successfully!");
         } catch (err) {
             console.error(err);

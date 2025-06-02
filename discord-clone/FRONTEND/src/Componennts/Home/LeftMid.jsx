@@ -3,9 +3,12 @@ import nitro from '../../assets/nitroIcon.png'
 import shop from '../../assets/shopIcon.png'
 import plus from '../../assets/plusIcon.png'
 import './css/LeftMid.css'
+import { useState } from 'react'
 
 
 export default function LeftMid({onSelectedOption}) {
+    const [friends,setFriends] = useState([])
+
     return (
         <div className="LeftMidC">
             <div className='leftMidheader'>
@@ -24,6 +27,7 @@ export default function LeftMid({onSelectedOption}) {
             </div>
             <div className="dm">
                 <div className="dmheader"><p>Direct Messages</p><img className='leftMidIcons' src={plus} alt="plusIcon" /></div>
+
             </div>
         </div>
     )

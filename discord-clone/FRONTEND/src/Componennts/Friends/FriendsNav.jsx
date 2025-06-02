@@ -14,7 +14,6 @@ export default function FriendsNav({ currentTab, setTab }) {
                 <img className='dot' src={dot} alt="dotIcon" />
                 <div className='lnc2' onClick={() => setTab('add')}><p>Add Friend</p></div>
                 <div className='lnc2' onClick={() => setTab('pending')}><p>Pending Request</p></div>
-                {/* <div className='lnc2' onClick={() => setTab('sent')}><p>Request Sent</p></div> */}
             </div>
             <div className='rightFriendsNav'>
                 <img className='friendsNavIcons' src={newchat} alt="newchatIcon" />

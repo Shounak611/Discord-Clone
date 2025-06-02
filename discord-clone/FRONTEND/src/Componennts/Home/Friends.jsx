@@ -3,7 +3,6 @@ import FriendsNav from '../Friends/FriendsNav'
 import LeftFriends from '../Friends/LeftFriends'
 import RightFriends from '../Friends/RightFriends'
 import PendingRequests from '../Friends/PendingRequests'
-import SentRequests from '../Friends/SentRequests'
 import './css/Friends.css'
 
 export default function Friends() {
@@ -14,7 +13,6 @@ export default function Friends() {
             <FriendsNav setTab={setTab} />
             <div className='friendsSubC'>
                 {tab === 'add' && <LeftFriends />}
-                {tab === 'sent' && <SentRequests />}
                 {tab === 'pending' && <PendingRequests />}
                 <RightFriends />
             </div>

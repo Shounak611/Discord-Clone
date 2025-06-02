@@ -16,7 +16,7 @@ class FriendRequest(Base):
     __tablename__ = "friendrequest"
 
     id = Column(Integer,primary_key=True,index=True)
-    sender_id = Column(Integer)
-    reciever_id = Column(Integer)
+    sender_id = Column(Integer, nullable=False)
+    receiver_id = Column(Integer, nullable=False)
     status = Column(Boolean,default=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))

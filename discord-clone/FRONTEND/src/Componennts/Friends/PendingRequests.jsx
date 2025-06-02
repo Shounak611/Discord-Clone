@@ -19,7 +19,7 @@ export default function PendingRequests() {
 
     const handleAccept = async (senderEmail) => {
         try {
-            await axios.post('http://localhost:8000/friend/accept-request', {
+            await axios.put('http://localhost:8000/friend/accept-request', {
                 sender_email: senderEmail,
                 receiver_email: currentUserEmail
             });
@@ -33,7 +33,7 @@ export default function PendingRequests() {
 
     const handleReject = async (senderEmail) => {
         try {
-            await axios.post('http://localhost:8000/friend/reject-request', {
+            await axios.delete('http://localhost:8000/friend/reject-request', {
                 sender_email: senderEmail,
                 receiver_email: currentUserEmail
             });

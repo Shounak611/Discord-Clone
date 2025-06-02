@@ -27,17 +27,22 @@ class Register_request(BaseModel):
     email : EmailStr
     display_name : str
     username : str
-    password : str =Field(min_length=6)
+    password : str
     dob : date
 
     @field_validator("password")
     def validate_strong_password(cls, v):
         import re
-        if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', v):
-            raise ValueError(
-                "Password must be at least 8 characters long and include at least one uppercase letter, "
-                "one lowercase letter, one digit, and one special character."
-            )
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters long.")
+        if not re.search(r'[A-Z]', v):
+            raise ValueError("Password must include at least one uppercase letter.")
+        if not re.search(r'[a-z]', v):
+            raise ValueError("Password must include at least one lowercase letter.")
+        if not re.search(r'\d', v):
+            raise ValueError("Password must include at least one digit.")
+        if not re.search(r'[@$!%*?&]', v):
+            raise ValueError("Password must include at least one special character (@$!%*?&).")
         return v
 
 @router.get("/",status_code=status.HTTP_200_OK)
@@ -46,13 +51,15 @@ async def read_all(db: db_dependency):
 
 @router.post("/registration",status_code=status.HTTP_201_CREATED)
 async def registration(db : db_dependency,reg_req : Register_request):
-    existing_user = db.query(Users).filter(Users.email == reg_req.email).first()
+    existing_user = db.query(Users).filter(Users.email == reg_req.email.strip()).first()
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    if not reg_req.display_name.strip() or not reg_req.username.strip():
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="Invalid username or display name")
     new_user = Users(
-        email = reg_req.email,
-        display_name = reg_req.display_name,
-        username = reg_req.username,
+        email = reg_req.email.strip(),
+        display_name = reg_req.display_name.strip(),
+        username = reg_req.username.strip(),
         hashed_password = bcrypt_context.hash(reg_req.password),
         dob = reg_req.dob,
     )

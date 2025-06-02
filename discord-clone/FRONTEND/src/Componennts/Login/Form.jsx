@@ -20,7 +20,6 @@ export default function Form() {
                 email:mail,
                 password:password,
             })
-            alert("Login successful!");
             localStorage.setItem("email",mail);
             navigate("/home");
         } catch (err) {

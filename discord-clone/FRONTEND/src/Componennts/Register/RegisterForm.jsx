@@ -19,17 +19,28 @@ export default function RegisterForm() {
     const dobString = `${dob.year}-${dob.month.toString().padStart(2, "0")}-${dob.day.toString().padStart(2, "0")}`;
     try {
       const res = await axios.post("http://localhost:8000/register/registration", {
-        email:email,
+        email: email,
         display_name: displayName,
-        username:username,
-        password:password,
-        dob:dobString,
+        username: username,
+        password: password,
+        dob: dobString,
       });
       alert("Registration successful!");
-      navigate("/login");
+      localStorage.setItem("email",email);
+      navigate("/home");
     } catch (err) {
-      alert("Registration failed: " + (err.response?.data?.detail || err.message));
+      console.log(err);
+      if (err.response?.data?.detail) {
+        const detail = err.response.data.detail;
+        const message = Array.isArray(detail)
+          ? detail.map(e => e.msg).join("\n")
+          : detail;
+        alert("Registration failed:\n" + message);
+      } else {
+        alert("Registration failed: " + err.message);
+      }
     }
+
   };
 
   return (
