@@ -3,11 +3,26 @@ import nitro from '../../assets/nitroIcon.png'
 import shop from '../../assets/shopIcon.png'
 import plus from '../../assets/plusIcon.png'
 import './css/LeftMid.css'
-import { useState } from 'react'
+import discord from '../../assets/displayDiscordlogo.png'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
+export default function LeftMid({ onSelectedOption }) {
+    const [friends, setFriends] = useState([]);
 
-export default function LeftMid({onSelectedOption}) {
-    const [friends,setFriends] = useState([])
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const email = localStorage.getItem("email"); 
+                const response = await axios.get(`http://localhost:8000/friend/get-friends?email=${email}`);
+                setFriends(response.data);
+            } catch (error) {
+                console.error("Error fetching friends:", error);
+            }
+        };
+
+        fetchFriends();
+    }, []);
 
     return (
         <div className="LeftMidC">
@@ -26,8 +41,22 @@ export default function LeftMid({onSelectedOption}) {
                 </div>
             </div>
             <div className="dm">
-                <div className="dmheader"><p>Direct Messages</p><img className='leftMidIcons' src={plus} alt="plusIcon" /></div>
-
+                <div className="dmheader">
+                    <p>Direct Messages</p>
+                    <img className='leftMidIcons' src={plus} alt="plusIcon" />
+                </div>
+                <div className="dmList">
+                    {friends.length === 0 ? (
+                        <p className="noDM">No friends to show</p>
+                    ) : (
+                        friends.map((friend, index) => (
+                            <div key={index} className="dmFriend">
+                                <img className='iconsize' src={discord} alt="discordLogo" />
+                                <p>{friend}</p>
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     )

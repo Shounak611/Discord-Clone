@@ -69,3 +69,28 @@
     align-items: center;
     margin: 0px 15px;
 }
+
+.dmlist{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.noDM{
+    margin-left: 30px;
+}
+
+.iconsize{
+    width: 40px;
+    height: 40px;
+    margin-left: 20px;
+}
+
+.dmFriend{
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px;
+    align-items: center;
+}

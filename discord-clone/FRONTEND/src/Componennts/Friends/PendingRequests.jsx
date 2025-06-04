@@ -23,8 +23,8 @@ export default function PendingRequests() {
                 sender_email: senderEmail,
                 receiver_email: currentUserEmail
             });
-            alert("Friend request accepted!");
             fetchPendingRequests();
+            window.location.reload()
         } catch (err) {
             console.error(err);
             alert("Failed to accept request.");
@@ -37,7 +37,6 @@ export default function PendingRequests() {
                 sender_email: senderEmail,
                 receiver_email: currentUserEmail
             });
-            alert("Friend request rejected.");
             fetchPendingRequests(); 
         } catch (err) {
             console.error(err);
