@@ -8,14 +8,13 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default function LeftMid({ onSelectedOption }) {
-    const [friends, setFriends] = useState([]);
-
+    const [friends,setfriends]=useState([]);
     useEffect(() => {
         const fetchFriends = async () => {
             try {
                 const email = localStorage.getItem("email"); 
                 const response = await axios.get(`http://localhost:8000/friend/get-friends?email=${email}`);
-                setFriends(response.data);
+                setfriends(response.data);
             } catch (error) {
                 console.error("Error fetching friends:", error);
             }
@@ -50,7 +49,10 @@ export default function LeftMid({ onSelectedOption }) {
                         <p className="noDM">No friends to show</p>
                     ) : (
                         friends.map((friend, index) => (
-                            <div key={index} className="dmFriend">
+                            <div 
+                            key={index} 
+                            className="dmFriend" 
+                            onClick={() => onSelectedOption(`Chat:${friend}`)}>
                                 <img className='iconsize' src={discord} alt="discordLogo" />
                                 <p>{friend}</p>
                             </div>

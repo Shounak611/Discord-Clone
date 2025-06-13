@@ -93,4 +93,5 @@
     justify-content: flex-start;
     gap: 30px;
     align-items: center;
+    cursor: pointer;
 }

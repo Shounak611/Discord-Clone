@@ -9,8 +9,7 @@ import './css/Home.css'
 
 
 export default function Home(){
-    const [selectedOption, setSelectedOption] = useState('chat')
-    const [selectedFriend,setselectedFriend] = useState(null);
+    const [selectedOption, setSelectedOption] = useState('Chat');
     
     return (
         <div className="styleHome">

@@ -6,12 +6,12 @@ import pin from '../../assets/pin.png'
 import addfriend from '../../assets/userAddChat.png'
 import user from '../../assets/userChat.png'
 
-export default function ChatNav(){
+export default function ChatNav({frndName}){
     return(
         <div className='chatNavC'>
             <div className='chatNavL'>
                 <img className='iconsizeD' src={discord} alt="discordLogo" />
-                <p>friend_name</p>
+                <p>{frndName}</p>
             </div>
             <div className='chatNavR'>
                 <img className='iconsize' src={call} alt="call" />
