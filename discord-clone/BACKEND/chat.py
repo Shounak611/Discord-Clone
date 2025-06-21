@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from starlette import status
-from models import Message
+from models import Messages,Users
 from sqlalchemy import or_
 from datetime import datetime
 
@@ -23,32 +23,39 @@ def get_db():
 db_dependency = Annotated[Session,Depends(get_db)]
 
 class MessageCreate(BaseModel):
-    sender_id: int
-    receiver_id: int
-    content: str
+    sender_email : str
+    receiver_username : str
+    content : str
 
-class MessageOut(BaseModel):
-    id: int
-    sender_id: int
-    receiver_id: int
-    content: str
-    timestamp: datetime
-
-    class Config:
-        orm_mode = True
-
-@router.post("/send", response_model=MessageOut)
-def send_message(msg: MessageCreate, db: Session = Depends(get_db)):
-    new_msg = Message(**msg.model_dump())
+@router.post("/send",status_code=status.HTTP_201_CREATED)
+def send_message(msg: MessageCreate, db: db_dependency):
+    sender = db.query(Users).filter(Users.email == msg.sender_email).first()
+    if sender is None:
+        raise HTTPException(status_code=404,detail="Sender not found")
+    receiver = db.query(Users).filter(Users.username == msg.receiver_username).first()
+    if receiver is None:
+        raise HTTPException(status_code=404,detail="Receiver not found")
+    new_msg = Messages(
+        sender_id = sender.id,
+        receiver_id = receiver.id,
+        content = msg.content
+    )
     db.add(new_msg)
     db.commit()
-    db.refresh(new_msg)
-    return new_msg
+    return {"message":"Successfully send"}
 
-@router.get("/chat/{user1_id}/{user2_id}", response_model=list[MessageOut])
-def get_conversation(user1_id: int, user2_id: int, db: Session = Depends(get_db)):
-    messages = db.query(Message).filter(
-        ((Message.sender_id == user1_id) & (Message.receiver_id == user2_id)) |
-        ((Message.sender_id == user2_id) & (Message.receiver_id == user1_id))
-    ).order_by(Message.timestamp).all()
+
+@router.get("/get_msgs/{username}/{email}",status_code=status.HTTP_200_OK)
+def get_conversation(username: str, email: str, db: db_dependency):
+    sender = db.query(Users).filter(Users.email == email).first()
+    if sender is None:
+        raise HTTPException(status_code=404,detail="Sender not found")
+    receiver = db.query(Users).filter(Users.username == username).first()
+    if receiver is None:
+        raise HTTPException(status_code=404,detail="Receiver not found")
+    messages=[]
+    messages = db.query(Messages).filter(
+        ((Messages.sender_id == sender.id) & (Messages.receiver_id == receiver.id)) |
+        ((Messages.sender_id == receiver.id) & (Messages.receiver_id == sender.id))
+    ).order_by(Messages.timestamp).all()
     return messages

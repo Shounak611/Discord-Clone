@@ -22,13 +22,11 @@ class FriendRequest(Base):
     status = Column(Boolean,default=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-class Message(Base):
-    __tablename__ = 'messages'
-    id = Column(Integer, primary_key=True)
-    sender_id = Column(Integer, ForeignKey("users.id"))
-    receiver_id = Column(Integer, ForeignKey("users.id"))
-    content = Column(Text)
-    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+class Messages(Base):
+    __tablename__ = "messages"
 
-    sender = relationship("Users", foreign_keys=[sender_id])
-    receiver = relationship("Users", foreign_keys=[receiver_id])
+    id = Column(Integer,index=True,primary_key=True)
+    sender_id = Column(Integer,nullable=False)
+    receiver_id = Column(Integer,nullable=False)
+    content = Column(String)
+    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
