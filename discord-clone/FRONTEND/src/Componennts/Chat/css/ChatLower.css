@@ -1,13 +1,16 @@
 .ChatLowerC {
+  flex: 1;
   display: flex;
   height: 100%;
 }
 
 .ChatLeft {
-  flex:1;
+  height: calc(100vh - 102px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #210b0b;
   padding: 10px;
-  overflow-y: auto;
-  background: #303030;
 }
 
 .ChatRight {
@@ -19,53 +22,106 @@
   border-left: 1px solid rgb(61, 59, 59);
 }
 
-.my-msg {
-  max-width: 75%;
-  padding: 0px 16px;
-  border-radius: 16px;
-  position: relative;
-  line-height: 1.4;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  word-wrap: break-word;
-  align-self: flex-end;
-  background: #f1f0f0;
-  color: #333;
-}
-
-.their-msg {
-  max-width: 75%;
-  padding: 0px 16px;
-  border-radius: 16px;
-  position: relative;
-  line-height: 1.4;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  word-wrap: break-word;
-  align-self: flex-start;
-  background: #f1f0f0;
-  color: #333;
-}
-.messagesArea{
+.messagesArea {
+  margin: 5px 0;
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-.messageBubble{
-  display: flex;
-  gap: 25px;
-}
-.messageBubble p{
-  text-align: left;
-  padding: 0px;
-  margin: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #7289da #2c2f33;
 }
 
-.messageBubble .timestamp{
-  text-align: right;
-  font-size: 10px;
-  padding: 0px;
+.messagesArea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messagesArea::-webkit-scrollbar-track {
+  background: #2c2f33;
+  border-radius: 4px;
+}
+
+.messagesArea::-webkit-scrollbar-thumb {
+  background-color: #7289da;
+  border-radius: 4px;
+}
+
+.messagesArea::-webkit-scrollbar-thumb:hover {
+  background: #99aab5;
+}
+
+.inputArea {
   display: flex;
-  flex-direction: column;
-  justify-content: end;
+  padding-top: 10px;
+  gap: 10px;
+}
+
+.inputArea input {
+  flex: 1;
+  padding: 8px;
+  color: white;
+  background-color: #1e1f22;
+  border: none;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.inputArea button {
+  padding: 8px 16px;
+  background-color: #5865F2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 40px;
+  cursor: pointer;
+}
+
+.messageBubble {
+  display: flex;
+  gap: 10px;
+  margin: 0 20px;
+}
+
+.my-msg,
+.their-msg {
+  max-width: 75%;
+  padding: 0 16px;
+  border-radius: 16px;
+  position: relative;
+  line-height: 1.4;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+  background: #f1f0f0;
+  color: #333;
+}
+
+.my-msg {
+  align-self: flex-end;
+  background: #d1ffd6;
+}
+
+.their-msg {
+  align-self: flex-start;
+  background: #f1f0f0;
+}
+
+.messageBubble p {
+  text-align: left;
+  margin: 5px 0;
+}
+
+.messageBubble .timestamp {
+  font-size: 10px;
+  display: flex;
+  align-items: flex-end;
+}
+
+@media (max-width: 950px) {
+  .ChatRight {
+    display: none;
+  }
 }

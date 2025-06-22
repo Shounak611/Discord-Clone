@@ -14,7 +14,7 @@ export default function Friends() {
             <div className='friendsSubC'>
                 {tab === 'add' && <LeftFriends />}
                 {tab === 'pending' && <PendingRequests />}
-                <RightFriends />
+                <RightFriends className="RightFriends"/>
             </div>
         </div>
     )

@@ -4,7 +4,7 @@ set -e
 trap 'echo "Something went wrong. Exiting."' ERR
 
 DEFAULT_COMMIT_MSG="Some bugs are fixed"
-DEFAULT_REMOTE_URL="#"
+DEFAULT_REMOTE_URL="https://github.com/Shounak611/Discord-Clone.git"
 DEFAULT_BRANCH="main"
 
 commit_msg="${1:-DEFAULT_COMMIT_MSG}"

@@ -8,6 +8,10 @@
   color: #ffffff;
   font-family: 'Segoe UI', sans-serif;
   text-align: center;
+  background-image: url("../../assets/login-page-bg.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .main-heading {
@@ -21,13 +25,13 @@
   transition: opacity 0.5s ease-in-out;
 }
 
-.btn-in{
+.btn-in {
   position: absolute;
   top: 30px;
   right: 200px;
 }
 
-.btn-register{
+.btn-register {
   position: absolute;
   top: 30px;
   right: 20px;

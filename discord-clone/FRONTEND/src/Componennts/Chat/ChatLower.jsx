@@ -5,15 +5,23 @@ import axios from 'axios';
 export default function ChatLower({ frndName }) {
     const receiver_username = frndName;
     const sender_email = localStorage.getItem("email");
-
+    const user_id = localStorage.getItem("user_id");
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
 
     useEffect(() => {
+        let interval;
         if (sender_email && receiver_username) {
             fetchConversation();
+            interval = setInterval(() => {
+                fetchConversation();
+            }, 500);
         }
-    }, [receiver_username]);
+
+        return () => {
+            if (interval) clearInterval(interval); 
+        };
+    }, [receiver_username, sender_email]);
 
     const fetchConversation = async () => {
         try {
@@ -45,20 +53,20 @@ export default function ChatLower({ frndName }) {
             <div className="ChatLeft">
                 <div className="messagesArea">
                     {messages.map((msg) => (
-                        <div 
-                            key={msg.id} 
-                            className={`messageBubble ${msg.sender_id === msg.receiver_id ? 'my-msg' : 'their-msg'}`}
+                        <div
+                            key={msg.id}
+                            className={`messageBubble ${msg.sender_id == user_id ? 'my-msg' : 'their-msg'}`}
                         >
                             <p>{msg.content}</p>
                             <span className="timestamp">
-                                {new Date(msg.timestamp).toLocaleTimeString()}
+                                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                         </div>
                     ))}
                 </div>
                 <div className="inputArea">
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Type a message..."
