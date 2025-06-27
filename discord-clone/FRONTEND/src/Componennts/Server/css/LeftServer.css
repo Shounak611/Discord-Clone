@@ -1,0 +1,141 @@
+.leftContainerC{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    width: 299px;
+    height: 100%;
+    border: 1px solid rgb(61, 59, 59);
+    border-top-left-radius: 20px;
+    color: white;
+}
+
+.serverName{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    border-radius: 5px;
+    border-bottom: 1px solid rgb(61, 59, 59);
+    margin: 5px 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    background-color: rgb(33, 32, 32);
+}
+.serverName p{
+    margin: 5px 0 10px 0;
+}
+.serverName:active{
+    background-color: rgb(33, 32, 32);
+}
+.serverName:hover{
+    
+    cursor: pointer;
+}
+.middle{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgb(61, 59, 59);
+}
+
+.sopt{
+    width: 283px;
+    height: 38px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+}
+.sopt:active{
+    background-color: rgb(33, 32, 32);
+}
+.sopt:hover{
+    background-color: rgb(33, 32, 32);
+    cursor: pointer;
+}
+
+.inviteLink {
+    margin-top: 10px;
+    padding: 8px;
+    /* background-color: #2f3136; */
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inviteInput {
+    background: none;
+    border: none;
+    color: #00b0f4;
+    font-size: 13px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.copyBtn {
+    margin: 8px 0;
+    background-color: #5865F2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.copyBtn:hover {
+    background-color: #4752c4;
+}
+
+.channelSection {
+    margin-top: 15px;
+    width: 90%;
+    color: #b9bbbe;
+    font-size: 14px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.channelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    color: #8e9297;
+    margin-top: 12px;
+}
+
+.channelItem {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    background-color: #2f3136;
+    padding: 6px 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #dcddde;
+}
+
+.channelItem:hover {
+    background-color: #393c43;
+}
+
+.channelSymbol {
+    margin-right: 6px;
+}
+
+.plusIcon {
+    color: #8e9297;
+    font-size: 14px;
+    cursor: pointer;
+}

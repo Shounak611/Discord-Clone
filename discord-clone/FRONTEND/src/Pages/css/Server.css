@@ -1,0 +1,33 @@
+.styleHome {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Poppins', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    color: white;
+    height: 100%;
+    /* overflow: hidden; */
+}
+
+.homeContainer {
+    display: flex;
+}
+
+.leftBox {
+    width: 376px;
+    background-color: rgb(10, 4, 4);
+    overflow: hidden;
+    height: calc(100vh - 32px);
+    display: flex;
+}
+
+.rightBox {
+    width: calc(100% - 376px);
+    background-color: rgb(14, 13, 13);
+    height: calc(100vh - 32px);
+}
+
+.displayName {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+

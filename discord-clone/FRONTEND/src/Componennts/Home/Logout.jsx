@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Logout(){
     const navigate = useNavigate();
     const handleLogout = () =>{
-        localStorage.removeItem("email");
+        localStorage.clear();
         navigate("/login");
     }
 

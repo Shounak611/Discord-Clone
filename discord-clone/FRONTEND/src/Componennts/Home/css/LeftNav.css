@@ -29,6 +29,7 @@
 
 .el:hover{
     background-color: blue;
+    transform: scale(1.05);
 }
 
 .elD{
@@ -41,9 +42,32 @@
     justify-content: center;
     cursor: pointer;
 }
+.elD:hover{
+    transform: scale(1.05);
+}
 
 .liIcon{
     width: 24px;
     height: 24px;
 
+}
+
+.servers {
+    width: 44px;
+    height: 44px;
+    background-color: #5865F2;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 5px auto;
+    cursor: pointer;
+}
+
+.servers:hover {
+    background-color: #4752c4;
+    transform: scale(1.05);
 }

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-import models, register, login, friends, getUser, google_auth,chat
+import models, register, login, friends, getUser,chat,server
 from database import engine
 from starlette.middleware.cors import CORSMiddleware
 
@@ -21,3 +21,4 @@ app.include_router(login.router)
 app.include_router(getUser.router)
 app.include_router(friends.router)
 app.include_router(chat.router)
+app.include_router(server.router)

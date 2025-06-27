@@ -1,7 +1,14 @@
 from database import Base
-from sqlalchemy import Column, ForeignKey,Integer,String,Boolean,Date,DateTime,Text
+from sqlalchemy import Column, ForeignKey,Integer,String,Boolean,Date,DateTime,Table
 from datetime import datetime,timezone
 from sqlalchemy.orm import relationship
+
+class Server_members(Base):
+    __tablename__="server_member"
+    id = Column(Integer,primary_key=True,index=True)
+    server_id = Column(Integer,nullable=False)
+    user_id = Column(Integer,nullable=False)
+
 
 class Users(Base):
     __tablename__="users"
@@ -30,3 +37,9 @@ class Messages(Base):
     receiver_id = Column(Integer,nullable=False)
     content = Column(String)
     timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+class Server(Base):
+    __tablename__ = "servers"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    owner_id = Column(Integer, ForeignKey('users.id'))
