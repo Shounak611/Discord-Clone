@@ -1,0 +1,13 @@
+.channelHeaderNav {
+    border-top: 1px solid rgb(61, 59, 59);
+    border-bottom: 1px solid rgb(61, 59, 59);
+    padding: 12px 16px;
+    background-color: #2c2f33;
+    color: #fff;
+}
+
+.channelHeaderNav h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}

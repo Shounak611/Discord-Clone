@@ -1,5 +1,5 @@
 import './css/ChatLower.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 
 export default function ChatLower({ frndName }) {
@@ -8,6 +8,7 @@ export default function ChatLower({ frndName }) {
     const user_id = localStorage.getItem("user_id");
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
+    const chatEndRef = useRef(null);
 
     useEffect(() => {
         let interval;
@@ -31,6 +32,9 @@ export default function ChatLower({ frndName }) {
             console.error("Error fetching conversation:", err);
         }
     };
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
 
     const sendMessage = async () => {
         if (!input.trim()) return;
@@ -63,6 +67,7 @@ export default function ChatLower({ frndName }) {
                             </span>
                         </div>
                     ))}
+                    <div ref={chatEndRef} />
                 </div>
                 <div className="inputArea">
                     <input

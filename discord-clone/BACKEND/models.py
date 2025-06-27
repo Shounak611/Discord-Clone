@@ -43,3 +43,13 @@ class Server(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
+
+class GroupMessage(Base):
+    __tablename__ = "group_messages"
+    id = Column(Integer, primary_key=True, index=True)
+    server_id = Column(String)
+    channel_id = Column(String)
+    sender = Column(String)
+    type = Column(String) 
+    content = Column(String)
+    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))

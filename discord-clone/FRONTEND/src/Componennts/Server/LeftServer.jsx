@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './css/LeftServer.css'
 
-export default function LeftServer({ servername }) {
+export default function LeftServer({ servername, setSelectedChannel }) {
     const [copied, setCopied] = useState(false)
 
     const handleCopy = () => {
@@ -31,25 +31,30 @@ export default function LeftServer({ servername }) {
                     {copied ? "Copied!" : "Copy"}
                 </button>
             </div>
-            {/* Section Headers */}
+
             <div className="channelSection">
                 <div className="channelHeader">
                     <span>Text Channels</span>
                     <span className="plusIcon">+</span>
                 </div>
-                <div className="channelItem">
+                <div
+                    className="channelItem"
+                    onClick={() => setSelectedChannel({ type: 'text', name: 'general' })}
+                >
                     <span className="channelSymbol">#</span> general
                 </div>
 
                 <div className="channelHeader">
-                    <span>Voice Channels</span>
+                    <span>Audio Channels</span>
                     <span className="plusIcon">+</span>
                 </div>
-                <div className="channelItem">
-                    <span className="channelSymbol">🔊</span> general
+                <div
+                    className="channelItem"
+                    onClick={() => setSelectedChannel({ type: 'audio', name: 'general' })}
+                >
+                    <span className="channelSymbol">🎤</span> general
                 </div>
             </div>
-
         </div>
     )
 }

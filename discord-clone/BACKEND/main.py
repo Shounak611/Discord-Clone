@@ -1,24 +1,36 @@
 from fastapi import FastAPI
-import models, register, login, friends, getUser,chat,server
-from database import engine
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
+
+import models
+from database import engine
+
+# Routers
+import register, login, friends, getUser, chat, server, channel, upload
 
 app = FastAPI()
 
+# CORS config
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173"],  # frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
+# DB setup
 models.Base.metadata.create_all(bind=engine)
 
+# Routers
 app.include_router(register.router)
 app.include_router(login.router)
 app.include_router(getUser.router)
 app.include_router(friends.router)
 app.include_router(chat.router)
 app.include_router(server.router)
+app.include_router(channel.router)   # WebSocket chat
+app.include_router(upload.router)    # File uploads
+
+# Static file serving for uploaded files
+app.mount("/uploaded_files", StaticFiles(directory="uploaded_files"), name="uploaded_files")
