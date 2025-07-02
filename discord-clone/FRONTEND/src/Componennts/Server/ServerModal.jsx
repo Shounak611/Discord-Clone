@@ -117,7 +117,7 @@ export default function ServerModal({ onClose }) {
             <input
               type="text"
               className="modal-input"
-              placeholder="123"
+              placeholder="http://localhost:5173/server/server_name"
               value={inviteLink}
               onChange={(e) => setInviteLink(e.target.value)}
             />

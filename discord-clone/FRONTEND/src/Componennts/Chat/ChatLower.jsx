@@ -9,6 +9,19 @@ export default function ChatLower({ frndName }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const chatEndRef = useRef(null);
+    const messagesAreaRef = useRef(null);
+
+    useEffect(() => {
+    const container = messagesAreaRef.current;
+    const isNearBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+
+    if (isNearBottom) {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+}, [messages]);
+
+
 
     useEffect(() => {
         let interval;
@@ -32,9 +45,6 @@ export default function ChatLower({ frndName }) {
             console.error("Error fetching conversation:", err);
         }
     };
-    useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
 
     const sendMessage = async () => {
         if (!input.trim()) return;
@@ -55,7 +65,7 @@ export default function ChatLower({ frndName }) {
     return (
         <div className="ChatLowerC">
             <div className="ChatLeft">
-                <div className="messagesArea">
+                <div className="messagesArea" ref={messagesAreaRef}>
                     {messages.map((msg) => (
                         <div
                             key={msg.id}

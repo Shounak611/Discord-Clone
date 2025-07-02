@@ -1,38 +1,64 @@
 .landing-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  position: relative;
+  overflow: hidden;
   height: 100vh;
   background-color: #121212;
-  color: #ffffff;
-  font-family: 'Segoe UI', sans-serif;
-  text-align: center;
   background-image: url("../../assets/login-page-bg.svg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* Spotlight effect */
+.landing-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle 150px at var(--x, 50%) var(--y, 50%),
+    transparent 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  transition: background-position 0.05s ease;
 }
 
 .main-heading {
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  z-index: 0;
+  position: relative;
 }
 
 .dynamic-text {
   font-size: 1.5rem;
   transition: opacity 0.5s ease-in-out;
+  z-index: 0;
+  position: relative;
 }
 
 .btn-in {
   position: absolute;
   top: 30px;
   right: 200px;
+  z-index: 2;
 }
 
 .btn-register {
   position: absolute;
   top: 30px;
   right: 20px;
+  z-index: 2;
 }

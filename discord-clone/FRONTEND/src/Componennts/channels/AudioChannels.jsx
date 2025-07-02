@@ -7,7 +7,7 @@ const APP_ID = "14e971c70b824c55bd71c7181a7ac59b";
 export default function AudioChannel({ channelName }) {
     const clientRef = useRef(null);
     const micTrackRef = useRef(null);
-    const { setMicOn } = useMicStatus();
+    const { micOn, setMicOn, setMicTrack } = useMicStatus();
 
     useEffect(() => {
         const startAudio = async () => {
@@ -15,6 +15,7 @@ export default function AudioChannel({ channelName }) {
             await clientRef.current.join(APP_ID, channelName, null, null);
 
             micTrackRef.current = await AgoraRTC.createMicrophoneAudioTrack();
+            setMicTrack(micTrackRef.current);
             await clientRef.current.publish([micTrackRef.current]);
             setMicOn(true); // 🎤 mic is ON
 

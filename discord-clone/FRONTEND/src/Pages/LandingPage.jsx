@@ -12,7 +12,18 @@ const phrases = [
 
 export default function LandingPage() {
     const [index, setIndex] = useState(0);
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            const container = document.querySelector('.landing-container');
+            const x = e.clientX;
+            const y = e.clientY;
+            container.style.setProperty('--x', `${x}px`);
+            container.style.setProperty('--y', `${y}px`);
+        };
 
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
     useEffect(() => {
         const interval = setInterval(() => {
             setIndex((prevIndex) => (prevIndex + 1) % phrases.length);
@@ -26,10 +37,10 @@ export default function LandingPage() {
             <h1 className="main-heading">Welcome to Discord</h1>
             <h2 className="dynamic-text">{phrases[index]}</h2>
             <Link to={"/login"}>
-                <div className="btn-in"><Button text={"Login"}/></div>
+                <div className="btn-in"><Button text={"Login"} /></div>
             </Link>
             <Link to={"/register"}>
-                <div className="btn-register"><Button text={"Register"}/></div>
+                <div className="btn-register"><Button text={"Register"} /></div>
             </Link>
         </div>
     );

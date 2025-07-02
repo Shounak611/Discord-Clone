@@ -159,6 +159,8 @@
 
 .filePreview {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 10px;
   margin-top: 8px;
@@ -172,8 +174,8 @@
 
 .filePreview img,
 .filePreview video {
-  max-width: 80px;
-  max-height: 80px;
+  max-width: 200px;
+  max-height: 200px;
   border-radius: 6px;
 }
 
@@ -191,4 +193,65 @@
   border: none;
   font-size: 16px;
   cursor: pointer;
+}
+
+.media-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.media-full {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.media-close {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 50px;
+  color: white;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.memberList li span {
+    font-size: 0.9em;
+    color: rgb(103, 227, 20);
+}
+
+.member{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #54575b;
+  border-radius: 3px;
+  margin: 5px 0;
+  padding: 5px;
+  padding-left: 20px;
+}
+.member button {
+    background-color: #444c56;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.member button:hover {
+    background-color: #5865f2; 
 }

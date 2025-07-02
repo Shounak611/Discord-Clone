@@ -10,7 +10,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
-    # Safe filename and extension handling
+    
     original_name = file.filename or "unnamed.bin"
     ext = os.path.splitext(original_name)[-1] or ".bin"
     filename = f"{uuid.uuid4().hex}{ext}"

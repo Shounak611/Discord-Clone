@@ -8,6 +8,7 @@ class Server_members(Base):
     id = Column(Integer,primary_key=True,index=True)
     server_id = Column(Integer,nullable=False)
     user_id = Column(Integer,nullable=False)
+    role = Column(String,default="member")
 
 
 class Users(Base):

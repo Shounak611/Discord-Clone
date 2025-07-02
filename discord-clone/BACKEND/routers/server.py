@@ -27,6 +27,10 @@ class ServerResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class RoleUpdateRequest(BaseModel):
+    member_id : int
+    new_role : str
+    server_id : str
 
 def get_db():
     db = SessionLocal()
@@ -88,3 +92,39 @@ def get_servers(user_id: int, db: db_dependency):
     joined_servers = db.query(Server).filter(Server.id.in_(only_joined_ids)).all()
 
     return owned_servers + joined_servers
+
+
+@router.get("/get_members/{serverId}")
+async def group_members(serverId : str,db : db_dependency):
+    members = []
+    server = db.query(Server).filter(Server.name == serverId).first()
+    if server is None:
+        raise HTTPException(status_code=404)
+    server_members = db.query(Server_members).filter(Server_members.server_id == server.id).order_by(Server_members.role).all()
+    for member in server_members:
+        user = db.query(Users).filter(Users.id == member.user_id).first()
+        if user is None:
+            raise HTTPException(status_code=404,detail="user not found")
+        members.append({"id":user.id,"username":user.username, "role":member.role})
+    return members
+
+@router.get("/get_owner/{serverId}")
+async def get_owner(serverId : str,db : db_dependency):
+    server = db.query(Server).filter(Server.name == serverId).first()
+    if server is None:
+        raise HTTPException(status_code=404)
+    owner = db.query(Users).filter(Users.id == server.owner_id).first()
+    return owner
+
+def role(member,role):
+    member.role = role
+
+@router.put("/update_role")
+def update_role(data: RoleUpdateRequest, db: Session = Depends(get_db)):
+    member = db.query(Server_members).filter(Server_members.user_id == data.member_id, Server_members.server_id == data.server_id).first()
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+    role(member,data.new_role)
+    db.commit()
+    db.refresh(member)
+    return {"role": member.role}

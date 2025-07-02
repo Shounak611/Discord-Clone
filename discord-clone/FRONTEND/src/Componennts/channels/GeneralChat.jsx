@@ -8,7 +8,15 @@ export default function GroupChat({ serverId, channelId }) {
     const socketRef = useRef(null);
     const chatEndRef = useRef(null);
     const username = localStorage.getItem("user_name");
+    const [mediaPreview, setMediaPreview] = useState(null);
 
+    const handleOpenMedia = (type, content) => {
+        setMediaPreview({ type, content });
+    };
+
+    const handleCloseMedia = () => {
+        setMediaPreview(null);
+    };
     useEffect(() => {
         const fetchHistory = async () => {
             const res = await fetch(`http://localhost:8000/ws/${serverId}/${channelId}/messages`);
@@ -66,6 +74,65 @@ export default function GroupChat({ serverId, channelId }) {
         socketRef.current.send(JSON.stringify(msg));
         setFile(null);
     };
+    const [members, setMembers] = useState([]);
+
+    useEffect(() => {
+        const fetchMembers = async () => {
+            try {
+                const res = await fetch(`http://localhost:8000/server/get_members/${serverId}`);
+                const data = await res.json();
+                setMembers(data);
+            } catch (err) {
+                console.error("Failed to fetch members", err);
+            }
+        };
+
+        if (serverId) fetchMembers();
+    }, [serverId]);
+    const [owner, setOwner] = useState({});
+    useEffect(() => {
+        const fetchOwner = async () => {
+            try {
+                const res = await fetch(`http://localhost:8000/server/get_owner/${serverId}`)
+                const data = await res.json();
+                setOwner(data);
+            } catch {
+                console.error("Failed to fetch owner", err);
+            }
+        }
+        if (serverId) fetchOwner();
+    }, [serverId]);
+
+    const handleEditRole = async (memberId, currentRole) => {
+        const newRole = prompt(`Edit role for member (current: ${currentRole}):`);
+        if (!newRole.trim()) return;
+
+        try {
+            const res = await fetch(`http://localhost:8000/server/update_role`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    member_id: memberId,
+                    new_role: newRole,
+                    server_id: serverId,
+                }),
+            });
+
+            if (res.ok) {
+                const updated = await res.json();
+                setMembers(prev =>
+                    prev.map(m => (m.id === memberId ? { ...m, role: updated.role } : m))
+                );
+            } else {
+                console.error("Failed to update role");
+            }
+        } catch (err) {
+            console.error("Error updating role", err);
+        }
+    };
+
 
     return (
         <div className="ChatLowerC">
@@ -80,18 +147,41 @@ export default function GroupChat({ serverId, channelId }) {
                                 <p><strong>{msg.sender}</strong></p>
                                 {msg.type === 'text' && <p>{msg.content}</p>}
                                 {msg.type === 'image' && (
-                                    <img src={msg.content} alt="img" style={{ maxWidth: '250px', borderRadius: '8px' }} />
+                                    <img
+                                        src={msg.content}
+                                        alt="img"
+                                        style={{ maxWidth: '250px', borderRadius: '8px', cursor: 'pointer' }}
+                                        onClick={() => handleOpenMedia('image', msg.content)}
+                                    />
                                 )}
                                 {msg.type === 'video' && (
-                                    <video src={msg.content} controls style={{ maxWidth: '250px', borderRadius: '8px' }} />
+                                    <video
+                                        src={msg.content}
+                                        controls
+                                        style={{ maxWidth: '250px', borderRadius: '8px', cursor: 'pointer' }}
+                                        onClick={() => handleOpenMedia('video', msg.content)}
+                                    />
                                 )}
-                                <span className="timestamp">
-                                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </span>
+
                             </div>
+                            <span className="timestamp">
+                                {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+
                         </div>
                     ))}
                     <div ref={chatEndRef} />
+                    {mediaPreview && (
+                        <div className="media-overlay">
+                            <span className="media-close" onClick={handleCloseMedia}>&times;</span>
+                            {mediaPreview.type === 'image' ? (
+                                <img src={mediaPreview.content} alt="full-preview" className="media-full" />
+                            ) : (
+                                <video src={mediaPreview.content} className="media-full" controls autoPlay />
+                            )}
+                        </div>
+                    )}
+
                 </div>
 
                 <div className="inputArea">
@@ -119,6 +209,7 @@ export default function GroupChat({ serverId, channelId }) {
 
             <div className="ChatRight">
                 <h3>Channel: #{channelId}</h3>
+                <h3>Owner : {owner.username}</h3>
                 <p>Server: {serverId}</p>
                 {file && (
                     <div className="filePreview">
@@ -133,6 +224,22 @@ export default function GroupChat({ serverId, channelId }) {
                         <button className="removeFile" onClick={() => setFile(null)}>✖</button>
                     </div>
                 )}
+                <div className="memberList">
+                    <h4>Server Members</h4>
+
+                    {members.map(member => (
+                        <li className='member' key={member.id}>
+                            {member.username}&nbsp;
+                            {member.role && <span>({member.role})</span>}
+                            <button
+                                onClick={() => handleEditRole(member.id, member.role)}
+                            >
+                                ✎ Edit
+                            </button>
+                        </li>
+                    ))}
+
+                </div>
             </div>
         </div>
     );
