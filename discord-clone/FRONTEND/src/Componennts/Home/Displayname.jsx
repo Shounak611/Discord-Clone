@@ -54,7 +54,8 @@ export default function Displayname() {
                     className='displaynameIcon'
                     src={micOn ? micOnIcon : mute}
                     alt={micOn ? "mic-on" : "muteIcon"}
-                    onClick={toggleMic}
+                    onClick={micTrack ? toggleMic : undefined}
+                    style={{ cursor: micTrack ? 'pointer' : 'not-allowed', opacity: micTrack ? 1 : 0.5 }}
                 />
             </div>
             <div className="displaybox ">

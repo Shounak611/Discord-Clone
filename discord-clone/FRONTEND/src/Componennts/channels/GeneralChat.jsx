@@ -9,7 +9,7 @@ export default function GroupChat({ serverId, channelId }) {
     const chatEndRef = useRef(null);
     const username = localStorage.getItem("user_name");
     const [mediaPreview, setMediaPreview] = useState(null);
-
+    const userId = localStorage.getItem("user_id");
     const handleOpenMedia = (type, content) => {
         setMediaPreview({ type, content });
     };
@@ -231,11 +231,11 @@ export default function GroupChat({ serverId, channelId }) {
                         <li className='member' key={member.id}>
                             {member.username}&nbsp;
                             {member.role && <span>({member.role})</span>}
-                            <button
+                            {owner.id==userId && <button
                                 onClick={() => handleEditRole(member.id, member.role)}
                             >
                                 ✎ Edit
-                            </button>
+                            </button>}
                         </li>
                     ))}
 

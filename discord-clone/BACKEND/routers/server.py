@@ -121,8 +121,11 @@ def role(member,role):
 
 @router.put("/update_role")
 def update_role(data: RoleUpdateRequest, db: Session = Depends(get_db)):
-    member = db.query(Server_members).filter(Server_members.user_id == data.member_id, Server_members.server_id == data.server_id).first()
-    if not member:
+    server = db.query(Server).filter(Server.name == data.server_id).first()
+    if server is None:
+        raise HTTPException(status_code=404,detail="Server not found")
+    member = db.query(Server_members).filter(Server_members.user_id == data.member_id, Server_members.server_id == server.id).first()
+    if member is None:
         raise HTTPException(status_code=404, detail="Member not found")
     role(member,data.new_role)
     db.commit()
