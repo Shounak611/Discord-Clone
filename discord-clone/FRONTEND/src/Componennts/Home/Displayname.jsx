@@ -6,20 +6,13 @@ import settings from '../../assets/settingsIcon.png'
 import micOnIcon from '../../assets/micOnIcon.png'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useMicStatus } from '../../context/MicStatusContext'
 
 
 export default function Displayname() {
     const [displayName, setDisplayName] = useState("");
     const [username, setUsername] = useState("");
     const email = localStorage.getItem("email");
-    const { micOn, setMicOn, micTrack } = useMicStatus();
 
-    const toggleMic = () => {
-        if (!micTrack) return;
-        micTrack.setEnabled(!micOn);
-        setMicOn(!micOn);
-    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -52,10 +45,9 @@ export default function Displayname() {
             <div className="displaybox ">
                 <img
                     className='displaynameIcon'
-                    src={micOn ? micOnIcon : mute}
-                    alt={micOn ? "mic-on" : "muteIcon"}
-                    onClick={micTrack ? toggleMic : undefined}
-                    style={{ cursor: micTrack ? 'pointer' : 'not-allowed', opacity: micTrack ? 1 : 0.5 }}
+                    src={mute}
+                    alt="muteIcon"
+                    
                 />
             </div>
             <div className="displaybox ">

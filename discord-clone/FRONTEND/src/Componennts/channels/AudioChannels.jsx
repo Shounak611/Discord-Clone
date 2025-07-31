@@ -1,49 +1,100 @@
-import { useEffect, useRef } from 'react';
-import AgoraRTC from 'agora-rtc-sdk-ng';
-import { useMicStatus } from '../../context/MicStatusContext';
+import React, { useState, useRef } from "react";
+import AgoraRTC from "agora-rtc-sdk-ng";
 
-const APP_ID = "14e971c70b824c55bd71c7181a7ac59b";
+const appId = "abbefe0cf86c4c7c905a54e8c12dd6dd";
+const token = null;
+export default function AudioChannel(){
+  const [joined, setJoined] = useState(false);
+  const [rtcUid] = useState(Math.floor(Math.random() * 2032));
+  const roomId = "main";
 
-export default function AudioChannel({ channelName }) {
-    const clientRef = useRef(null);
-    const micTrackRef = useRef(null);
-    const { micOn, setMicOn, setMicTrack } = useMicStatus();
+  const rtcClientRef = useRef(null);
+  const localAudioTrackRef = useRef(null);
+  const remoteAudioTracksRef = useRef({});
 
-    useEffect(() => {
-        const startAudio = async () => {
-            clientRef.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
-            await clientRef.current.join(APP_ID, channelName, null, null);
+  const membersRef = useRef(null);
 
-            micTrackRef.current = await AgoraRTC.createMicrophoneAudioTrack();
-            setMicTrack(micTrackRef.current);
-            await clientRef.current.publish([micTrackRef.current]);
-            setMicOn(true); // 🎤 mic is ON
+  const initRtc = async () => {
+    const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+    rtcClientRef.current = client;
 
-            clientRef.current.on("user-published", async (user, mediaType) => {
-                await clientRef.current.subscribe(user, mediaType);
-                if (mediaType === "audio") {
-                    user.audioTrack.play();
-                }
-            });
-        };
+    client.on("user-joined", handleUserJoined);
+    client.on("user-published", handleUserPublished);
+    client.on("user-left", handleUserLeft);
 
-        startAudio();
+    await client.join(appId, roomId, token, rtcUid);
+    localAudioTrackRef.current = await AgoraRTC.createMicrophoneAudioTrack();
+    await client.publish(localAudioTrackRef.current);
 
-        return () => {
-            const cleanup = async () => {
-                if (micTrackRef.current) {
-                    micTrackRef.current.stop();
-                    micTrackRef.current.close();
-                }
-                if (clientRef.current) {
-                    await clientRef.current.leave();
-                    clientRef.current.removeAllListeners();
-                }
-                setMicOn(false); // 🎤 mic is OFF
-            };
-            cleanup();
-        };
-    }, [channelName]);
+    addMember(rtcUid);
+    setJoined(true);
+  };
 
-    return <p>🎤 Connected to audio channel: <strong>{channelName}</strong></p>;
-}
+  const handleUserJoined = async (user) => {
+    console.log("USER JOINED:", user);
+    addMember(user.uid);
+  };
+
+  const handleUserPublished = async (user, mediaType) => {
+    const client = rtcClientRef.current;
+    await client.subscribe(user, mediaType);
+
+    if (mediaType === "audio") {
+      remoteAudioTracksRef.current[user.uid] = user.audioTrack;
+      user.audioTrack.play();
+    }
+  };
+
+  const handleUserLeft = async (user) => {
+    delete remoteAudioTracksRef.current[user.uid];
+    const userDiv = document.getElementById(user.uid);
+    if (userDiv) userDiv.remove();
+  };
+
+  const addMember = (uid) => {
+    if (!membersRef.current) return;
+    const newDiv = document.createElement("div");
+    newDiv.className = `speaker user-rtc-${uid}`;
+    newDiv.id = uid;
+    newDiv.innerHTML = `<p>${uid}</p>`;
+    membersRef.current.appendChild(newDiv);
+  };
+
+  const leaveRoom = async () => {
+    if (localAudioTrackRef.current) {
+      localAudioTrackRef.current.stop();
+      localAudioTrackRef.current.close();
+    }
+
+    await rtcClientRef.current.unpublish();
+    await rtcClientRef.current.leave();
+
+    setJoined(false);
+    membersRef.current.innerHTML = "";
+  };
+
+  const enterRoom = (e) => {
+    e.preventDefault();
+    initRtc();
+  };
+
+  return (
+    <div>
+      {!joined ? (
+        <form id="form" onSubmit={enterRoom}>
+          <button type="submit">Join Room</button>
+        </form>
+      ) : (
+        <>
+          <div id="room-header" style={{ display: "flex", marginBottom: "10px" }}>
+            <h3>Agora Voice Room</h3>
+            <button id="leave-icon" onClick={leaveRoom} style={{ marginLeft: "auto" }}>
+              Leave Room
+            </button>
+          </div>
+          <div id="members" ref={membersRef}></div>
+        </>
+      )}
+    </div>
+  );
+};

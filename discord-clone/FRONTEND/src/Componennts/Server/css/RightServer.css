@@ -11,3 +11,20 @@
     font-weight: 600;
     margin: 0;
 }
+
+.connectButton {
+    padding: 10px 20px;
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.connectButton:hover {
+    background-color: #4752c4;
+}
+

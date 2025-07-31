@@ -26,7 +26,11 @@ export default function GroupChat({ serverId, channelId }) {
 
         fetchHistory();
 
-        const ws = new WebSocket(`ws://localhost:8000/ws/chat/${serverId}/${channelId}`);
+        const encodedServerId = encodeURIComponent(serverId);
+        const encodedChannelId = encodeURIComponent(channelId);
+        const ws = new WebSocket(`ws://localhost:8000/ws/chat/${encodedServerId}/${encodedChannelId}`);
+
+
         socketRef.current = ws;
 
         ws.onmessage = (event) => {
@@ -231,7 +235,7 @@ export default function GroupChat({ serverId, channelId }) {
                         <li className='member' key={member.id}>
                             {member.username}&nbsp;
                             {member.role && <span>({member.role})</span>}
-                            {owner.id==userId && <button
+                            {owner.id == userId && <button
                                 onClick={() => handleEditRole(member.id, member.role)}
                             >
                                 ✎ Edit

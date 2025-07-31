@@ -1,8 +1,27 @@
-import './css/RightServer.css'
+import { useState, useEffect, useRef } from 'react';
+import './css/RightServer.css';
 import AudioChannel from '../channels/AudioChannels';
 import GeneralChat from '../channels/GeneralChat';
 
 export default function RightServer({ selectedChannel, servername }) {
+    const [connected, setConnected] = useState(false);
+    const prevChannelRef = useRef({ name: "", type: "" });
+
+    const handleConnect = () => {
+        setConnected(true);
+    };
+
+    useEffect(() => {
+        const changed =
+            prevChannelRef.current.name !== selectedChannel.name ||
+            prevChannelRef.current.type !== selectedChannel.type;
+
+        if (changed) {
+            setConnected(false);
+            prevChannelRef.current = selectedChannel;
+        }
+    }, [selectedChannel]);
+
     return (
         <div className="rightServerContainer">
             <nav className="channelHeaderNav">
@@ -13,7 +32,6 @@ export default function RightServer({ selectedChannel, servername }) {
                 </h2>
             </nav>
 
-
             {selectedChannel.type === 'text' && (
                 <GeneralChat
                     serverId={servername}
@@ -21,10 +39,19 @@ export default function RightServer({ selectedChannel, servername }) {
                 />
             )}
 
-
             {selectedChannel.type === 'audio' && (
                 <div className="audioChannelArea">
-                    <AudioChannel channelName={`${servername}-${selectedChannel.name}`} />
+                    {!connected ? (
+                        <button className="connectButton" onClick={handleConnect}>
+                            Connect to Voice
+                        </button>
+                    ) : (
+                        <AudioChannel
+                            key={`${servername}-${selectedChannel.name}`}
+                            channelName={`${servername}-${selectedChannel.name}`}
+                            onDisconnect={() => setConnected(false)}
+                        />
+                    )}
                 </div>
             )}
         </div>
