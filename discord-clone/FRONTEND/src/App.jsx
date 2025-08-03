@@ -5,23 +5,20 @@ import Home from './Pages/Home';
 import LandingPage from './Pages/LandingPage';
 import Server from './Pages/Server';
 import ProtectedRoute from './protectRoutes';
-import { MicStatusProvider } from './context/MicStatusContext';
-
+import PublicRoute from './PublicRoute';
 
 function App() {
 
   return (
-    <MicStatusProvider>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
           <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path='/server/:servername' element={<ProtectedRoute><Server /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
-    </MicStatusProvider>
   )
 }
 

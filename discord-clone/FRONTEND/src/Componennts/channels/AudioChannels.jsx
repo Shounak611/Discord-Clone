@@ -1,18 +1,24 @@
 import React, { useState, useRef } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
+import "./css/AudioChannels.css";
 
 const appId = "abbefe0cf86c4c7c905a54e8c12dd6dd";
 const token = null;
-export default function AudioChannel(){
+export default function AudioChannel({ channelName, onDisconnect }) {
   const [joined, setJoined] = useState(false);
   const [rtcUid] = useState(Math.floor(Math.random() * 2032));
-  const roomId = "main";
+  const roomId = channelName;
 
   const rtcClientRef = useRef(null);
   const localAudioTrackRef = useRef(null);
   const remoteAudioTracksRef = useRef({});
-
   const membersRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      leaveRoom(); 
+    };
+  }, []);
 
   const initRtc = async () => {
     const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });

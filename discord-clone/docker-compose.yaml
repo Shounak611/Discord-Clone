@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: discord
+      POSTGRES_PASSWORD: discordpass
+      POSTGRES_DB: discorddb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
