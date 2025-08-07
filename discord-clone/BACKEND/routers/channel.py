@@ -46,7 +46,7 @@ async def websocket_endpoint(websocket: WebSocket, server_id: str, channel_id: s
     try:
         while True:
             data = await websocket.receive_text()
-            # Parse message
+
             message = json.loads(data)
             sender = message.get("sender")
             type_ = message.get("type")

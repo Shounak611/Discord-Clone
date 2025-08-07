@@ -72,3 +72,32 @@
   width: 100%;
   margin-bottom: 1rem;
 }
+
+#public,
+#private {
+  margin-right: 0.5rem;
+  display: inline;
+}
+
+.server-type {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+.server-type span {
+  display: flex;
+  align-items: center;
+}
+.server-type input[type="radio"] {
+  margin-right: 0.25rem;
+}
+.server-type label {
+  font-size: 0.875rem;
+  color: #ccc;
+}
+.server-type input[type="radio"]:checked + label {
+  color: #fff;
+}
+.server-type input[type="radio"]:checked {
+  accent-color: #2563eb;
+}

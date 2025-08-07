@@ -44,6 +44,7 @@ class Server(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey('users.id'))
+    private = Column(Boolean, default=False)
 
 class GroupMessage(Base):
     __tablename__ = "group_messages"

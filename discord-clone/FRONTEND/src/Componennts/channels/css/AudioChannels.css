@@ -1,80 +1,180 @@
-#form, #room-header, #members {
-  max-width: 600px;
-  margin: auto;
+:root {
+  --primary-bg: #2c2f33;
+  --secondary-bg: #23272a;
+  --accent-color: #7289da;
+  --text-color: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
 }
 
 #form button {
-  padding: 12px 24px;
+  padding: 14px 28px;
   font-size: 1.1rem;
-  background-color: #4caf50;
+  background-color: var(--accent-color);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease, transform 0.2s ease;
+  margin: 150px auto;
   display: block;
-  margin: 100px auto;
 }
 
 #form button:hover {
-  background-color: #388e3c;
-}
-
-#room-header {
-  background-color: #1e1e2f;
-  padding: 15px 20px;
-  border-radius: 10px;
-  color: #fff;
-  align-items: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-#room-header h3 {
-  margin: 0;
-  font-size: 1.4rem;
-}
-
-#leave-icon {
-  padding: 8px 16px;
-  font-size: 0.95rem;
-  background-color: #e53935;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-#leave-icon:hover {
-  background-color: #c62828;
-}
-
-#members {
-  margin-top: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-
-.speaker {
-  background-color: #282a36;
-  color: #f8f8f2;
-  border-radius: 10px;
-  padding: 12px 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-  min-width: 100px;
-  text-align: center;
-  transition: transform 0.2s ease;
-}
-
-.speaker:hover {
+  background-color: #5b6eae;
   transform: scale(1.05);
 }
 
-.speaker p {
-  margin: 0;
-  font-size: 1rem;
+.audio-channel-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
+.audio-ui-container {
+  display: flex;
+  width: 95%;
+  max-width: 900px;
+  background-color: var(--primary-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Left Sidebar */
+.audio-left-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 130px;
+  background-color: var(--secondary-bg);
+  padding: 20px 10px;
+  gap: 15px;
+}
+
+.logo-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.user-label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 5px;
+  color: var(--accent-color);
+}
+
+.controls-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.icon-button {
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  transition: transform 0.2s ease;
+}
+
+.icon-button:hover {
+  transform: scale(1.2);
+}
+
+/* Right Panel */
+.audio-right-panel {
+  flex-grow: 1;
+  background-color: #2f3136;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.audio-right-panel h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+}
+
+#members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 110px;
+  background: var(--card-bg);
+  border-radius: 15px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.member-card:hover {
+  transform: scale(1.05);
+}
+
+.member-avatar {
+  width: 55px;
+  height: 55px;
+  background: #ffffff33;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.member-name {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #dcdcdc;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .audio-ui-container {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .audio-left-panel {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .controls-group {
+    flex-direction: row;
+    margin-top: 0;
+  }
+
+  .icon-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-icon {
+    width: 50px;
+    height: 50px;
+  }
+}

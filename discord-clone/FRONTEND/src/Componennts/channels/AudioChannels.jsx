@@ -1,14 +1,24 @@
-import React, { useState, useRef } from "react";
+import micoff from "../../assets/muteIcon.png";
+import micon from "../../assets/micOnIcon.png";
+import leave_room from "../../assets/leave_room.png";
+import discordlogo from "../../assets/displayDiscordlogo.png";
+import speakerOnIcon from "../../assets/speakerOn.png";
+import speakerOff from "../../assets/speakerOff.png";
+
+import React, { useState, useRef, useEffect } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import "./css/AudioChannels.css";
 
 const appId = "abbefe0cf86c4c7c905a54e8c12dd6dd";
 const token = null;
+
 export default function AudioChannel({ channelName, onDisconnect }) {
+  const [userName] = useState(() => localStorage.getItem("user_name") || "You");
   const [joined, setJoined] = useState(false);
+  const [micOn, setMicOn] = useState(true);
+  const [speakerOn, setSpeakerOn] = useState(true);
   const [rtcUid] = useState(Math.floor(Math.random() * 2032));
   const roomId = channelName;
-
   const rtcClientRef = useRef(null);
   const localAudioTrackRef = useRef(null);
   const remoteAudioTracksRef = useRef({});
@@ -16,7 +26,7 @@ export default function AudioChannel({ channelName, onDisconnect }) {
 
   useEffect(() => {
     return () => {
-      leaveRoom(); 
+      leaveRoom();
     };
   }, []);
 
@@ -32,13 +42,12 @@ export default function AudioChannel({ channelName, onDisconnect }) {
     localAudioTrackRef.current = await AgoraRTC.createMicrophoneAudioTrack();
     await client.publish(localAudioTrackRef.current);
 
-    addMember(rtcUid);
+    addMember(rtcUid, userName);
     setJoined(true);
   };
 
-  const handleUserJoined = async (user) => {
-    console.log("USER JOINED:", user);
-    addMember(user.uid);
+  const handleUserJoined = (user) => {
+    addMember(user.uid, `User-${user.uid}`);
   };
 
   const handleUserPublished = async (user, mediaType) => {
@@ -51,20 +60,30 @@ export default function AudioChannel({ channelName, onDisconnect }) {
     }
   };
 
-  const handleUserLeft = async (user) => {
+  const handleUserLeft = (user) => {
     delete remoteAudioTracksRef.current[user.uid];
-    const userDiv = document.getElementById(user.uid);
+    const userDiv = document.getElementById(`user-${user.uid}`);
     if (userDiv) userDiv.remove();
   };
 
-  const addMember = (uid) => {
+
+  const addMember = (uid, name) => {
     if (!membersRef.current) return;
-    const newDiv = document.createElement("div");
-    newDiv.className = `speaker user-rtc-${uid}`;
-    newDiv.id = uid;
-    newDiv.innerHTML = `<p>${uid}</p>`;
-    membersRef.current.appendChild(newDiv);
+    const existing = document.getElementById(`user-${uid}`);
+    if (existing) return;
+
+    const displayName = uid === rtcUid ? userName : name;
+
+    const memberCard = document.createElement("div");
+    memberCard.className = `member-card user-rtc-${uid}`;
+    memberCard.id = `user-${uid}`;
+    memberCard.innerHTML = `
+    <div class="member-avatar">${displayName.charAt(0).toUpperCase()}</div>
+    <p class="member-name">${displayName}</p>
+  `;
+    membersRef.current.appendChild(memberCard);
   };
+
 
   const leaveRoom = async () => {
     if (localAudioTrackRef.current) {
@@ -76,31 +95,65 @@ export default function AudioChannel({ channelName, onDisconnect }) {
     await rtcClientRef.current.leave();
 
     setJoined(false);
-    membersRef.current.innerHTML = "";
+    if (membersRef.current) membersRef.current.innerHTML = "";
+    if (onDisconnect) onDisconnect();
   };
 
-  const enterRoom = (e) => {
-    e.preventDefault();
-    initRtc();
+  const toggleMic = async () => {
+    if (!localAudioTrackRef.current) return;
+    await localAudioTrackRef.current.setEnabled(!micOn);
+    setMicOn(!micOn);
+  };
+
+  const toggleSpeaker = () => {
+    Object.values(remoteAudioTracksRef.current).forEach(track =>
+      track.setVolume(speakerOn ? 0 : 100)
+    );
+    setSpeakerOn(!speakerOn);
   };
 
   return (
-    <div>
+    <div className="audio-channel-wrapper">
       {!joined ? (
-        <form id="form" onSubmit={enterRoom}>
+        <form id="form" onSubmit={(e) => { e.preventDefault(); initRtc(); }}>
           <button type="submit">Join Room</button>
         </form>
       ) : (
-        <>
-          <div id="room-header" style={{ display: "flex", marginBottom: "10px" }}>
-            <h3>Agora Voice Room</h3>
-            <button id="leave-icon" onClick={leaveRoom} style={{ marginLeft: "auto" }}>
-              Leave Room
-            </button>
+        <div className="audio-ui-container">
+          <div className="audio-left-panel">
+            <img src={discordlogo} alt="discord" className="logo-icon" />
+            <div className="user-label">{userName}</div>
+            <div className="controls-group">
+              <img
+                src={micOn ? micon : micoff}
+                alt="mic toggle"
+                className="icon-button"
+                onClick={toggleMic}
+                title={micOn ? "Mute Mic" : "Unmute Mic"}
+              />
+              <img
+                src={speakerOn ? speakerOnIcon : speakerOff}
+                alt="speaker toggle"
+                className="icon-button"
+                onClick={toggleSpeaker}
+                title={speakerOn ? "Mute Speaker" : "Unmute Speaker"}
+              />
+              <img
+                src={leave_room}
+                alt="leave"
+                className="icon-button"
+                onClick={leaveRoom}
+                title="Leave Room"
+              />
+            </div>
           </div>
-          <div id="members" ref={membersRef}></div>
-        </>
+
+          <div className="audio-right-panel">
+            <h3>Participants</h3>
+            <div id="members" ref={membersRef}></div>
+          </div>
+        </div>
       )}
     </div>
   );
-};
+}

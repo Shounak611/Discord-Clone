@@ -47,8 +47,7 @@ export default function RightServer({ selectedChannel, servername }) {
                         </button>
                     ) : (
                         <AudioChannel
-                            key={`${servername}-${selectedChannel.name}`}
-                            channelName={`${servername}-${selectedChannel.name}`}
+                            channelName={servername.replace(/[^a-zA-Z0-9\s!#$%&()+\-:;<.=?>@\[\]^_{|}~]/g, '')}
                             onDisconnect={() => setConnected(false)}
                         />
                     )}

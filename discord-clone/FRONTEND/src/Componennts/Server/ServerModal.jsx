@@ -6,6 +6,7 @@ import './css/ServerModal.css';
 export default function ServerModal({ onClose }) {
   const [step, setStep] = useState('main');
   const [serverName, setServerName] = useState('');
+  const [serverType, setServerType] = useState("public");
   const [inviteLink, setInviteLink] = useState('');
   const userId = localStorage.getItem("user_id");
   const navigate = useNavigate()
@@ -21,7 +22,8 @@ export default function ServerModal({ onClose }) {
     try {
       const response = await axios.post(`${API_BASE}/create`, {
         name: serverName,
-        owner_id: userId
+        owner_id: userId,
+        server_type: serverType === "public" ? "public" : "private"
       });
 
       alert(`${response.data.message}`);
@@ -41,7 +43,7 @@ export default function ServerModal({ onClose }) {
     if (inviteLink.trim() === '') {
       alert("Please enter a server invite link");
       return;
-    }
+    }between
 
     const expectedPrefix = "http://localhost:5173/server/";
 
@@ -102,6 +104,16 @@ export default function ServerModal({ onClose }) {
               value={serverName}
               onChange={(e) => setServerName(e.target.value)}
             />
+            <div className='server-type'>
+              <span>
+                <input type="radio" name="serverType" id="public" value="public" checked={serverType === 'public'} onChange={() => setServerType('public')} />
+                <label htmlFor="public">Public</label>
+              </span>
+              <span>
+                <input type="radio" name="serverType" id="private" value="private" checked={serverType === 'private'} onChange={() => setServerType('private')} />
+                <label htmlFor="private">Private</label>
+              </span>
+            </div>
             <button className="modal-button create-btn" onClick={handleCreateSubmit}>
               Create
             </button>

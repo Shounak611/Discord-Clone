@@ -14,6 +14,7 @@ router = APIRouter(
 class CreateServerRequest(BaseModel):
     name: str
     owner_id: int  
+    server_type: str
 
 class JoinServerRequest(BaseModel):
     server_name: str
@@ -48,7 +49,7 @@ def create_server(data: CreateServerRequest, db: db_dependency):
     if existing:
         raise HTTPException(status_code=400, detail="Server with this name already exists.")
 
-    new_server = Server(name=data.name, owner_id=data.owner_id)
+    new_server = Server(name=data.name, owner_id=data.owner_id, private=(data.server_type == "private"))
     db.add(new_server)
     db.commit()
     db.refresh(new_server)

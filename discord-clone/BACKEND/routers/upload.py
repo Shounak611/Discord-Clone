@@ -16,10 +16,8 @@ async def upload_file(file: UploadFile = File(...)):
     filename = f"{uuid.uuid4().hex}{ext}"
     file_path = os.path.join(UPLOAD_DIR, filename)
 
-    # Write file
     with open(file_path, "wb") as f:
         content = await file.read()
         f.write(content)
 
-    # Return public URL
     return JSONResponse(content={"url": f"http://localhost:8000/uploaded_files/{filename}"})
