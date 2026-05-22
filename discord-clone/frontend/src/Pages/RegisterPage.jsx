@@ -1,5 +1,5 @@
 import Discordlogo from '../assets/login-page-discord-logo.svg'
-import RegisterForm from '../Componennts/Register/RegisterForm'
+import Register from '../Componennts/Register/Register'
 import './css/RegisterPage.css'
 
 export default function RegisterPage() {
@@ -9,7 +9,7 @@ export default function RegisterPage() {
                 <img src={Discordlogo} alt="Discord-logo" />
             </div>
             <div className='stylesRegisterForm'>
-                <RegisterForm/>
+                <Register/>
             </div>
         </div>
     )

@@ -1,9 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import App from './App.jsx'
 import axios from 'axios'
 
-// Configure global Axios interceptors for JWT support
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -21,7 +21,6 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Token is invalid or expired, clear storage and redirect to login
       localStorage.clear();
       window.location.href = "/login";
     }
@@ -31,6 +30,8 @@ axios.interceptors.response.use(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <GoogleOAuthProvider clientId="430843247170-ncncirn1ogiaqclq7402hq4ko21tiu94.apps.googleusercontent.com">
+      <App />
+    </GoogleOAuthProvider>
   </StrictMode>,
 )

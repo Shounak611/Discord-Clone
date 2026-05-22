@@ -26,3 +26,6 @@ class Register_request(BaseModel):
 class LoginRequest(BaseModel):
     email : EmailStr
     password : str
+
+class GoogleLoginRequest(BaseModel):
+    access_token : str

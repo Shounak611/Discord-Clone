@@ -1,0 +1,152 @@
+.regformcontainerStyle {
+    color: white;
+    font-family: gg sans, Noto Sans, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.regformheadingStyle {
+    width: 416px;
+    height: 30px;
+    text-align: center;
+    margin: 30px auto;
+}
+
+.regformStyle {
+    width: 416px;
+    height: 450px;
+    margin: 1px;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+h6 {
+    color: grey;
+    display: inline;
+    padding: 0px;
+    margin: 5px 0px;
+}
+
+.checkBox {
+    width: 24px;
+    height: 24px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.caution {
+    display: flex;
+    align-items: center;
+}
+
+.reglinkStyles {
+    color: rgb(168, 175, 245);
+    font-size: 10px;
+    text-decoration: none;
+    display: inline;
+}
+
+.lastlink {
+    align-self: flex-start;
+}
+
+.lowerregform {
+    width: 416px;
+    height: 140px;
+    margin: 1px;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.inpcontainerStyles {
+    width: 416px;
+    height: 72px;
+    color: white;
+    margin: 1px;
+}
+
+.inpboxStyle {
+    background-color: #1E1F22;
+    color: white;
+    border: 1px solid #1E1F22;
+    border-radius: 8px;
+    padding: 10px 2%;
+    font-size: 16px;
+    width: 96%;
+}
+
+.labelingStyle {
+    width: 416px;
+    height: 24px;
+    color: #FFFFFF;
+    font-family: gg sans, Noto Sans, sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.eachSelect {
+    background-color: #1E1F22;
+    color: white;
+    width: 130px;
+    height: 40px;
+    border-radius: 8px;
+    padding: 10px 0px;
+    border-color: #1E1F22;
+    text-align: center;
+}
+
+.selectContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.linkStyles {
+    color: rgb(168, 175, 245);
+    font-size: 14px;
+    text-decoration: none;
+    display: inline;
+    cursor: pointer;
+}
+
+.btnStyle {
+    background-color: #5865F2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.googleBtnStyle {
+    background-color: white;
+    color: #2b2d31;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 0;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.googleBtnStyle:hover {
+    background-color: #f2f3f5;
+}
+
+.googleBtnStyle:active {
+    transform: scale(0.98);
+}

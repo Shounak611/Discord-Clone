@@ -1,5 +1,5 @@
 import './css/LoginPage.css'
-import FormContainer from '../Componennts/Login/FormContainer'
+import Login from '../Componennts/Login/Login'
 import Discordlogo from '../assets/login-page-discord-logo.svg'
 
 export default function LoginPage() {
@@ -9,7 +9,7 @@ export default function LoginPage() {
                 <img src={Discordlogo} alt="Discord-logo" />
             </div>
             <div className='stylesFormContainer'>
-               <FormContainer/>
+               <Login/>
             </div>
         </div>
     )
