@@ -9,25 +9,21 @@
 
 .homeContainer {
     display: flex;
+    width: 100%;
+    height: calc(100% - 32px);
 }
 
 .leftBox {
     width: 376px;
-    background-color: rgb(10, 4, 4);
+    background-color: #2b2d31;
     overflow: hidden;
-    height: calc(100vh - 32px);
+    height: 100%;
     display: flex;
 }
 
 .rightBox {
     width: calc(100% - 376px);
-    background-color: rgb(14, 13, 13);
-    height: calc(100vh - 32px);
-}
-
-.displayName {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
+    background-color: #313338;
+    height: 100%;
 }
 

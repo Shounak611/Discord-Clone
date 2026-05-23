@@ -1,152 +1,315 @@
-.regformcontainerStyle {
-    color: white;
-    font-family: gg sans, Noto Sans, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.registerCardBody {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 32px;
+    gap: 32px;
+    font-family: 'Inter', sans-serif;
 }
 
-.regformheadingStyle {
-    width: 416px;
-    height: 30px;
+.registerFormSection {
+    flex: 1.4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.registerHeader {
     text-align: center;
-    margin: 30px auto;
+    margin-bottom: 24px;
 }
 
-.regformStyle {
-    width: 416px;
-    height: 450px;
-    margin: 1px;
-    justify-self: center;
+.registerHeader h2 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.5px;
+}
+
+.registerForm {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
 }
 
-h6 {
-    color: grey;
-    display: inline;
-    padding: 0px;
-    margin: 5px 0px;
-}
-
-.checkBox {
-    width: 24px;
-    height: 24px;
-    border-radius: 10px;
-    margin-right: 10px;
-}
-
-.caution {
+.inputRow {
     display: flex;
-    align-items: center;
-}
-
-.reglinkStyles {
-    color: rgb(168, 175, 245);
-    font-size: 10px;
-    text-decoration: none;
-    display: inline;
-}
-
-.lastlink {
-    align-self: flex-start;
-}
-
-.lowerregform {
-    width: 416px;
-    height: 140px;
-    margin: 1px;
-    justify-self: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.inpcontainerStyles {
-    width: 416px;
-    height: 72px;
-    color: white;
-    margin: 1px;
-}
-
-.inpboxStyle {
-    background-color: #1E1F22;
-    color: white;
-    border: 1px solid #1E1F22;
-    border-radius: 8px;
-    padding: 10px 2%;
-    font-size: 16px;
-    width: 96%;
-}
-
-.labelingStyle {
-    width: 416px;
-    height: 24px;
-    color: #FFFFFF;
-    font-family: gg sans, Noto Sans, sans-serif;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-}
-
-.eachSelect {
-    background-color: #1E1F22;
-    color: white;
-    width: 130px;
-    height: 40px;
-    border-radius: 8px;
-    padding: 10px 0px;
-    border-color: #1E1F22;
-    text-align: center;
-}
-
-.selectContainer {
-    display: flex;
-    justify-content: space-between;
-}
-
-.linkStyles {
-    color: rgb(168, 175, 245);
-    font-size: 14px;
-    text-decoration: none;
-    display: inline;
-    cursor: pointer;
-}
-
-.btnStyle {
-    background-color: #5865F2;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 10px 0;
+    gap: 16px;
     width: 100%;
 }
 
-.googleBtnStyle {
-    background-color: white;
-    color: #2b2d31;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+.inputRow .inputGroup {
+    flex: 1;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.inputLabel {
+    color: #b5bac1;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+}
+
+.requiredIndicator {
+    color: #f23f43;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.registerInputField {
+    background-color: #1e1f22;
+    color: #dbdee1;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 16px;
+    height: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+}
+
+.registerInputField:focus {
+    outline: none;
+    border-color: #5865f2;
+    box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.25);
+}
+
+/* Date of Birth selector styles */
+.dobSelectContainer {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.dobSelect {
+    background-color: #1e1f22;
+    color: #dbdee1;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 16px;
+    height: 40px;
+    flex: 1;
+    cursor: pointer;
+    box-sizing: border-box;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23b5bac1' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 20px;
+    padding-right: 32px;
+    transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+}
+
+.dobSelect:focus {
+    outline: none;
+    border-color: #5865f2;
+    box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.25);
+}
+
+.dobSelect option {
+    background-color: #1e1f22;
+    color: #dbdee1;
+}
+
+.submitButton {
+    background-color: #5865f2;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
     font-size: 16px;
     font-weight: 600;
-    padding: 10px 0;
+    height: 44px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s ease, box-shadow 0.2s ease;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.2);
+}
+
+.submitButton:hover {
+    background-color: #4752c4;
+    box-shadow: 0 6px 16px rgba(88, 101, 242, 0.35);
+}
+
+.submitButton:active {
+    transform: scale(0.985);
+}
+
+.loginPrompt {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin: 0;
+}
+
+.loginText {
+    color: #949ba4;
+}
+
+.loginLink {
+    color: #00a8fc;
+    text-decoration: none;
+    margin-left: 6px;
+    font-weight: 500;
+    transition: text-decoration 0.2s ease, color 0.2s ease;
+}
+
+.loginLink:hover {
+    text-decoration: underline;
+    color: #008ccf;
+}
+
+.dividerLine {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    align-self: stretch;
+}
+
+.googleAuthSection {
+    flex: 0.9;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
+}
+
+.googleContainerCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: rgba(30, 31, 34, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    padding: 32px 24px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.googleContainerCard:hover {
+    background: rgba(30, 31, 34, 0.55);
+    border-color: rgba(88, 101, 242, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 16px rgba(88, 101, 242, 0.05);
+}
+
+.googleLogoWrapper {
+    width: 72px;
+    height: 72px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.googleContainerCard:hover .googleLogoWrapper {
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+.googleSvgIcon {
+    width: 40px;
+    height: 40px;
+}
+
+.googleInfoText h3 {
+    color: #f2f3f5;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.3px;
+}
+
+.googleInfoText p {
+    color: #b5bac1;
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0 0 24px 0;
+    font-weight: 400;
+}
+
+.googleRegisterButton {
+    background-color: #ffffff;
+    color: #2c2e31;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 20px;
     width: 100%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 12px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
 }
 
-.googleBtnStyle:hover {
+.googleRegisterButton:hover {
     background-color: #f2f3f5;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
-.googleBtnStyle:active {
-    transform: scale(0.98);
+.googleRegisterButton:active {
+    transform: scale(0.985);
+}
+
+.btnGoogleIcon {
+    flex-shrink: 0;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 830px) {
+    .registerCardBody {
+        flex-direction: column;
+        padding: 24px;
+        gap: 24px;
+    }
+
+    .dividerLine {
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .googleAuthSection {
+        width: 100%;
+    }
+
+    .googleContainerCard {
+        padding: 24px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .inputRow {
+        flex-direction: column;
+        gap: 0;
+    }
 }

@@ -13,7 +13,9 @@
 .leftnavC{
     color: white;
     width: 76px;
-    height: 100vh;
+    height: 100%;
+    background-color: #1e1f22;
+    box-sizing: border-box;
 }
 
 .el{

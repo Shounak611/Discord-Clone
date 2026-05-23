@@ -1,11 +1,13 @@
 .friendsC{
     height: 100%;
+    box-sizing: border-box;
 }
 
 .friendsSubC{
     display: flex;
     justify-content: space-between;
-    height: calc(100vh - 82px);
+    height: calc(100vh - 96px);
     width: 100%;
+    box-sizing: border-box;
 }
 

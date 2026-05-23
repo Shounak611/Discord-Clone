@@ -1,4 +1,4 @@
-.stylesRegister{
+.stylesRegister {
     background-image: url('../../assets/login-page-bg.svg');
     background-size: cover;
     background-position: center;
@@ -6,19 +6,79 @@
     width: 100%;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 24px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
+/* Default (mobile/tablet/laptop): Logo flows naturally above the card to prevent overlap */
 .logoStyle {
-    position: absolute;
-    top: 50px;
-    left: 50px;
+    position: static;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    z-index: 10;
 }
 
-.stylesRegisterForm{
-    width: 480px;
-    height: 714px;
-    background-color: #36393F;
-    border-radius: 10px;
+.logoStyle img {
+    height: 36px;
+    transition: transform 0.3s ease;
+}
+
+.logoStyle img:hover {
+    transform: scale(1.03);
+}
+
+.stylesRegisterForm {
+    width: 100%;
+    max-width: 840px;
+    background-color: #313338;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Large screens: Logo is absolute on top-left */
+@media (min-width: 1025px) {
+    .logoStyle {
+        position: absolute;
+        top: 48px;
+        left: 48px;
+        justify-content: flex-start;
+        width: auto;
+        margin-bottom: 0;
+    }
+    .stylesRegister {
+        justify-content: center;
+    }
+}
+
+/* Small screens: Adjust container heights and alignment */
+@media (max-width: 830px) {
+    .stylesRegister {
+        justify-content: flex-start;
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    .stylesRegisterForm {
+        max-width: 480px;
+        min-height: auto;
+    }
 }

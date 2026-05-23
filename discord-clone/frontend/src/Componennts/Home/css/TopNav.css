@@ -1,31 +1,49 @@
-.topdiv{
-    height: 32px;
+.topdiv {
+    height: 48px;
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: black;
+    background-color: #313338;
     justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
-.center{
-    color: white;
+
+.left-title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 0 auto;
+    gap: 8px;
+    color: #f2f3f5;
 }
-.right{
+
+.title-text {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.title-icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0.6;
+}
+
+.right {
     display: flex;
     align-items: center;
-    gap: 25px;
-    margin-right: 15px;
+    gap: 16px;
 }
-.icon{
-    width: 18px;
-    height: 18px;
+
+.icon {
+    width: 24px;
+    height: 24px;
     cursor: pointer;
+    color: #b5bac1;
+    transition: color 0.15s ease;
 }
 
 .icon:hover {
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
+    color: #dbdee1;
 }

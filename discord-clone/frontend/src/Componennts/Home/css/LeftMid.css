@@ -1,97 +1,198 @@
-.LeftMidC{
+.LeftMidC {
     width: 299px;
     height: 100%;
-    border: 1px solid rgb(61, 59, 59);
-    border-top-left-radius: 20px;
-    color: white;
-    
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: #2b2d31;
+    color: #949ba4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 
-.leftMidheader{
+.leftMidScrollable {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 12px;
+}
+
+/* Custom scrollbar for sidebar */
+.leftMidScrollable::-webkit-scrollbar {
+    width: 4px;
+}
+.leftMidScrollable::-webkit-scrollbar-track {
+    background: transparent;
+}
+.leftMidScrollable::-webkit-scrollbar-thumb {
+    background: #1a1b1e;
+    border-radius: 2px;
+}
+
+.leftMidheader {
     width: 100%;
     height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid rgb(61, 59, 59) ;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
-.header{
-    margin: auto;
-    width: 279px;
-    height: 32px;
-    border-radius: 10px;
-    background-color: rgb(33, 32, 32);
+.header {
+    width: 260px;
+    height: 28px;
+    border-radius: 4px;
+    background-color: #1e1f22;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 13px;
+    color: #949ba4;
+    cursor: pointer;
 }
 
-.opts{
+.header p {
+    margin: 0;
+}
+
+.opts {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    gap: 2px;
+    padding: 8px 0;
     align-items: center;
-    gap: 10px;
-    padding: 15px 0;
-    border-bottom: 1px solid rgb(61, 59, 59);
 }
 
-.opt{
+.opt {
     width: 283px;
     height: 38px;
-    border-radius: 5px;
+    border-radius: 4px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 15px;
+    gap: 16px;
+    color: #949ba4;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    box-sizing: border-box;
 }
-.opt:active{
-    background-color: rgb(33, 32, 32);
+
+.opt p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 15px;
 }
-.opt:hover{
-    background-color: rgb(33, 32, 32);
+
+.opt:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #dbdee1;
     cursor: pointer;
 }
 
+.opt.active {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+}
 
-.leftMidIcons{
+.leftMidIcons {
     width: 20px;
     height: 20px;
-    margin-left: 20px;
-    cursor: pointer;
+    margin-left: 12px;
 }
 
-.dmheader{
+.dm {
+    margin-top: 16px;
+}
+
+.dmheader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0px 15px;
+    padding: 0 16px 0 18px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.25px;
+    color: #949ba4;
 }
 
-.dmlist{
+.dmheader p {
+    margin: 0;
+}
+
+.dmheader .leftMidIcons {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.dmheader .leftMidIcons:hover {
+    color: #dbdee1;
+}
+
+.dmList {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    gap: 2px;
     align-items: center;
-    gap: 20px;
+    padding: 4px 0;
 }
 
-.noDM{
-    margin-left: 30px;
+.noDM {
+    padding: 16px;
+    font-size: 13px;
+    color: #949ba4;
+    text-align: center;
 }
 
-.iconsize{
-    width: 40px;
-    height: 40px;
-    margin-left: 20px;
+.iconsize {
+    width: 32px;
+    height: 32px;
+    margin-left: 12px;
+    background-color: #313338;
+    border-radius: 50%;
+    padding: 4px;
+    box-sizing: border-box;
 }
 
-.dmFriend{
+.dmFriend {
+    width: 283px;
+    height: 42px;
+    border-radius: 4px;
     display: flex;
     justify-content: flex-start;
-    gap: 30px;
     align-items: center;
-    cursor: pointer;
+    gap: 12px;
+    color: #949ba4;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    box-sizing: border-box;
+}
+
+.dmFriend p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.dmFriend:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #dbdee1;
+}
+
+.dmFriend.active {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+}
+
+.leftMidUserProfile {
+    height: 52px;
+    background-color: #232428;
+    width: 100%;
+    flex-shrink: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }

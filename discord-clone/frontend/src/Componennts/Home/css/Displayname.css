@@ -1,45 +1,74 @@
-.displaynameC{
-    width: 360px;
-    height: 60px;
+.displaynameC {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    background-color: rgb(41, 40, 40);
-    border-radius: 15px;
+    padding: 0 8px;
+    background-color: transparent;
+    box-sizing: border-box;
 }
-.displaybox{
+
+.displaybox {
     display: flex;
-    justify-content: center;
     align-items: center;
 }
 
-.displaynameIcon{
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-}
-
-.displaynameIcond{
-    width: 44px;
-    height: 44px;
-}
-
-.box2{
-    display: flex;
+.displaybox.box2 {
+    flex: 1;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: flex-start;
-    gap: 7px;
-    margin-left: 0;
-    padding-left: 0;
+    gap: 2px;
+    margin-left: 8px;
+    min-width: 0; /* Enable text truncation */
 }
 
-.subBox1{
-    font-size: 20px;
-    color: grey;
+.displaynameIcond {
+    width: 32px;
+    height: 32px;
+    background-color: #313338;
+    border-radius: 50%;
+    padding: 4px;
+    box-sizing: border-box;
 }
 
-.subBox2{
-    font-size: 12px;
-    color: yellow;
+.subBox1 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f2f3f5;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.subBox2 {
+    font-size: 11px;
+    color: #23a55a; /* Green online status color */
+    font-weight: 500;
+    text-transform: capitalize;
+    margin: 0;
+}
+
+/* Control Icons Wrapper */
+.displaybox.controls {
+    display: flex;
+    gap: 2px;
+}
+
+.displaynameIcon {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    color: #b5bac1;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.displaynameIcon:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #dbdee1;
 }

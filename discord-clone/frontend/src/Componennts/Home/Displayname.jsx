@@ -3,21 +3,25 @@ import discord from '../../assets/displayDiscordlogo.png'
 import headphone from '../../assets/headphoneIcon.png'
 import mute from '../../assets/muteIcon.png'
 import settings from '../../assets/settingsIcon.png'
-import micOnIcon from '../../assets/micOnIcon.png'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-
+import ProfileSettingsModal from './ProfileSettingsModal'
 
 export default function Displayname() {
     const [displayName, setDisplayName] = useState("");
     const [username, setUsername] = useState("");
+    const [showSettings, setShowSettings] = useState(false);
     const email = localStorage.getItem("email");
-
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/get_user?email=${encodeURIComponent(email)}`);
+                const token = localStorage.getItem("token");
+                const res = await axios.get(`http://localhost:8000/get_user?email=${encodeURIComponent(email)}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 setUsername(res.data.username);
                 setDisplayName(res.data.display_name);
                 localStorage.setItem("user_name", res.data.username);
@@ -34,28 +38,43 @@ export default function Displayname() {
     }, [email]);
 
     return (
-        <div className='displaynameC'>
-            <div className="displaybox">
-                <img className='displaynameIcond' src={discord} alt="discordIcon" />
+        <>
+            <div className='displaynameC'>
+                <div className="displaybox">
+                    <img className='displaynameIcond' src={discord} alt="discordIcon" />
+                </div>
+                <div className="displaybox box2">
+                    <div className="subBox1">{displayName || "Discord User"}</div>
+                    <div className="subBox2">online</div>
+                </div>
+                <div className="displaybox controls">
+                    <img
+                        className='displaynameIcon'
+                        src={mute}
+                        alt="muteIcon"
+                    />
+                    <img className='displaynameIcon' src={headphone} alt="headphoneIcon" />
+                    <img 
+                        className='displaynameIcon' 
+                        src={settings} 
+                        alt="settingsIcon" 
+                        onClick={() => setShowSettings(true)}
+                    />
+                </div>
+
             </div>
-            <div className="displaybox box2">
-                <div className="subBox1">{displayName}</div>
-                <div className="subBox2">online</div>
-            </div>
-            <div className="displaybox ">
-                <img
-                    className='displaynameIcon'
-                    src={mute}
-                    alt="muteIcon"
-                    
-                />
-            </div>
-            <div className="displaybox ">
-                <img className='displaynameIcon' src={headphone} alt="headphoneIcon" />
-            </div>
-            <div className="displaybox ">
-                <img className='displaynameIcon' src={settings} alt="settingsIcon" />
-            </div>
-        </div>
+
+            <ProfileSettingsModal
+                isOpen={showSettings}
+                onClose={() => setShowSettings(false)}
+                onSave={(newDisp, newUsr) => {
+                    setDisplayName(newDisp);
+                    setUsername(newUsr);
+                }}
+                currentDisplayName={displayName}
+                currentUsername={username}
+            />
+        </>
     );
 }
+

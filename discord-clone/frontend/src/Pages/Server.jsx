@@ -28,7 +28,6 @@ export default function Server(){
                     <RightServer selectedChannel={selectedChannel} servername={servername} />
                 </div>
             </div>
-            <div className="displayName"><Displayname /></div>
         </div>
     )
 }
