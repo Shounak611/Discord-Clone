@@ -1,75 +1,137 @@
-.leftnavul{
-    width: 76px;
+.leftnavul {
+    width: 72px;
     list-style-type: none;
-    padding: 0;
+    padding: 12px 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
     margin: 0;
 }
 
-.leftnavC{
+.leftnavC {
     color: white;
-    width: 76px;
+    width: 72px;
     height: 100%;
     background-color: #1e1f22;
     box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
 }
 
-.el{
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    background-color: rgb(52, 52, 52);
+/* Hide scrollbar */
+.leftnavC::-webkit-scrollbar {
+    width: 0;
+}
+
+.leftNavDivider {
+    width: 32px;
+    height: 2px;
+    background-color: #35363c;
+    border-radius: 1px;
+}
+
+.el {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #313338;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: border-radius 0.2s ease, background-color 0.2s ease, transform 0.1s ease;
 }
 
-.el:hover{
-    background-color: blue;
-    transform: scale(1.05);
+.el:hover {
+    background-color: #5865f2;
+    border-radius: 16px;
+    transform: scale(1.02);
 }
 
-.elD{
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    background-color: blue;
+.el.addServer {
+    background-color: #313338;
+}
+
+.el.addServer:hover {
+    background-color: #23a55a;
+    border-radius: 16px;
+}
+
+.elD {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background-color: #5865f2;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-}
-.elD:hover{
-    transform: scale(1.05);
+    transition: border-radius 0.2s ease, transform 0.1s ease;
 }
 
-.liIcon{
+.elD:hover {
+    border-radius: 12px;
+    transform: scale(1.02);
+}
+
+.liIcon {
     width: 24px;
     height: 24px;
-
 }
 
 .servers {
-    width: 44px;
-    height: 44px;
-    background-color: #5865F2;
-    border-radius: 10px;
+    width: 48px;
+    height: 48px;
+    background-color: #5865f2;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
-    font-weight: bold;
-    font-size: 18px;
-    margin: 5px auto;
+    font-weight: 700;
+    font-size: 16px;
     cursor: pointer;
+    transition: border-radius 0.2s ease, background-color 0.2s ease;
+    letter-spacing: 0.5px;
 }
 
 .servers:hover {
     background-color: #4752c4;
-    transform: scale(1.05);
+    border-radius: 16px;
+}
+
+/* ── Responsive: small mobile ── */
+@media (max-width: 480px) {
+    .leftnavC {
+        width: 56px;
+    }
+
+    .leftnavul {
+        width: 56px;
+        gap: 6px;
+        padding: 8px 0;
+    }
+
+    .el, .elD {
+        width: 40px;
+        height: 40px;
+    }
+
+    .servers {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .liIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .leftNavDivider {
+        width: 28px;
+    }
 }

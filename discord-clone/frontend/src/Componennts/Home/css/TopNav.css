@@ -6,34 +6,30 @@
     background-color: #313338;
     justify-content: space-between;
     padding: 0 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.24);
     box-sizing: border-box;
     flex-shrink: 0;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
 }
 
 .left-title {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     color: #f2f3f5;
 }
 
 .title-text {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     margin: 0;
+    letter-spacing: 0.2px;
 }
 
 .title-icon {
     width: 24px;
     height: 24px;
-    opacity: 0.6;
-}
-
-.right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    opacity: 0.7;
 }
 
 .icon {
@@ -41,9 +37,37 @@
     height: 24px;
     cursor: pointer;
     color: #b5bac1;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, opacity 0.15s ease;
 }
 
 .icon:hover {
     color: #dbdee1;
+    opacity: 1;
+}
+
+/* ── Hamburger button — hidden on desktop ── */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #b5bac1;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    line-height: 0;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.hamburger-btn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #f2f3f5;
+}
+
+/* Show hamburger on mobile/tablet */
+@media (max-width: 768px) {
+    .hamburger-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }

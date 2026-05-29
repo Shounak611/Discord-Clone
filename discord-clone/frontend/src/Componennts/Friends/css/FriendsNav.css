@@ -1,59 +1,120 @@
-.friendNavC{
+.friendNavC {
     width: 100%;
-    height: 48px;
+    min-height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgb(61, 59, 59);
-    border-bottom: 1px solid rgb(61, 59, 59);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.24);
     box-sizing: border-box;
+    padding: 0 16px;
+    flex-shrink: 0;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
 
-.leftFriendsNav{
+.leftFriendsNav {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 10px;
-    margin-left: 20px;
+    gap: 16px;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 8px 0;
 }
 
-.rightFriendsNav{
+.friendsNavTitle {
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin-right: 20px;
+    gap: 8px;
+    color: #f2f3f5;
+    font-weight: 700;
+    font-size: 16px;
+    padding-right: 16px;
+    border-right: 1px solid #3f4147;
+    margin-right: 4px;
+    flex-shrink: 0;
 }
 
-.friendsNavIcons{
-    width: 20px;
-    height: 20px;
+.friendsNavTitle svg {
+    color: #b5bac1;
+    flex-shrink: 0;
+}
+
+.friendsNavTitle p {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.friendsNavBtns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lnc2 {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 12px;
+    border-radius: 4px;
     cursor: pointer;
+    color: #b5bac1;
+    background-color: transparent;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
 }
 
-.lnc1{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.lnc2 p {
+    margin: 0;
 }
 
-.lnc2{
-    height: 35px;
-    display: flex;
-    align-items: center;
-    font-size: 15px;
-    background-color: rgb(104, 106, 232);
-    padding: 0 15px;
-    border-radius: 5px;
-    cursor: pointer;
+.lnc2:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #f2f3f5;
 }
 
-.lnc2:active{
-    background-color: rgb(29, 29, 29);
-    color: rgb(129, 129, 224);
+.lnc2:active {
+    background-color: rgba(88, 101, 242, 0.15);
+    color: #c4c9f0;
 }
 
-.dot{
-    width: 30px;
-    height: 30px;
+/* ── Responsive: small screens ── */
+@media (max-width: 600px) {
+    .friendNavC {
+        padding: 0 12px;
+    }
+
+    .leftFriendsNav {
+        gap: 10px;
+    }
+
+    .friendsNavTitle {
+        font-size: 14px;
+        padding-right: 10px;
+    }
+
+    .lnc2 {
+        font-size: 13px;
+        padding: 0 10px;
+        height: 26px;
+    }
 }
 
+@media (max-width: 400px) {
+    .friendsNavTitle {
+        border-right: none;
+        padding-right: 0;
+        margin-right: 0;
+    }
+
+    .leftFriendsNav {
+        gap: 6px;
+    }
+
+    .lnc2 {
+        font-size: 12px;
+        padding: 0 8px;
+    }
+}

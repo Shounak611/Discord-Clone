@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import discord from '../../assets/discordIcon.png'
 import add from '../../assets/addIcon.png'
-import discovery from '../../assets/discoveryIcon.png'
-import download from '../../assets/downloadIcon.png'
 import './css/LeftNav.css'
 import ServerModal from '../Server/ServerModal'
 
@@ -42,6 +40,7 @@ export default function LeftNav() {
                     </div>
                 </li>
 
+                <li><div className="leftNavDivider"></div></li>
 
                 {/* User Servers */}
                 {servers.map(server => (
@@ -54,25 +53,10 @@ export default function LeftNav() {
                     </li>
                 ))}
 
-
                 {/* Add Server */}
                 <li>
-                    <div className='el' onClick={() => setShowModal(true)}>
+                    <div className='el addServer' onClick={() => setShowModal(true)}>
                         <img className='liIcon' src={add} alt="addIcon" />
-                    </div>
-                </li>
-
-                {/* Discovery */}
-                <li>
-                    <div className='el'>
-                        <img className='liIcon' src={discovery} alt="discoveryIcon" />
-                    </div>
-                </li>
-
-                {/* Download */}
-                <li>
-                    <div className='el'>
-                        <img className='liIcon' src={download} alt="downloadIcon" />
                     </div>
                 </li>
             </ul>

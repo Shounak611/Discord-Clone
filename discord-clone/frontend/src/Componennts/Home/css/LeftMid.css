@@ -1,13 +1,14 @@
 .LeftMidC {
-    width: 299px;
+    width: 240px;
     height: 100%;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
     background-color: #2b2d31;
     color: #949ba4;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .leftMidScrollable {
@@ -35,26 +36,37 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.24);
     flex-shrink: 0;
     box-sizing: border-box;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .header {
-    width: 260px;
+    width: calc(100% - 24px);
     height: 28px;
     border-radius: 4px;
     background-color: #1e1f22;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-left: 8px;
     font-size: 13px;
-    color: #949ba4;
+    color: #6d6f78;
     cursor: pointer;
+    transition: background-color 0.15s ease;
+    box-sizing: border-box;
+}
+
+.header:hover {
+    background-color: #232428;
 }
 
 .header p {
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .opts {
@@ -62,21 +74,23 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 8px 0;
+    padding: 8px 8px;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .opt {
-    width: 283px;
-    height: 38px;
+    width: 100%;
+    height: 42px;
     border-radius: 4px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     color: #949ba4;
     transition: background-color 0.15s ease, color 0.15s ease;
     box-sizing: border-box;
+    padding: 0 12px;
 }
 
 .opt p {
@@ -86,36 +100,37 @@
 }
 
 .opt:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(255, 255, 255, 0.06);
     color: #dbdee1;
     cursor: pointer;
 }
 
 .opt.active {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.08);
     color: #ffffff;
 }
 
 .leftMidIcons {
     width: 20px;
     height: 20px;
-    margin-left: 12px;
+    opacity: 0.7;
+    flex-shrink: 0;
 }
 
 .dm {
-    margin-top: 16px;
+    margin-top: 12px;
 }
 
 .dmheader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px 0 18px;
+    padding: 0 12px 0 18px;
     margin-bottom: 4px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.25px;
+    letter-spacing: 0.5px;
     color: #949ba4;
 }
 
@@ -128,10 +143,12 @@
     height: 14px;
     cursor: pointer;
     margin: 0;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
 }
 
 .dmheader .leftMidIcons:hover {
-    color: #dbdee1;
+    opacity: 1;
 }
 
 .dmList {
@@ -139,28 +156,28 @@
     flex-direction: column;
     gap: 2px;
     align-items: center;
-    padding: 4px 0;
+    padding: 4px 8px;
 }
 
 .noDM {
-    padding: 16px;
+    padding: 20px 16px;
     font-size: 13px;
-    color: #949ba4;
+    color: #6d6f78;
     text-align: center;
 }
 
 .iconsize {
     width: 32px;
     height: 32px;
-    margin-left: 12px;
-    background-color: #313338;
+    background-color: #5865f2;
     border-radius: 50%;
     padding: 4px;
     box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .dmFriend {
-    width: 283px;
+    width: 100%;
     height: 42px;
     border-radius: 4px;
     display: flex;
@@ -170,21 +187,26 @@
     color: #949ba4;
     transition: background-color 0.15s ease, color 0.15s ease;
     box-sizing: border-box;
+    cursor: pointer;
+    padding: 0 8px;
 }
 
 .dmFriend p {
     margin: 0;
     font-weight: 500;
     font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dmFriend:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(255, 255, 255, 0.06);
     color: #dbdee1;
 }
 
 .dmFriend.active {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.08);
     color: #ffffff;
 }
 
@@ -193,6 +215,27 @@
     background-color: #232428;
     width: 100%;
     flex-shrink: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+/* ── Responsive: small mobile ── */
+@media (max-width: 480px) {
+    .LeftMidC {
+        width: 224px;
+    }
+
+    .header {
+        font-size: 12px;
+    }
+
+    .opt p {
+        font-size: 14px;
+    }
+
+    .dmFriend p {
+        font-size: 14px;
+    }
 }

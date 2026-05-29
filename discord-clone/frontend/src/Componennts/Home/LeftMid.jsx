@@ -1,12 +1,10 @@
-import user from '../../assets/userIcon.png'
-import nitro from '../../assets/nitroIcon.png'
-import shop from '../../assets/shopIcon.png'
-import plus from '../../assets/plusIcon.png'
-import './css/LeftMid.css'
-import discord from '../../assets/displayDiscordlogo.png'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import Displayname from './Displayname'
+import user from '../../assets/userIcon.png';
+import plus from '../../assets/plusIcon.png';
+import './css/LeftMid.css';
+import discord from '../../assets/displayDiscordlogo.png';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Displayname from './Displayname';
 
 export default function LeftMid({ onSelectedOption, selectedOption }) {
     const [friends, setfriends] = useState([]);
@@ -39,18 +37,6 @@ export default function LeftMid({ onSelectedOption, selectedOption }) {
                         onClick={() => onSelectedOption("Friends")}
                     >
                         <img className='leftMidIcons' src={user} alt="userIcon" /><p>Friends</p>
-                    </div>
-                    <div 
-                        className={`opt ${selectedOption === "Nitro" ? "active" : ""}`} 
-                        onClick={() => onSelectedOption("Nitro")}
-                    >
-                        <img className='leftMidIcons' src={nitro} alt="nitroIcon" /><p>Nitro</p>
-                    </div>
-                    <div 
-                        className={`opt ${selectedOption === "Shop" ? "active" : ""}`} 
-                        onClick={() => onSelectedOption("Shop")}
-                    >
-                        <img className='leftMidIcons' src={shop} alt="shopIcon" /><p>Shop</p>
                     </div>
                 </div>
                 <div className="dm">

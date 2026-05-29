@@ -1,13 +1,31 @@
-.friendsC{
+.friendsC {
     height: 100%;
-    box-sizing: border-box;
-}
-
-.friendsSubC{
-    display: flex;
-    justify-content: space-between;
-    height: calc(100vh - 96px);
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
+.friendsSubC {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+.friendsSubC::-webkit-scrollbar {
+    width: 6px;
+}
+.friendsSubC::-webkit-scrollbar-track {
+    background: transparent;
+}
+.friendsSubC::-webkit-scrollbar-thumb {
+    background: #1a1b1e;
+    border-radius: 3px;
+}
+.friendsSubC::-webkit-scrollbar-thumb:hover {
+    background: #2b2d31;
+}

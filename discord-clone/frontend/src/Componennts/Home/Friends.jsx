@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import FriendsNav from '../Friends/FriendsNav'
 import LeftFriends from '../Friends/LeftFriends'
-import RightFriends from '../Friends/RightFriends'
 import PendingRequests from '../Friends/PendingRequests'
 import './css/Friends.css'
 
@@ -14,7 +13,6 @@ export default function Friends() {
             <div className='friendsSubC'>
                 {tab === 'add' && <LeftFriends />}
                 {tab === 'pending' && <PendingRequests />}
-                <RightFriends className="RightFriends"/>
             </div>
         </div>
     )

@@ -1,46 +1,118 @@
-.leftFriendsC{
+.leftFriendsC {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 4px;
+    padding: 20px 30px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-h3{
-    margin-left: 20px;
+.leftFriendsC h3 {
+    margin: 0 0 16px 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #f2f3f5;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
-.friendRequestCard{
+
+.friendRequestCard {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background-color 0.15s ease;
+    gap: 12px;
 }
 
-.friendRequestCardL{
+.friendRequestCard:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.friendRequestCardL {
     display: flex;
-    gap: 20px;
+    gap: 12px;
     align-items: center;
+    min-width: 0;
 }
 
-.friendRequestCardR{
+.friendRequestCardL p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #f2f3f5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friendRequestCardR {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     align-items: center;
+    flex-shrink: 0;
 }
 
-.friendRequestCardR button{
-    padding: 6px 12px;
-    background-color: #aee665;
+.friendRequestCardR button {
+    padding: 7px 16px;
+    background-color: rgba(255, 255, 255, 0.06);
     border: none;
-    color: rgb(22, 2, 2);
+    color: #b5bac1;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    font-family: inherit;
+    white-space: nowrap;
 }
 
-#danger{
-    background-color: red;
+.friendRequestCardR button:hover {
+    background-color: #23a55a;
+    color: #ffffff;
+}
+
+#danger {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #b5bac1;
+}
+
+#danger:hover {
+    background-color: #da373c;
     color: white;
 }
 
-.iconsize{
-    width: 40px;
-    height: 40px;
-    margin-left: 20px;
+.iconsize {
+    width: 36px;
+    height: 36px;
+    background-color: #5865f2;
+    border-radius: 50%;
+    padding: 4px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .leftFriendsC {
+        padding: 16px;
+    }
+
+    .friendRequestCard {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .friendRequestCardR {
+        align-self: flex-end;
+    }
+
+    .friendRequestCardR button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
 }

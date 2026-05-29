@@ -12,6 +12,7 @@
 .displaybox {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .displaybox.box2 {
@@ -19,9 +20,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    gap: 2px;
+    gap: 1px;
     margin-left: 8px;
     min-width: 0; /* Enable text truncation */
+    flex-shrink: 1;
+}
+
+/* Avatar Wrapper and Online Status Badge */
+.avatarWrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .displaynameIcond {
@@ -31,6 +42,24 @@
     border-radius: 50%;
     padding: 4px;
     box-sizing: border-box;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.avatarWrapper:hover .displaynameIcond {
+    filter: brightness(0.85);
+}
+
+.statusIndicator {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #23a55a; /* Discord online green */
+    border: 2px solid #232428; /* Matches user profile bar background */
+    pointer-events: none;
 }
 
 .subBox1 {
@@ -42,14 +71,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
+    cursor: default;
 }
 
 .subBox2 {
     font-size: 11px;
-    color: #23a55a; /* Green online status color */
-    font-weight: 500;
-    text-transform: capitalize;
+    color: #949ba4; /* Soft grey for username handle */
+    font-weight: 400;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    cursor: default;
 }
 
 /* Control Icons Wrapper */
@@ -58,17 +92,135 @@
     gap: 2px;
 }
 
+.displaynameIconWrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .displaynameIcon {
     width: 18px;
     height: 18px;
-    cursor: pointer;
     padding: 6px;
     border-radius: 4px;
     color: #b5bac1;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
 }
 
-.displaynameIcon:hover {
+.displaynameIconWrapper:hover .displaynameIcon {
     background-color: rgba(255, 255, 255, 0.06);
     color: #dbdee1;
+}
+
+/* Mute / Deafen slashed state overlay */
+.displaynameIconWrapper.slashed::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 18px;
+    background-color: #f23f43; /* Discord red */
+    transform: rotate(45deg);
+    border: 1.5px solid #232428; /* boundary to make it look clean */
+    top: 5px;
+    left: 14px;
+    pointer-events: none;
+}
+
+.displaynameIconWrapper.slashed .displaynameIcon {
+    opacity: 0.6;
+    color: #f23f43;
+}
+
+.displaynameIconWrapper.slashed:hover .displaynameIcon {
+    opacity: 0.8;
+    color: #fa777c;
+}
+
+/* Premium CSS Tooltips */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background-color: #111214;
+    color: #dbdee1;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100;
+}
+
+[data-tooltip]::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    border-width: 4px;
+    border-style: solid;
+    border-color: #111214 transparent transparent transparent;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Responsive: small mobile ── */
+@media (max-width: 480px) {
+    .displaynameC {
+        padding: 0 4px;
+    }
+
+    .displaynameIcond {
+        width: 28px;
+        height: 28px;
+    }
+
+    .displaynameIcon {
+        width: 16px;
+        height: 16px;
+        padding: 4px;
+    }
+
+    .subBox1 {
+        font-size: 12px;
+    }
+
+    .subBox2 {
+        font-size: 10px;
+    }
+
+    .statusIndicator {
+        width: 8px;
+        height: 8px;
+    }
+
+    .displaynameIconWrapper.slashed::after {
+        height: 14px;
+        top: 4px;
+        left: 11px;
+    }
 }

@@ -8,11 +8,14 @@ html, body, #root {
 .styleHome {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', 'Poppins', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif;
     color: #ffffff;
     height: 100%;
     overflow: hidden;
     background-color: #313338;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
 }
 
 .homeContainer {
@@ -21,14 +24,21 @@ html, body, #root {
     height: 100%;
 }
 
+/* ── Sidebar overlay backdrop (mobile only) ── */
+.sidebarOverlay {
+    display: none;
+}
+
+/* ── Left sidebar container ── */
 .leftBox {
-    width: 375px; /* 76px LeftNav + 299px LeftMid */
+    width: 312px; /* 72px LeftNav + 240px LeftMid */
     background-color: #2b2d31;
     height: 100%;
     display: flex;
     flex-shrink: 0;
 }
 
+/* ── Right main content area ── */
 .rightBox {
     flex: 1;
     background-color: #313338;
@@ -36,10 +46,63 @@ html, body, #root {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-width: 0;
 }
 
 .rightContent {
     flex: 1;
-    height: calc(100% - 48px);
     overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE: Tablet (≤ 768px)
+   - Hide LeftMid sidebar, keep LeftNav
+   - Sidebar slides in as overlay on toggle
+   ═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    .sidebarOverlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 90;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .leftBox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 312px;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: none;
+    }
+
+    .leftBox.open {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .rightBox {
+        width: 100%;
+    }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE: Small mobile (≤ 480px)
+   - Narrower sidebar
+   ═══════════════════════════════════════════════ */
+@media (max-width: 480px) {
+    .leftBox {
+        width: 280px; /* 56px LeftNav + 224px LeftMid */
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

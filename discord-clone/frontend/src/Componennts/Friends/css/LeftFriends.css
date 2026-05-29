@@ -1,62 +1,121 @@
-.leftFriendsC{
-    width: calc(100% - 421px);
-    height: calc(100vh - 96px);
-    box-sizing: border-box;
-    /* border-right: 1px solid rgb(61, 59, 59); */
-}
-
-.leftFriendsUpper{
-    height: 142px;
+.leftFriendsC {
     width: 100%;
-    border-bottom: 1px solid rgb(61, 59, 59);
+    height: 100%;
+    box-sizing: border-box;
     padding: 20px 30px;
+}
+
+.leftFriendsUpper {
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
     box-sizing: border-box;
 }
 
+.leftFriendsUpper h3 {
+    margin: 0 0 6px 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f2f3f5;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.leftFriendsUpper p {
+    margin: 0 0 16px 0;
+    font-size: 13px;
+    color: #949ba4;
+    line-height: 1.4;
+}
 
 .inputWithButton {
-  display: flex;
-  border: none;
-  border-radius: 6px;
-  overflow: hidden;
-  background-color: #1e1f22;
-  width: 100%;
-  height: 52px;
-  align-items: center;
+    display: flex;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #1e1f22;
+    width: 100%;
+    max-width: 600px;
+    height: 48px;
+    align-items: center;
+    transition: border-color 0.2s ease;
 }
 
 .inputWithButton:focus-within {
-  border: 1px solid #5865f2;
+    border-color: #5865f2;
 }
 
 .inputWithButton input {
-  border: none;
-  outline: none;
-  padding: 10px;
-  background-color: transparent;
-  color: white;
-  font-size: 14px;
-  flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    background-color: transparent;
+    color: #dbdee1;
+    font-size: 14px;
+    flex: 1;
+    font-family: inherit;
+    min-width: 0; /* Allow input to shrink in flex */
+}
+
+.inputWithButton input::placeholder {
+    color: #6d6f78;
 }
 
 .inputWithButton button {
-  background-color: #5865f2;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  font-size: 14px;
-  cursor: pointer;
-  height: 32px;
-  border-radius: 5px;
-  margin-right: 15px;
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    padding: 0 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    height: 32px;
+    border-radius: 4px;
+    margin-right: 8px;
+    white-space: nowrap;
+    transition: background-color 0.15s ease;
+    font-family: inherit;
+    flex-shrink: 0;
 }
 
 .inputWithButton button:hover {
-  background-color: #4752c4;
+    background-color: #4752c4;
 }
 
-.cartoonLeftFriends{
-    z-index: 4;
-    position: absolute;
-    left: 20px;
+.inputWithButton button:active {
+    background-color: #3c45a5;
+}
+
+.leftFriendsLower {
+    padding: 20px 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .leftFriendsC {
+        padding: 16px;
+    }
+
+    .leftFriendsUpper h3 {
+        font-size: 14px;
+    }
+
+    .inputWithButton {
+        flex-direction: column;
+        height: auto;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .inputWithButton input {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .inputWithButton button {
+        margin: 0 8px 8px 8px;
+        height: 36px;
+        border-radius: 4px;
+    }
 }

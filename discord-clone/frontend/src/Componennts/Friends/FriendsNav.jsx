@@ -1,22 +1,22 @@
-import user from '../../assets/userIcon.png';
-import newchat from '../../assets/newchatIcon.png';
-import dot from '../../assets/dotIcon.png';
 import './css/FriendsNav.css';
 
-export default function FriendsNav({ currentTab, setTab }) {
+export default function FriendsNav({ setTab }) {
     return (
         <div className='friendNavC'>
             <div className='leftFriendsNav'>
-                <div className='lnc1'>
-                    <img className='friendsNavIcons' src={user} alt="userIcon" />
-                    <p onClick={() => setTab('friends')}>Friends</p>
+                <div className='friendsNavTitle'>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <p>Friends</p>
                 </div>
-                <img className='dot' src={dot} alt="dotIcon" />
-                <div className='lnc2' onClick={() => setTab('add')}><p>Add Friend</p></div>
-                <div className='lnc2' onClick={() => setTab('pending')}><p>Pending Request</p></div>
-            </div>
-            <div className='rightFriendsNav'>
-                <img className='friendsNavIcons' src={newchat} alt="newchatIcon" />
+                <div className='friendsNavBtns'>
+                    <div className='lnc2' onClick={() => setTab('add')}><p>Add Friend</p></div>
+                    <div className='lnc2' onClick={() => setTab('pending')}><p>Pending</p></div>
+                </div>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./css/ProfileSettingsModal.css";
@@ -18,6 +18,16 @@ export default function ProfileSettingsModal({
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+    // Sync internal state when modal opens or props change
+    useEffect(() => {
+        if (isOpen) {
+            setDisplayName(currentDisplayName || "");
+            setUsername(currentUsername || "");
+            setError("");
+            setSuccess("");
+        }
+    }, [isOpen, currentDisplayName, currentUsername]);
+
     if (!isOpen) return null;
 
     const handleLogout = () => {
@@ -30,11 +40,14 @@ export default function ProfileSettingsModal({
         setError("");
         setSuccess("");
 
-        if (!displayName.trim()) {
+        const cleanDisp = displayName.trim();
+        const cleanUsr = username.trim();
+
+        if (!cleanDisp) {
             setError("Display name cannot be empty");
             return;
         }
-        if (!username.trim()) {
+        if (!cleanUsr) {
             setError("Username cannot be empty");
             return;
         }
@@ -43,13 +56,16 @@ export default function ProfileSettingsModal({
         try {
             const token = localStorage.getItem("token");
             const res = await axios.put("http://localhost:8000/get_user/update", {
-                display_name: displayName,
-                username: username,
+                display_name: cleanDisp,
+                username: cleanUsr,
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            
+            // Sync with localStorage so other parts of the app are updated
+            localStorage.setItem("user_name", res.data.username);
             
             setSuccess("Profile updated successfully!");
             onSave(res.data.display_name, res.data.username);
@@ -69,6 +85,9 @@ export default function ProfileSettingsModal({
             setLoading(false);
         }
     };
+
+    const isUnchanged = displayName.trim() === (currentDisplayName || "").trim() && 
+                        username.trim() === (currentUsername || "").trim();
 
     return (
         <div className="profileModalOverlay" onClick={onClose}>
@@ -148,7 +167,7 @@ export default function ProfileSettingsModal({
                         <button
                             type="submit"
                             className="profileBtnSave"
-                            disabled={loading || (displayName === currentDisplayName && username === currentUsername)}
+                            disabled={loading || !displayName.trim() || !username.trim() || isUnchanged}
                         >
                             {loading ? "Saving..." : "Save Changes"}
                         </button>
