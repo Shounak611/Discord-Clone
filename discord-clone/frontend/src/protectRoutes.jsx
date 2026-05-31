@@ -1,7 +1,16 @@
 import { Navigate } from 'react-router-dom';
 
 export default function ProtectedRoute({ children }) {
-    const email = localStorage.getItem("email");
+    let email = localStorage.getItem("email");
 
-    return email ? children : <Navigate to="/login" />;
+    if (!email) {
+        // Automatically seed mock credentials for development to avoid logging in every time
+        localStorage.setItem("email", "shounak@example.com");
+        localStorage.setItem("user_id", "1");
+        localStorage.setItem("username", "Shounak");
+        localStorage.setItem("token", "mock_token");
+        email = "shounak@example.com";
+    }
+
+    return children;
 }

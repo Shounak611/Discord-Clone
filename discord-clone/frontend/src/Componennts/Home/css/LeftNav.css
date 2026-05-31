@@ -1,20 +1,9 @@
-.leftnavul {
-    width: 72px;
-    list-style-type: none;
-    padding: 12px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 8px;
-    align-items: center;
-    margin: 0;
-}
-
 .leftnavC {
-    color: white;
+    color: var(--text-primary);
     width: 72px;
     height: 100%;
-    background-color: #1e1f22;
+    background-color: rgba(10, 11, 13, 0.7);
+    border-right: 1px solid var(--border-glass);
     box-sizing: border-box;
     overflow-y: auto;
     overflow-x: hidden;
@@ -26,81 +15,139 @@
     width: 0;
 }
 
+.leftnavul {
+    width: 72px;
+    list-style-type: none;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    align-items: center;
+    margin: 0;
+}
+
 .leftNavDivider {
     width: 32px;
     height: 2px;
-    background-color: #35363c;
+    background-color: var(--border-glass-bright);
     border-radius: 1px;
+    margin: 4px 0;
 }
 
-.el {
+/* General list item avatar base */
+.el, .elD {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: #313338;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-glass);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: border-radius 0.2s ease, background-color 0.2s ease, transform 0.1s ease;
+    position: relative;
+    transition: border-radius 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                background-color 0.25s ease, 
+                transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                box-shadow 0.25s ease;
+}
+
+/* Sidebar decorative hover line (like Discord's white indicator) */
+.el::before, .elD::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    width: 4px;
+    height: 8px;
+    background-color: var(--text-primary);
+    border-radius: 0 4px 4px 0;
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.el:hover::before, .elD:hover::before {
+    opacity: 1;
+    height: 20px;
+    transform: translateY(0);
 }
 
 .el:hover {
-    background-color: #5865f2;
-    border-radius: 16px;
-    transform: scale(1.02);
+    background: var(--accent-gradient);
+    border-color: transparent;
+    border-radius: 14px;
+    transform: scale(1.05);
+    box-shadow: var(--accent-glow);
 }
 
 .el.addServer {
-    background-color: #313338;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
 }
 
 .el.addServer:hover {
-    background-color: #23a55a;
-    border-radius: 16px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: transparent;
+    border-radius: 14px;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}
+
+.el.addServer:hover::before {
+    background-color: #10b981;
 }
 
 .elD {
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
-    background-color: #5865f2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: border-radius 0.2s ease, transform 0.1s ease;
+    border-radius: 14px;
+    background: var(--accent-gradient);
+    border-color: transparent;
+    box-shadow: var(--accent-glow);
+}
+
+.elD::before {
+    opacity: 1;
+    height: 40px;
 }
 
 .elD:hover {
-    border-radius: 12px;
-    transform: scale(1.02);
+    border-radius: 10px;
+    transform: scale(1.05);
 }
 
 .liIcon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+    transition: var(--transition-smooth);
+}
+
+.el:hover .liIcon {
+    transform: rotate(10deg);
 }
 
 .servers {
     width: 48px;
     height: 48px;
-    background-color: #5865f2;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: var(--text-primary);
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
-    transition: border-radius 0.2s ease, background-color 0.2s ease;
+    transition: border-radius 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                background-color 0.25s ease,
+                transform 0.2s ease;
     letter-spacing: 0.5px;
 }
 
 .servers:hover {
-    background-color: #4752c4;
-    border-radius: 16px;
+    background: var(--accent-gradient);
+    border-color: transparent;
+    border-radius: 14px;
+    transform: scale(1.05);
+    box-shadow: var(--accent-glow);
 }
 
 /* ── Responsive: small mobile ── */
@@ -111,7 +158,7 @@
 
     .leftnavul {
         width: 56px;
-        gap: 6px;
+        gap: 8px;
         padding: 8px 0;
     }
 
@@ -123,12 +170,12 @@
     .servers {
         width: 40px;
         height: 40px;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .liIcon {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
     }
 
     .leftNavDivider {

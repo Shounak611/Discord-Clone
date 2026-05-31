@@ -1,18 +1,52 @@
+/* Premium Modern Theme for Home View */
+:root {
+    --bg-deep: #0a0b0d;
+    --bg-sidebar: rgba(18, 20, 27, 0.65);
+    --bg-sidebar-hover: rgba(255, 255, 255, 0.04);
+    --bg-main: rgba(21, 23, 30, 0.4);
+    --bg-profile: rgba(12, 14, 18, 0.85);
+    --bg-card: rgba(255, 255, 255, 0.02);
+    --bg-card-hover: rgba(255, 255, 255, 0.05);
+
+    --border-glass: rgba(255, 255, 255, 0.05);
+    --border-glass-bright: rgba(255, 255, 255, 0.1);
+    
+    --accent-color: #5865f2;
+    --accent-color-hover: #4752c4;
+    --accent-gradient: linear-gradient(135deg, #5865f2 0%, #8b5cf6 100%);
+    --accent-glow: 0 0 16px rgba(88, 101, 242, 0.4);
+    
+    --text-primary: #f2f3f5;
+    --text-muted: #949ba4;
+    --text-dark: #6d6f78;
+    
+    --glass-blur: blur(16px);
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 html, body, #root {
     height: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    background-color: var(--bg-deep);
 }
 
 .styleHome {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif;
-    color: #ffffff;
-    height: 100%;
+    font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
+    color: var(--text-primary);
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
     overflow: hidden;
-    background-color: #313338;
+    background-color: var(--bg-deep);
+    /* Decorative abstract radial gradient orbs behind the glass UI */
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(88, 101, 242, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+        radial-gradient(at 80% 20%, rgba(6, 182, 212, 0.04) 0px, transparent 40%);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     position: relative;
@@ -22,6 +56,8 @@ html, body, #root {
     display: flex;
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 2;
 }
 
 /* ── Sidebar overlay backdrop (mobile only) ── */
@@ -32,26 +68,45 @@ html, body, #root {
 /* ── Left sidebar container ── */
 .leftBox {
     width: 312px; /* 72px LeftNav + 240px LeftMid */
-    background-color: #2b2d31;
+    background-color: var(--bg-sidebar);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     height: 100%;
     display: flex;
     flex-shrink: 0;
+    border-right: 1px solid var(--border-glass);
+    transition: var(--transition-smooth);
 }
 
 /* ── Right main content area ── */
 .rightBox {
     flex: 1;
-    background-color: #313338;
+    background-color: var(--bg-main);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     min-width: 0;
+    position: relative;
+}
+
+/* Subtle inner shadow highlight for the right content container */
+.rightBox::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-left: 1px solid rgba(255, 255, 255, 0.03);
+    z-index: 10;
 }
 
 .rightContent {
     flex: 1;
     overflow: hidden;
+    position: relative;
 }
 
 /* ═══════════════════════════════════════════════
@@ -60,14 +115,15 @@ html, body, #root {
    - Sidebar slides in as overlay on toggle
    ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
-
     .sidebarOverlay {
         display: block;
         position: fixed;
         inset: 0;
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
         z-index: 90;
-        animation: fadeIn 0.2s ease;
+        animation: fadeIn 0.25s ease;
     }
 
     .leftBox {
@@ -78,13 +134,13 @@ html, body, #root {
         width: 312px;
         z-index: 100;
         transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: none;
+        background-color: rgba(18, 20, 27, 0.95); /* More solid on mobile for readability */
     }
 
     .leftBox.open {
         transform: translateX(0);
-        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
     }
 
     .rightBox {
@@ -105,4 +161,15 @@ html, body, #root {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

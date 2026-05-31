@@ -3,46 +3,49 @@
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: #313338;
+    background-color: rgba(15, 17, 23, 0.35);
+    border-bottom: 1px solid var(--border-glass);
     justify-content: space-between;
     padding: 0 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.24);
     box-sizing: border-box;
     flex-shrink: 0;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    z-index: 10;
 }
 
 .left-title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #f2f3f5;
+    gap: 12px;
+    color: var(--text-primary);
 }
 
 .title-text {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     margin: 0;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.3px;
 }
 
 .title-icon {
-    width: 24px;
-    height: 24px;
-    opacity: 0.7;
+    width: 20px;
+    height: 20px;
+    opacity: 0.65;
+    transition: var(--transition-smooth);
 }
 
 .icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
-    color: #b5bac1;
-    transition: color 0.15s ease, opacity 0.15s ease;
+    color: var(--text-muted);
+    transition: var(--transition-smooth);
 }
 
 .icon:hover {
-    color: #dbdee1;
-    opacity: 1;
+    color: var(--text-primary);
+    transform: scale(1.05);
 }
 
 /* ── Hamburger button — hidden on desktop ── */
@@ -50,17 +53,17 @@
     display: none;
     background: none;
     border: none;
-    color: #b5bac1;
+    color: var(--text-muted);
     cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
+    padding: 6px;
+    border-radius: 6px;
     line-height: 0;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: var(--transition-smooth);
 }
 
 .hamburger-btn:hover {
     background-color: rgba(255, 255, 255, 0.06);
-    color: #f2f3f5;
+    color: var(--text-primary);
 }
 
 /* Show hamburger on mobile/tablet */

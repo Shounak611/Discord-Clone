@@ -1,19 +1,262 @@
-.rightFriendsC{
-    width: 320px;
-    padding: auto;
-    height: calc(100vh - 96px);
+.rightFriendsC {
+    width: 340px;
+    height: 100%;
+    border-left: 1px solid var(--border-glass);
+    background-color: rgba(18, 20, 27, 0.3);
     box-sizing: border-box;
-    /* border-left: 1px solid rgb(61, 59, 59); */
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
 }
 
-.paraRightFriends{
-    text-align: center;
-    
+.rightFriendsHeader {
+    padding: 20px 24px 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
-@media (max-width: 1200px) {
-  .rightFriendsC {
-    display: none;
-    width: 0px;
-  }
+.rightFriendsHeader h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Pulsing live indicator dot */
+.livePulse {
+    width: 7px;
+    height: 7px;
+    background-color: #23a55a;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px rgba(35, 165, 90, 0.8);
+    animation: livePulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes livePulseGlow {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.4);
+        opacity: 1;
+        box-shadow: 0 0 14px rgba(35, 165, 90, 1);
+    }
+}
+
+.activitiesList {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Scrollbar for activities list */
+.activitiesList::-webkit-scrollbar {
+    width: 4px;
+}
+.activitiesList::-webkit-scrollbar-track {
+    background: transparent;
+}
+.activitiesList::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+.activitiesList::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Glassmorphic Activity Card */
+.activityCard {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px;
+    box-sizing: border-box;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.activityCard:hover {
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.activityCardUser {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.activityAvatarWrapper {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.activityAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.activityOnlineStatus {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 9px;
+    height: 9px;
+    background-color: #23a55a;
+    border-radius: 50%;
+    border: 2px solid var(--bg-deep);
+}
+
+.activityUserMeta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.activityUsername {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activityUserTag {
+    font-size: 11px;
+    color: var(--text-dark);
+}
+
+/* Activity detail container */
+.activityDetailsBox {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.activityHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.activityTypeLabel {
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text-dark);
+}
+
+.activityBadge {
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.activityTrackName {
+    margin: 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activityTrackArtist {
+    margin: 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activityTrackAlbum {
+    margin: 0;
+    font-size: 11px;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activityTimeElapsed {
+    font-size: 10.5px;
+    color: var(--text-dark);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Spotify Style Progress Track */
+.spotifyProgressContainer {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.spotifyProgressBar {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.spotifyProgressFill {
+    height: 100%;
+    background-color: #1db954;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.spotifyProgressTime {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-dark);
+    font-family: monospace;
+}
+
+/* ── Responsive: Collapse/Hide Active Now Column ── */
+@media (max-width: 1100px) {
+    .rightFriendsC {
+        display: none;
+        width: 0px;
+    }
 }

@@ -58,14 +58,14 @@
     height: 10px;
     border-radius: 50%;
     background-color: #23a55a; /* Discord online green */
-    border: 2px solid #232428; /* Matches user profile bar background */
+    border: 2px solid var(--bg-profile);
     pointer-events: none;
 }
 
 .subBox1 {
     font-size: 13px;
     font-weight: 600;
-    color: #f2f3f5;
+    color: var(--text-primary);
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
@@ -76,7 +76,7 @@
 
 .subBox2 {
     font-size: 11px;
-    color: #949ba4; /* Soft grey for username handle */
+    color: var(--text-muted); /* Soft grey for username handle */
     font-weight: 400;
     margin: 0;
     white-space: nowrap;
@@ -106,13 +106,14 @@
     height: 18px;
     padding: 6px;
     border-radius: 4px;
-    color: #b5bac1;
-    transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+    color: var(--text-muted);
+    transition: var(--transition-smooth);
 }
 
 .displaynameIconWrapper:hover .displaynameIcon {
     background-color: rgba(255, 255, 255, 0.06);
-    color: #dbdee1;
+    color: var(--text-primary);
+    transform: scale(1.08);
 }
 
 /* Mute / Deafen slashed state overlay */
@@ -123,7 +124,7 @@
     height: 18px;
     background-color: #f23f43; /* Discord red */
     transform: rotate(45deg);
-    border: 1.5px solid #232428; /* boundary to make it look clean */
+    border: 1.5px solid var(--bg-profile); /* boundary to make it look clean */
     top: 5px;
     left: 14px;
     pointer-events: none;
