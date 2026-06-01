@@ -64,9 +64,9 @@ function NavigationSidebar({ onOpenAddServerModal }) {
                 {/* Server Avatars */}
                 {servers.map(server => (
                     <li key={server.id}>
-                        <div 
-                            className="el" 
-                            title={server.name} 
+                        <div
+                            className="el"
+                            title={server.name}
                             onClick={() => navigate(`/server/${server.name}`)}
                         >
                             <div className="servers">
@@ -117,8 +117,8 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
                     <div className="headerSearch">
                         <div className="searchInner">
                             <svg className="searchIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="11" cy="11" r="8"/>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
                             </svg>
                             <span className="searchText">Find or start a conversation</span>
                         </div>
@@ -128,8 +128,8 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
 
                 {/* Navigation Items */}
                 <div className="opts">
-                    <div 
-                        className={`opt ${selectedOption === "Friends" ? "active" : ""}`} 
+                    <div
+                        className={`opt ${selectedOption === "Friends" ? "active" : ""}`}
                         onClick={() => onSelectedOption("Friends")}
                     >
                         <img className="leftMidIcons" src={userIcon} alt="Friends Tab" />
@@ -143,7 +143,7 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
                         <p>Direct Messages</p>
                         <img className="leftMidIcons" src={plusIcon} alt="Start Direct Message" />
                     </div>
-                    
+
                     <div className="dmList">
                         {friends.length === 0 ? (
                             <p className="noDM">No friends to show</p>
@@ -151,9 +151,9 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
                             friends.map((friend, index) => {
                                 const isSelected = selectedOption === `Chat:${friend}`;
                                 return (
-                                    <div 
-                                        key={index} 
-                                        className={`dmFriend ${isSelected ? "active" : ""}`} 
+                                    <div
+                                        key={index}
+                                        className={`dmFriend ${isSelected ? "active" : ""}`}
                                         onClick={() => onSelectedOption(`Chat:${friend}`)}
                                     >
                                         <img className="iconsize" src={displayDiscordLogo} alt="User Avatar" />
@@ -165,7 +165,7 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
                     </div>
                 </div>
             </div>
-            
+
             {/* User Profile Bar */}
             <div className="leftMidUserProfile">
                 <Displayname />
@@ -174,42 +174,12 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
     );
 }
 
-/**
- * HeaderBar - Displays current conversation name or selected tab,
- * along with sidebar toggle menu buttons on mobile screens.
- */
-function HeaderBar({ selectedOption, onToggleSidebar }) {
-    let title = "Friends";
-    let icon = userIcon;
-
-    if (selectedOption && selectedOption.startsWith("Chat:")) {
-        title = selectedOption.split(":")[1];
-        icon = userIcon;
-    }
-
-    return (
-        <div className="topdiv">
-            <div className="left-title">
-                {/* Mobile Menu Hamburger Button */}
-                <button className="hamburger-btn" onClick={onToggleSidebar} aria-label="Toggle sidebar">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
-                <img className="icon title-icon" src={icon} alt={title} />
-                <p className="title-text">{title}</p>
-            </div>
-        </div>
-    );
-}
 
 /**
  * MainContentBox - Handles rendering the primary page workspace content
  * (displays either the Friends Dashboard or a specific active Chat room).
  */
-function MainContentBox({ selectedOption }) {
+function MainContentBox({ selectedOption, onToggleSidebar }) {
     let friendName = null;
 
     if (selectedOption.startsWith("Chat:")) {
@@ -218,8 +188,8 @@ function MainContentBox({ selectedOption }) {
 
     return (
         <div className="rightBoxC">
-            {selectedOption === "Friends" && <Friends />}
-            {friendName && <Chat frndName={friendName} />}
+            {selectedOption === "Friends" && <Friends onToggleSidebar={onToggleSidebar} />}
+            {friendName && <Chat frndName={friendName} onToggleSidebar={onToggleSidebar} />}
         </div>
     );
 }
@@ -241,8 +211,8 @@ export default function Home() {
         <div className="styleHome">
             {/* Mobile Sidebar Backdrop Overlay */}
             {sidebarOpen && (
-                <div 
-                    className="sidebarOverlay" 
+                <div
+                    className="sidebarOverlay"
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
@@ -250,23 +220,22 @@ export default function Home() {
             <div className="homeContainer">
                 {/* Sidebars Panel */}
                 <div className={`leftBox ${sidebarOpen ? 'open' : ''}`}>
-                    <NavigationSidebar 
-                        onOpenAddServerModal={() => setShowServerModal(true)} 
+                    <NavigationSidebar
+                        onOpenAddServerModal={() => setShowServerModal(true)}
                     />
-                    <ConversationSidebar 
-                        selectedOption={selectedOption} 
-                        onSelectedOption={handleSelectOption} 
+                    <ConversationSidebar
+                        selectedOption={selectedOption}
+                        onSelectedOption={handleSelectOption}
                     />
                 </div>
-                
+
                 {/* Main Content Pane */}
                 <div className="rightBox">
-                    <HeaderBar 
-                        selectedOption={selectedOption} 
-                        onToggleSidebar={() => setSidebarOpen(prev => !prev)}
-                    />
                     <div className="rightContent">
-                        <MainContentBox selectedOption={selectedOption} />           
+                        <MainContentBox
+                            selectedOption={selectedOption}
+                            onToggleSidebar={() => setSidebarOpen(prev => !prev)}
+                        />
                     </div>
                 </div>
             </div>

@@ -84,7 +84,9 @@ export default function PendingRequests() {
                     {pendingRequests.map((user, i) => (
                         <div key={i} className="friendRequestCard">
                             <div className='friendRequestCardL'>
-                                <img className='iconsize' src={discord} alt="discordLogo" />
+                                <div className="dmAvatarWrapper">
+                                    <img className="dmAvatarIcon" src={discord} alt="discordLogo" />
+                                </div>
                                 <div className='friendRequestMeta'>
                                     <span className='friendRequestUsername'>{user.username}</span>
                                     <span className='friendRequestSubtitle'>Incoming Friend Request</span>

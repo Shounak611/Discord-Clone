@@ -5,7 +5,7 @@ import OneToOneCall from '../Chat/OneToOneCall';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Chat({ frndName }) {
+export default function Chat({ frndName, onToggleSidebar }) {
     const senderEmail = localStorage.getItem("email");
     const userId = localStorage.getItem("user_id");
     const [messages, setMessages] = useState([]);
@@ -143,7 +143,7 @@ export default function Chat({ frndName }) {
 
     return (
         <div className="chatC">
-            <ChatNav frndName={frndName} onInitiateCall={handleInitiateCall} />
+            <ChatNav frndName={frndName} onInitiateCall={handleInitiateCall} onToggleSidebar={onToggleSidebar} />
             
             {/* Outgoing Calling Dialog */}
             {activeCall && activeCall.status === 'offering' && (

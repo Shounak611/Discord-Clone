@@ -13,10 +13,10 @@ export default function Server(){
     const { servername } = useParams()
 
     return (
-        <div className="styleHome">
+        <div className="serverPage">
             <ServerTopNav servername={servername} />
-            <div className="homeContainer">
-                <div className="leftBox">
+            <div className="serverContainer">
+                <div className="serverLeftBox">
                     <LeftNav />
                     <LeftServer
                         servername={servername}
@@ -24,7 +24,7 @@ export default function Server(){
                         setSelectedChannel={setSelectedChannel}
                     />
                 </div>
-                <div className="rightBox">
+                <div className="serverRightBox">
                     <RightServer selectedChannel={selectedChannel} servername={servername} />
                 </div>
             </div>

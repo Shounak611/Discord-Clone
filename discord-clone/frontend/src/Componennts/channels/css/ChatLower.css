@@ -25,7 +25,7 @@
   box-sizing: border-box;
 }
 
-.ChatRight p{
+.ChatRight p {
   margin-left: 20px;
 }
 
@@ -229,11 +229,11 @@
 }
 
 .memberList li span {
-    font-size: 0.9em;
-    color: rgb(103, 227, 20);
+  font-size: 0.9em;
+  color: rgb(103, 227, 20);
 }
 
-.member{
+.member {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -243,19 +243,20 @@
   padding: 5px;
   padding-left: 20px;
 }
+
 .member button {
-    background-color: #444c56;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    justify-self: flex-end;
+  background-color: #444c56;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  justify-self: flex-end;
 }
 
 .member button:hover {
-    background-color: #5865f2; 
+  background-color: #5865f2;
 }

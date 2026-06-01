@@ -210,16 +210,36 @@
     font-style: italic;
 }
 
-.iconsize {
+.dmAvatarWrapper {
+    position: relative;
     width: 32px;
     height: 32px;
-    background-color: var(--accent-color);
+    background-color: var(--accent-color, #5865f2);
     border-radius: 50%;
-    padding: 4px;
-    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
     transition: var(--transition-smooth);
     border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dmAvatarIcon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1); /* Makes the logo white */
+    transition: var(--transition-smooth);
+}
+
+.dmOnlineStatus {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 8px;
+    height: 8px;
+    background-color: #23a55a;
+    border-radius: 50%;
+    border: 2px solid #161a24; /* matches LeftMid sidebar background */
 }
 
 .dmFriend {
@@ -248,20 +268,20 @@
 }
 
 .dmFriend:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
     transform: translateX(2px);
 }
 
-.dmFriend:hover .iconsize {
+.dmFriend:hover .dmAvatarWrapper {
     transform: scale(1.05);
     box-shadow: 0 0 8px rgba(88, 101, 242, 0.3);
 }
 
 .dmFriend.active {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    color: #ffffff;
 }
 
 .leftMidUserProfile {

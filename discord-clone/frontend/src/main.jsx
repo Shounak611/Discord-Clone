@@ -5,12 +5,14 @@ import App from './App.jsx'
 import axios from 'axios'
 
 // Automatically seed mock credentials for development to avoid logging in
+/*
 if (!localStorage.getItem("email")) {
   localStorage.setItem("email", "shounak@example.com");
   localStorage.setItem("user_id", "1");
   localStorage.setItem("username", "Shounak");
   localStorage.setItem("token", "mock_token");
 }
+*/
 
 axios.interceptors.request.use(
   (config) => {

@@ -55,9 +55,9 @@ export default function LeftFriends() {
                 <div className='wumpusIllustrationContainer'>
                     <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="wumpusIllustration">
                         {/* Background soft glow rings */}
-                        <circle cx="110" cy="90" r="70" stroke="rgba(88, 101, 242, 0.05)" strokeWidth="1.5" strokeDasharray="4 4" />
-                        <circle cx="110" cy="90" r="50" stroke="rgba(139, 92, 246, 0.08)" strokeWidth="1.2" />
-                        <circle cx="110" cy="90" r="30" stroke="rgba(6, 182, 212, 0.12)" strokeWidth="2" strokeLinecap="round" strokeDasharray="1 14" />
+                        <circle cx="110" cy="90" r="70" stroke="rgba(88, 101, 242, 0.18)" strokeWidth="1.5" strokeDasharray="4 4" />
+                        <circle cx="110" cy="90" r="50" stroke="rgba(139, 92, 246, 0.22)" strokeWidth="1.2" />
+                        <circle cx="110" cy="90" r="30" stroke="rgba(6, 182, 212, 0.35)" strokeWidth="2" strokeLinecap="round" strokeDasharray="1 14" />
                         
                         {/* Floating robot head */}
                         <g className="floatingAnim">

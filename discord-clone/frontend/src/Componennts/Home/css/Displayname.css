@@ -33,20 +33,23 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background-color: var(--accent-color, #5865f2);
+    border-radius: 50%;
+    transition: var(--transition-smooth);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .displaynameIcond {
-    width: 32px;
-    height: 32px;
-    background-color: #313338;
-    border-radius: 50%;
-    padding: 4px;
-    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     transition: filter 0.15s ease;
+    filter: brightness(0) invert(1); /* Makes the logo white */
 }
 
-.avatarWrapper:hover .displaynameIcond {
+.avatarWrapper:hover {
     filter: brightness(0.85);
 }
 

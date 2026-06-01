@@ -145,3 +145,24 @@
         font-size: 12px;
     }
 }
+
+.dmAvatarWrapper {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    background-color: var(--accent-color, #5865f2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition-smooth);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dmAvatarIcon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+    transition: var(--transition-smooth);
+}

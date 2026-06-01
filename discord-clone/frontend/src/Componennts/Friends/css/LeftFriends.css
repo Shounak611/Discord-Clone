@@ -35,10 +35,10 @@
 /* Premium styled input field wrapper */
 .inputWithButton {
     display: flex;
-    border: 1px solid var(--border-glass);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 8px;
     overflow: hidden;
-    background-color: rgba(10, 11, 13, 0.45);
+    background-color: rgba(10, 11, 13, 0.65);
     width: 100%;
     max-width: 620px;
     height: 48px;
@@ -51,7 +51,7 @@
 .inputWithButton:focus-within {
     border-color: var(--accent-color);
     box-shadow: 0 0 12px rgba(88, 101, 242, 0.25);
-    background-color: rgba(10, 11, 13, 0.7);
+    background-color: rgba(10, 11, 13, 0.85);
 }
 
 .inputWithButton input {
@@ -67,7 +67,7 @@
 }
 
 .inputWithButton input::placeholder {
-    color: var(--text-dark);
+    color: var(--text-muted, #949ba4);
 }
 
 .inputWithButton button {
