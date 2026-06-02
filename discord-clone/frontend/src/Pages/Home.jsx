@@ -91,24 +91,7 @@ function NavigationSidebar({ onOpenAddServerModal }) {
  * ConversationSidebar - Renders DMs search bar, direct message contacts list,
  * and the user profile summary bar at the bottom.
  */
-function ConversationSidebar({ selectedOption, onSelectedOption }) {
-    const [friends, setFriends] = useState([]);
-    const email = localStorage.getItem("email");
-
-    useEffect(() => {
-        const fetchFriends = async () => {
-            try {
-                if (email) {
-                    const response = await axios.get(`http://localhost:8000/friend/get-friends?email=${email}`);
-                    setFriends(response.data);
-                }
-            } catch (error) {
-                console.error("Error fetching friends in ConversationSidebar:", error);
-            }
-        };
-        fetchFriends();
-    }, [email]);
-
+function ConversationSidebar({ selectedOption, onSelectedOption, friends }) {
     return (
         <div className="LeftMidC">
             <div className="leftMidScrollable">
@@ -149,15 +132,21 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
                             <p className="noDM">No friends to show</p>
                         ) : (
                             friends.map((friend, index) => {
-                                const isSelected = selectedOption === `Chat:${friend}`;
+                                const isSelected = selectedOption === `Chat:${friend.username}`;
                                 return (
                                     <div
                                         key={index}
                                         className={`dmFriend ${isSelected ? "active" : ""}`}
-                                        onClick={() => onSelectedOption(`Chat:${friend}`)}
+                                        onClick={() => onSelectedOption(`Chat:${friend.username}`)}
                                     >
-                                        <img className="iconsize" src={displayDiscordLogo} alt="User Avatar" />
-                                        <p>{friend}</p>
+                                        <div className="dmAvatarWrapper">
+                                            <img className="dmAvatarIcon" src={displayDiscordLogo} alt="User Avatar" />
+                                            <span 
+                                                className="dmOnlineStatus" 
+                                                style={{ backgroundColor: friend.status === 'online' ? '#23a55a' : '#80848e' }}
+                                            ></span>
+                                        </div>
+                                        <p>{friend.display_name || friend.username}</p>
                                     </div>
                                 );
                             })
@@ -179,7 +168,7 @@ function ConversationSidebar({ selectedOption, onSelectedOption }) {
  * MainContentBox - Handles rendering the primary page workspace content
  * (displays either the Friends Dashboard or a specific active Chat room).
  */
-function MainContentBox({ selectedOption, onToggleSidebar }) {
+function MainContentBox({ selectedOption, onToggleSidebar, friends }) {
     let friendName = null;
 
     if (selectedOption.startsWith("Chat:")) {
@@ -188,7 +177,7 @@ function MainContentBox({ selectedOption, onToggleSidebar }) {
 
     return (
         <div className="rightBoxC">
-            {selectedOption === "Friends" && <Friends onToggleSidebar={onToggleSidebar} />}
+            {selectedOption === "Friends" && <Friends onToggleSidebar={onToggleSidebar} friends={friends} />}
             {friendName && <Chat frndName={friendName} onToggleSidebar={onToggleSidebar} />}
         </div>
     );
@@ -201,6 +190,50 @@ export default function Home() {
     const [selectedOption, setSelectedOption] = useState('Friends');
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showServerModal, setShowServerModal] = useState(false);
+    const [friends, setFriends] = useState([]);
+    const email = localStorage.getItem("email");
+
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                if (email) {
+                    const response = await axios.get(`http://localhost:8000/friend/get-friends?email=${email}`);
+                    setFriends(response.data);
+                }
+            } catch (error) {
+                console.error("Error fetching friends in Home master:", error);
+            }
+        };
+        fetchFriends();
+
+        // Connect to status WebSocket to receive status updates of friends in real-time
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const ws = new WebSocket(`ws://localhost:8000/friend/ws?token=${encodeURIComponent(token)}`);
+
+        ws.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            if (msg.type === "status_change") {
+                setFriends((prevFriends) => {
+                    return prevFriends.map(friend => {
+                        if (friend.username === msg.username) {
+                            return { ...friend, status: msg.status };
+                        }
+                        return friend;
+                    });
+                });
+            }
+        };
+
+        ws.onclose = () => {
+            console.log("Status WebSocket connection closed");
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [email]);
 
     const handleSelectOption = (option) => {
         setSelectedOption(option);
@@ -226,6 +259,7 @@ export default function Home() {
                     <ConversationSidebar
                         selectedOption={selectedOption}
                         onSelectedOption={handleSelectOption}
+                        friends={friends}
                     />
                 </div>
 
@@ -235,6 +269,7 @@ export default function Home() {
                         <MainContentBox
                             selectedOption={selectedOption}
                             onToggleSidebar={() => setSidebarOpen(prev => !prev)}
+                            friends={friends}
                         />
                     </div>
                 </div>

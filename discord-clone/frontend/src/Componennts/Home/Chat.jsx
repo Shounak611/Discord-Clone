@@ -2,7 +2,7 @@ import './css/Chat.css';
 import ChatNav from '../Chat/ChatNav';
 import ChatLower from '../Chat/ChatLower';
 import OneToOneCall from '../Chat/OneToOneCall';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 export default function Chat({ frndName, onToggleSidebar }) {
@@ -10,6 +10,46 @@ export default function Chat({ frndName, onToggleSidebar }) {
     const userId = localStorage.getItem("user_id");
     const [messages, setMessages] = useState([]);
     const [activeCall, setActiveCall] = useState(null);
+
+    const activeCallRef = useRef(activeCall);
+    activeCallRef.current = activeCall;
+
+    const wsRef = useRef(null);
+    const rtcSignalHandlerRef = useRef(null);
+
+    const processSignaling = (latestMsg) => {
+        const content = latestMsg.content;
+        const isFromFriend = latestMsg.sender_id != userId;
+        
+        if (content.startsWith("__CALL_INITIATED__:")) {
+            const parts = content.split(":");
+            const type = parts[1];
+            const channelName = parts[2];
+            
+            const msgTime = new Date(latestMsg.timestamp).getTime();
+            const isFresh = (Date.now() - msgTime) < 25000;
+
+            if (isFresh) {
+                if (isFromFriend && (!activeCallRef.current || activeCallRef.current.channelName !== channelName)) {
+                    setActiveCall({ type, status: 'incoming', channelName, isCaller: false });
+                } else if (!isFromFriend && !activeCallRef.current) {
+                    setActiveCall({ type, status: 'offering', channelName, isCaller: true });
+                }
+            }
+        } else if (content.startsWith("__CALL_ACCEPTED__:")) {
+            const parts = content.split(":");
+            const channelName = parts[2];
+            if (activeCallRef.current && activeCallRef.current.channelName === channelName && activeCallRef.current.status !== 'connected') {
+                setActiveCall(prev => ({ ...prev, status: 'connected' }));
+            }
+        } else if (content.startsWith("__CALL_DECLINED__:") || content.startsWith("__CALL_HUNGUP__:")) {
+            const parts = content.split(":");
+            const channelName = parts[2];
+            if (activeCallRef.current && activeCallRef.current.channelName === channelName) {
+                setActiveCall(null);
+            }
+        }
+    };
 
     // Fetch conversation and check for call signaling
     const fetchConversation = async () => {
@@ -21,50 +61,56 @@ export default function Chat({ frndName, onToggleSidebar }) {
 
             if (fetchedMsgs.length > 0) {
                 const latestMsg = fetchedMsgs[fetchedMsgs.length - 1];
-                const content = latestMsg.content;
-                const isFromFriend = latestMsg.sender_id != userId;
-                
-                // Process WebRTC signaling messages
-                if (content.startsWith("__CALL_INITIATED__:")) {
-                    const parts = content.split(":");
-                    const type = parts[1];
-                    const channelName = parts[2];
-                    
-                    // Verify signal is fresh (sent within last 25 seconds) to avoid trigger on historic messages
-                    const msgTime = new Date(latestMsg.timestamp).getTime();
-                    const isFresh = (Date.now() - msgTime) < 25000;
-
-                    if (isFresh) {
-                        if (isFromFriend && (!activeCall || activeCall.channelName !== channelName)) {
-                            setActiveCall({ type, status: 'incoming', channelName });
-                        } else if (!isFromFriend && !activeCall) {
-                            setActiveCall({ type, status: 'offering', channelName });
-                        }
-                    }
-                } else if (content.startsWith("__CALL_ACCEPTED__:")) {
-                    const parts = content.split(":");
-                    const channelName = parts[2];
-                    if (activeCall && activeCall.channelName === channelName && activeCall.status !== 'connected') {
-                        setActiveCall(prev => ({ ...prev, status: 'connected' }));
-                    }
-                } else if (content.startsWith("__CALL_DECLINED__:") || content.startsWith("__CALL_HUNGUP__:")) {
-                    const parts = content.split(":");
-                    const channelName = parts[2];
-                    if (activeCall && activeCall.channelName === channelName) {
-                        setActiveCall(null);
-                    }
-                }
+                processSignaling(latestMsg);
             }
         } catch (err) {
             console.error("Error fetching conversation in Chat.jsx:", err);
         }
     };
 
-    // Poll messages every 1000ms
+    // WebSocket connection for real-time messages
     useEffect(() => {
         fetchConversation();
-        const interval = setInterval(fetchConversation, 1000);
-        return () => clearInterval(interval);
+
+        const token = localStorage.getItem("token") || "";
+        const encodedFrndName = encodeURIComponent(frndName);
+        const ws = new WebSocket(`ws://localhost:8000/chat/ws/${encodedFrndName}?token=${encodeURIComponent(token)}`);
+        wsRef.current = ws;
+
+        ws.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            
+            // Intercept WebRTC signaling messages
+            if (msg.type === "rtc_signal") {
+                if (rtcSignalHandlerRef.current) {
+                    rtcSignalHandlerRef.current(msg.signal);
+                }
+                return;
+            }
+            
+            setMessages((prev) => {
+                if (prev.some(m => m.id === msg.id)) {
+                    return prev;
+                }
+                return [...prev, msg];
+            });
+
+            processSignaling(msg);
+        };
+
+        ws.onerror = (err) => {
+            console.error("WebSocket error:", err);
+        };
+
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+            wsRef.current = null;
+        };
+
+        return () => {
+            ws.close();
+            wsRef.current = null;
+        };
     }, [frndName, senderEmail]);
 
     // Reset active call when switching chat partner
@@ -92,7 +138,20 @@ export default function Chat({ frndName, onToggleSidebar }) {
         const channelName = `call_${[senderPrefix, receiverPrefix].sort().join('_')}`;
         
         sendSignalingMessage(`__CALL_INITIATED__:${type}:${channelName}`);
-        setActiveCall({ type, status: 'offering', channelName });
+        setActiveCall({ type, status: 'offering', channelName, isCaller: true });
+    };
+
+    const sendRtcSignal = (signal) => {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify({
+                type: "rtc_signal",
+                signal: signal
+            }));
+        }
+    };
+
+    const registerSignalHandler = (handler) => {
+        rtcSignalHandlerRef.current = handler;
     };
 
     const handleAcceptCall = () => {
@@ -183,6 +242,9 @@ export default function Chat({ frndName, onToggleSidebar }) {
                     isVideo={activeCall.type === 'video'} 
                     friendName={frndName} 
                     onHangUp={handleHangUp} 
+                    isCaller={activeCall.isCaller}
+                    sendRtcSignal={sendRtcSignal}
+                    registerSignalHandler={registerSignalHandler}
                 />
             )}
 

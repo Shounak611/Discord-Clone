@@ -1,14 +1,57 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, WebSocket, WebSocketDisconnect
 from starlette import status
 from app.models import Users, FriendRequest
 from sqlalchemy import or_
 from app.schemas import FriendRequestIn, AcceptReject
-from app.dependencies import db_dependency, current_user_dependency
+from app.dependencies import db_dependency, current_user_dependency, SECRET_KEY, ALGORITHM
+from app.core.database import SessionLocal
+import json
+from typing import Dict, List
 
 router = APIRouter(
     prefix="/friend",
     tags=["friend"]
 )
+
+# Active connections for checking online status: username -> list of websockets
+online_users: Dict[str, List[WebSocket]] = {}
+
+async def broadcast_status_to_friends(db, username: str, status: str):
+    user = db.query(Users).filter(Users.username == username).first()
+    if not user:
+        return
+    
+    # Get all friends
+    friends_model = db.query(FriendRequest).filter(
+        ((FriendRequest.sender_id == user.id) | (FriendRequest.receiver_id == user.id)) &
+        (FriendRequest.status == True)
+    ).all()
+
+    friend_ids = []
+    for f in friends_model:
+        friend_ids.append(f.receiver_id if f.sender_id == user.id else f.sender_id)
+
+    if not friend_ids:
+        return
+
+    friend_users = db.query(Users).filter(Users.id.in_(friend_ids)).all()
+    friend_usernames = [u.username for u in friend_users]
+
+    # For each online friend, send them a status change message
+    msg = json.dumps({
+        "type": "status_change",
+        "username": username,
+        "status": status
+    })
+
+    for f_username in friend_usernames:
+        if f_username in online_users:
+            for conn in list(online_users[f_username]):
+                try:
+                    await conn.send_text(msg)
+                except Exception:
+                    pass
+
 
 def check_same_user(sdr, rvr):
     if sdr.id == rvr.id:
@@ -129,7 +172,11 @@ async def get_friends(db: db_dependency, email: str, current_user: current_user_
         frnd = db.query(Users).filter(Users.id == friend.receiver_id).first()
         if frnd is None:
             raise HTTPException(status_code=404, detail="User Not Found")
-        friends.append(frnd.username)
+        friends.append({
+            "username": frnd.username,
+            "display_name": frnd.display_name,
+            "status": "online" if frnd.username in online_users else "offline"
+        })
         
     friends_model = db.query(FriendRequest).filter(
         FriendRequest.receiver_id == user.id,
@@ -139,5 +186,54 @@ async def get_friends(db: db_dependency, email: str, current_user: current_user_
         frnd = db.query(Users).filter(Users.id == friend.sender_id).first()
         if frnd is None:
             raise HTTPException(status_code=404, detail="User Not Found")
-        friends.append(frnd.username)
+        friends.append({
+            "username": frnd.username,
+            "display_name": frnd.display_name,
+            "status": "online" if frnd.username in online_users else "offline"
+        })
     return friends
+
+@router.websocket("/ws")
+async def status_websocket(websocket: WebSocket):
+    token = websocket.query_params.get("token")
+    if not token:
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+    except Exception:
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
+
+    db = SessionLocal()
+    try:
+        user = db.query(Users).filter(Users.email == email).first()
+        if not user:
+            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            return
+
+        username = user.username
+        await websocket.accept()
+
+        if username not in online_users:
+            online_users[username] = []
+        online_users[username].append(websocket)
+
+        # Notify friends that this user has come online
+        await broadcast_status_to_friends(db, username, "online")
+
+        try:
+            while True:
+                # Keep connection open, listen for optional messages or pings
+                await websocket.receive_text()
+        except WebSocketDisconnect:
+            if username in online_users:
+                if websocket in online_users[username]:
+                    online_users[username].remove(websocket)
+                if not online_users[username]:
+                    del online_users[username]
+                    # Notify friends that this user has gone offline
+                    await broadcast_status_to_friends(db, username, "offline")
+    finally:
+        db.close()

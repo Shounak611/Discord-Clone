@@ -1,168 +1,168 @@
 import React, { useState, useEffect, useRef } from "react";
-import AgoraRTC from "agora-rtc-sdk-ng";
 import micoff from "../../assets/muteIcon.png";
 import micon from "../../assets/micOnIcon.png";
 import leave_room from "../../assets/leave_room.png";
 import videoIcon from "../../assets/video_call.png";
 import "./css/OneToOneCall.css";
 
-const appId = "abbefe0cf86c4c7c905a54e8c12dd6dd";
-const token = null;
-
-export default function OneToOneCall({ channelName, isVideo, onHangUp, friendName }) {
+export default function OneToOneCall({ 
+    channelName, 
+    isVideo, 
+    onHangUp, 
+    friendName, 
+    isCaller, 
+    sendRtcSignal, 
+    registerSignalHandler 
+}) {
     const [userName] = useState(() => localStorage.getItem("user_name") || "You");
     const [joined, setJoined] = useState(false);
     const [micOn, setMicOn] = useState(true);
     const [cameraOn, setCameraOn] = useState(isVideo);
     const [remoteUserJoined, setRemoteUserJoined] = useState(false);
 
-    const rtcClientRef = useRef(null);
-    const localAudioTrackRef = useRef(null);
-    const localVideoTrackRef = useRef(null);
-    const rtcUid = useRef(null);
+    const pcRef = useRef(null);
+    const localStreamRef = useRef(null);
+    const localVideoRef = useRef(null);
+    const remoteVideoRef = useRef(null);
+    const remoteAudioRef = useRef(null);
 
     useEffect(() => {
+        // Register signaling callback from WebSocket
+        registerSignalHandler((signal) => {
+            handleRtcSignal(signal);
+        });
+
         initCall();
+
         return () => {
+            registerSignalHandler(null);
             leaveCall();
         };
     }, []);
 
     const initCall = async () => {
         try {
-            const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-            rtcClientRef.current = client;
+            // Get local audio and optionally video
+            const constraints = {
+                audio: true,
+                video: isVideo
+            };
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            localStreamRef.current = stream;
 
-            client.on("user-published", handleUserPublished);
-            client.on("user-unpublished", handleUserUnpublished);
-            client.on("user-left", handleUserLeft);
-
-            // Join channel
-            const uid = await client.join(appId, channelName, token, null);
-            rtcUid.current = uid;
-
-            // Create and publish local tracks
-            const tracks = [];
-            
-            // Audio track
-            localAudioTrackRef.current = await AgoraRTC.createMicrophoneAudioTrack();
-            tracks.push(localAudioTrackRef.current);
-
-            // Video track (if video is enabled)
-            if (isVideo) {
-                try {
-                    localVideoTrackRef.current = await AgoraRTC.createCameraVideoTrack();
-                    tracks.push(localVideoTrackRef.current);
-                    
-                    // Play local video
-                    setTimeout(() => {
-                        const localEl = document.getElementById("local-video-stream");
-                        if (localVideoTrackRef.current && localEl) {
-                            localVideoTrackRef.current.play("local-video-stream");
-                        }
-                    }, 500);
-                } catch (videoError) {
-                    console.error("Failed to access camera:", videoError);
-                    setCameraOn(false);
-                }
+            if (isVideo && localVideoRef.current) {
+                localVideoRef.current.srcObject = stream;
             }
 
-            await client.publish(tracks);
+            // Create WebRTC Peer Connection
+            const configuration = {
+                iceServers: [
+                    { urls: "stun:stun.l.google.com:19302" },
+                    { urls: "stun:stun1.l.google.com:19302" }
+                ]
+            };
+            const pc = new RTCPeerConnection(configuration);
+            pcRef.current = pc;
+
+            // Add local tracks to peer connection
+            stream.getTracks().forEach(track => {
+                pc.addTrack(track, stream);
+            });
+
+            // Send local ICE candidates to peer
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    sendRtcSignal({
+                        type: "candidate",
+                        candidate: event.candidate
+                    });
+                }
+            };
+
+            // Play remote track when received
+            pc.ontrack = (event) => {
+                const remoteStream = event.streams[0];
+                if (isVideo && remoteVideoRef.current) {
+                    remoteVideoRef.current.srcObject = remoteStream;
+                } else if (!isVideo && remoteAudioRef.current) {
+                    remoteAudioRef.current.srcObject = remoteStream;
+                }
+                setRemoteUserJoined(true);
+            };
+
+            // If we are the one initiating the call, create offer
+            if (isCaller) {
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+                sendRtcSignal({
+                    type: "offer",
+                    offer: offer
+                });
+            }
+
             setJoined(true);
         } catch (err) {
-            console.error("Agora RTC initialization failed:", err);
+            console.error("WebRTC initialization failed:", err);
+            // Fallback for missing permissions/devices
+            setJoined(true);
         }
     };
 
-    const handleUserPublished = async (user, mediaType) => {
-        const client = rtcClientRef.current;
-        if (!client) return;
-        
-        await client.subscribe(user, mediaType);
+    const handleRtcSignal = async (signal) => {
+        const pc = pcRef.current;
+        if (!pc) return;
 
-        if (mediaType === "audio") {
-            user.audioTrack.play();
-        }
-        
-        if (mediaType === "video") {
-            setRemoteUserJoined(true);
-            setTimeout(() => {
-                const remoteEl = document.getElementById("remote-video-stream");
-                if (user.videoTrack && remoteEl) {
-                    user.videoTrack.play("remote-video-stream");
+        try {
+            if (signal.type === "offer") {
+                await pc.setRemoteDescription(new RTCSessionDescription(signal.offer));
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                sendRtcSignal({
+                    type: "answer",
+                    answer: answer
+                });
+            } else if (signal.type === "answer") {
+                await pc.setRemoteDescription(new RTCSessionDescription(signal.answer));
+            } else if (signal.type === "candidate") {
+                if (signal.candidate) {
+                    await pc.addIceCandidate(new RTCIceCandidate(signal.candidate));
                 }
-            }, 500);
+            }
+        } catch (err) {
+            console.error("Error handling RTC signal:", err);
         }
     };
 
-    const handleUserUnpublished = (user, mediaType) => {
-        if (mediaType === "video") {
-            setRemoteUserJoined(false);
+    const leaveCall = () => {
+        if (localStreamRef.current) {
+            localStreamRef.current.getTracks().forEach(track => track.stop());
+            localStreamRef.current = null;
         }
-    };
-
-    const handleUserLeft = (user) => {
+        if (pcRef.current) {
+            pcRef.current.close();
+            pcRef.current = null;
+        }
+        setJoined(false);
         setRemoteUserJoined(false);
     };
 
-    const leaveCall = async () => {
-        try {
-            if (localAudioTrackRef.current) {
-                localAudioTrackRef.current.stop();
-                localAudioTrackRef.current.close();
-                localAudioTrackRef.current = null;
+    const toggleMic = () => {
+        if (localStreamRef.current) {
+            const audioTrack = localStreamRef.current.getAudioTracks()[0];
+            if (audioTrack) {
+                audioTrack.enabled = !audioTrack.enabled;
+                setMicOn(audioTrack.enabled);
             }
-            if (localVideoTrackRef.current) {
-                localVideoTrackRef.current.stop();
-                localVideoTrackRef.current.close();
-                localVideoTrackRef.current = null;
-            }
-
-            if (rtcClientRef.current) {
-                await rtcClientRef.current.leave();
-                rtcClientRef.current = null;
-            }
-        } catch (e) {
-            console.error(e);
-        }
-        setJoined(false);
-    };
-
-    const toggleMic = async () => {
-        if (localAudioTrackRef.current) {
-            await localAudioTrackRef.current.setEnabled(!micOn);
-            setMicOn(!micOn);
         }
     };
 
-    const toggleCamera = async () => {
-        if (!joined || !rtcClientRef.current) return;
-        
-        try {
-            if (cameraOn) {
-                // Turn off camera
-                if (localVideoTrackRef.current) {
-                    await rtcClientRef.current.unpublish(localVideoTrackRef.current);
-                    localVideoTrackRef.current.stop();
-                    localVideoTrackRef.current.close();
-                    localVideoTrackRef.current = null;
-                }
-                setCameraOn(false);
-            } else {
-                // Turn on camera
-                localVideoTrackRef.current = await AgoraRTC.createCameraVideoTrack();
-                await rtcClientRef.current.publish(localVideoTrackRef.current);
-                setCameraOn(true);
-                
-                setTimeout(() => {
-                    const localEl = document.getElementById("local-video-stream");
-                    if (localVideoTrackRef.current && localEl) {
-                        localVideoTrackRef.current.play("local-video-stream");
-                    }
-                }, 500);
+    const toggleCamera = () => {
+        if (localStreamRef.current) {
+            const videoTrack = localStreamRef.current.getVideoTracks()[0];
+            if (videoTrack) {
+                videoTrack.enabled = !videoTrack.enabled;
+                setCameraOn(videoTrack.enabled);
             }
-        } catch (err) {
-            console.error("Error toggling camera:", err);
         }
     };
 
@@ -171,20 +171,26 @@ export default function OneToOneCall({ channelName, isVideo, onHangUp, friendNam
             <div className="callHeader">
                 <div className="callTitle">
                     <span className="liveBadge">LIVE</span>
-                    <p>{cameraOn || remoteUserJoined ? "Video Call" : "Voice Call"} with {friendName}</p>
+                    <p>{isVideo ? "Video Call" : "Voice Call"} with {friendName}</p>
                 </div>
             </div>
 
             <div className="mediaContainer">
-                {cameraOn || remoteUserJoined ? (
+                {isVideo ? (
                     <div className="videoGrid">
                         {/* Remote User Video */}
                         <div className="videoCard remoteVideo">
-                            <div id="remote-video-stream" className="videoStream"></div>
+                            <video 
+                                ref={remoteVideoRef} 
+                                className="videoStream" 
+                                autoPlay 
+                                playsInline 
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', display: remoteUserJoined ? 'block' : 'none' }}
+                            />
                             {!remoteUserJoined && (
                                 <div className="videoPlaceholder">
                                     <div className="placeholderAvatar">{friendName.charAt(0).toUpperCase()}</div>
-                                    <p>Waiting for {friendName}'s camera...</p>
+                                    <p>Waiting for {friendName} to join...</p>
                                 </div>
                             )}
                             <div className="videoLabel">{friendName}</div>
@@ -192,7 +198,14 @@ export default function OneToOneCall({ channelName, isVideo, onHangUp, friendNam
 
                         {/* Local User Video */}
                         <div className="videoCard localVideo">
-                            <div id="local-video-stream" className="videoStream"></div>
+                            <video 
+                                ref={localVideoRef} 
+                                className="videoStream" 
+                                autoPlay 
+                                playsInline 
+                                muted 
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', display: cameraOn ? 'block' : 'none' }}
+                            />
                             {!cameraOn && (
                                 <div className="videoPlaceholder">
                                     <div className="placeholderAvatar">{userName.charAt(0).toUpperCase()}</div>
@@ -204,14 +217,15 @@ export default function OneToOneCall({ channelName, isVideo, onHangUp, friendNam
                     </div>
                 ) : (
                     <div className="voiceGrid">
+                        <audio ref={remoteAudioRef} autoPlay />
                         <div className="voiceCard activeSpeaker">
                             <div className="voiceAvatarContainer">
-                                <div className={`voiceAvatar ${micOn ? 'pulseRing' : ''}`}>
+                                <div className={`voiceAvatar ${micOn && remoteUserJoined ? 'pulseRing' : ''}`}>
                                     {friendName.charAt(0).toUpperCase()}
                                 </div>
                             </div>
                             <p className="voiceName">{friendName}</p>
-                            <span className="voiceStatus">Connected</span>
+                            <span className="voiceStatus">{remoteUserJoined ? "Connected" : "Connecting..."}</span>
                         </div>
                         <div className="voiceCard">
                             <div className="voiceAvatarContainer">

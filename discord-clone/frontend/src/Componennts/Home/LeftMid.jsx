@@ -58,15 +58,21 @@ export default function LeftMid({ onSelectedOption, selectedOption }) {
                             <p className="noDM">No friends to show</p>
                         ) : (
                             friends.map((friend, index) => {
-                                const isSelected = selectedOption === `Chat:${friend}`;
+                                const isSelected = selectedOption === `Chat:${friend.username}`;
                                 return (
                                     <div 
                                         key={index} 
                                         className={`dmFriend ${isSelected ? "active" : ""}`} 
-                                        onClick={() => onSelectedOption(`Chat:${friend}`)}
+                                        onClick={() => onSelectedOption(`Chat:${friend.username}`)}
                                     >
-                                        <img className='iconsize' src={discord} alt="discordLogo" />
-                                        <p>{friend}</p>
+                                        <div className="dmAvatarWrapper">
+                                            <img className='dmAvatarIcon' src={discord} alt="discordLogo" />
+                                            <span 
+                                                className="dmOnlineStatus" 
+                                                style={{ backgroundColor: friend.status === 'online' ? '#23a55a' : '#80848e' }}
+                                            ></span>
+                                        </div>
+                                        <p>{friend.display_name || friend.username}</p>
                                     </div>
                                 );
                             })

@@ -5,7 +5,7 @@ import PendingRequests from '../Friends/PendingRequests'
 import RightFriends from '../Friends/RightFriends'
 import './css/Friends.css'
 
-export default function Friends({ onToggleSidebar }) {
+export default function Friends({ onToggleSidebar, friends }) {
     const [tab, setTab] = useState('add');
 
     return (
@@ -16,7 +16,7 @@ export default function Friends({ onToggleSidebar }) {
                     {tab === 'add' && <LeftFriends />}
                     {tab === 'pending' && <PendingRequests />}
                 </div>
-                <RightFriends />
+                <RightFriends friends={friends} />
             </div>
         </div>
     )
