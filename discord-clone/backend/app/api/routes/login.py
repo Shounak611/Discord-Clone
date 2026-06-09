@@ -1,28 +1,40 @@
 from fastapi import APIRouter, HTTPException
 from starlette import status
 from app.models import Users
-from passlib.context import CryptContext
 from app.schemas import LoginRequest, GoogleLoginRequest
 from app.dependencies import db_dependency, create_access_token
 import urllib.request
 import json
+import hashlib
+import bcrypt
 
 router = APIRouter(
     prefix="/login",
     tags=["login"]
 )
 
-bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 def check_user(request, model):
     if not model.hashed_password:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID USER")
+    
+    # Try verifying with pre-hashed password first
     try:
-        if not bcrypt_context.verify(request.password, model.hashed_password):
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID USER")
+        prehashed = hashlib.sha256(request.password.encode("utf-8")).hexdigest()
+        if bcrypt.checkpw(prehashed.encode("utf-8"), model.hashed_password.encode("utf-8")):
+            return True
     except Exception:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID USER")
-    return True
+        pass
+        
+    # Fallback to verifying with the raw password for backward compatibility
+    try:
+        raw_bytes = request.password.encode("utf-8")
+        if len(raw_bytes) <= 72:
+            if bcrypt.checkpw(raw_bytes, model.hashed_password.encode("utf-8")):
+                return True
+    except Exception:
+        pass
+
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID USER")
 
 @router.post("/", status_code=status.HTTP_200_OK)
 async def get_page(db: db_dependency, req: LoginRequest):
