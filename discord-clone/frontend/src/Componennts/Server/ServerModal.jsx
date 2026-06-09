@@ -40,25 +40,32 @@ export default function ServerModal({ onClose }) {
   };
 
   const handleJoinSubmit = async () => {
-    if (inviteLink.trim() === '') {
-      alert("Please enter a server invite link");
+    let servername = inviteLink.trim();
+    if (servername === '') {
+      alert("Please enter a server name or invite link");
       return;
-    }between
+    }
 
-    const expectedPrefix = "http://localhost:5173/server/";
+    // Extract the server name if a URL is provided
+    if (servername.includes('/server/')) {
+      try {
+        const parts = servername.split('/server/');
+        // Extract the part right after '/server/' and strip any trailing query params or slash paths
+        servername = decodeURIComponent(parts[parts.length - 1].split('/')[0].split('?')[0]);
+      } catch (err) {
+        alert("Enter a valid server invite link or server name");
+        return;
+      }
+    }
 
-    if (!inviteLink.startsWith(expectedPrefix)) {
-      alert("Enter a valid server invite link");
+    if (servername === '') {
+      alert("Could not extract a valid server name");
       return;
     }
 
     try {
-      const url = new URL(inviteLink);
-      const pathnameParts = url.pathname.split('/');
-      const servername = decodeURIComponent(pathnameParts[pathnameParts.length - 1]);
-      console.log(servername);
       const response = await axios.post(`${API_BASE}/join`, {
-        server_name:servername,
+        server_name: servername,
         user_id: userId
       });
 
@@ -70,7 +77,7 @@ export default function ServerModal({ onClose }) {
       if (err.response) {
         alert(`${err.response.data.detail}`);
       } else {
-        alert("Failed to join server. Make sure the link is valid.");
+        alert("Failed to join server. Make sure the server name or link is valid.");
       }
     }
   };

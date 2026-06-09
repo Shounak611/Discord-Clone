@@ -6,6 +6,7 @@ from app.schemas import FriendRequestIn, AcceptReject
 from app.dependencies import db_dependency, current_user_dependency, SECRET_KEY, ALGORITHM
 from app.core.database import SessionLocal
 import json
+import jwt
 from typing import Dict, List
 
 router = APIRouter(
@@ -225,8 +226,32 @@ async def status_websocket(websocket: WebSocket):
 
         try:
             while True:
-                # Keep connection open, listen for optional messages or pings
-                await websocket.receive_text()
+                data_str = await websocket.receive_text()
+                try:
+                    data_json = json.loads(data_str)
+                    msg_type = data_json.get("type")
+                    if msg_type in ("rtc_signal", "call_signal"):
+                        rvr_username = data_json.get("receiver_username")
+                        if rvr_username and rvr_username in online_users:
+                            forward_data = {
+                                "type": msg_type,
+                                "sender_username": username,
+                            }
+                            if msg_type == "rtc_signal":
+                                forward_data["signal"] = data_json.get("signal")
+                            else:
+                                forward_data["content"] = data_json.get("content")
+                                from datetime import datetime
+                                forward_data["timestamp"] = datetime.utcnow().isoformat()
+                            
+                            forward_msg = json.dumps(forward_data)
+                            for conn in list(online_users[rvr_username]):
+                                try:
+                                    await conn.send_text(forward_msg)
+                                except Exception:
+                                    pass
+                except Exception:
+                    pass
         except WebSocketDisconnect:
             if username in online_users:
                 if websocket in online_users[username]:

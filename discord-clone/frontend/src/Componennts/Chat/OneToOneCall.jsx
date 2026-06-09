@@ -25,11 +25,16 @@ export default function OneToOneCall({
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
     const remoteAudioRef = useRef(null);
+    const signalQueueRef = useRef([]);
 
     useEffect(() => {
         // Register signaling callback from WebSocket
         registerSignalHandler((signal) => {
-            handleRtcSignal(signal);
+            if (pcRef.current) {
+                handleRtcSignal(signal);
+            } else {
+                signalQueueRef.current.push(signal);
+            }
         });
 
         initCall();
@@ -79,16 +84,33 @@ export default function OneToOneCall({
                 }
             };
 
+            pc.oniceconnectionstatechange = () => {
+                console.log("ICE connection state:", pc.iceConnectionState);
+            };
+
             // Play remote track when received
             pc.ontrack = (event) => {
+                console.log("Remote track received:", event.track.kind);
                 const remoteStream = event.streams[0];
                 if (isVideo && remoteVideoRef.current) {
                     remoteVideoRef.current.srcObject = remoteStream;
                 } else if (!isVideo && remoteAudioRef.current) {
                     remoteAudioRef.current.srcObject = remoteStream;
+                    remoteAudioRef.current.play().catch(e => {
+                        console.warn("Audio autoplay blocked by browser policy:", e);
+                    });
                 }
                 setRemoteUserJoined(true);
             };
+
+            // Process any queued signaling messages
+            const processQueue = async () => {
+                while (signalQueueRef.current.length > 0) {
+                    const queuedSignal = signalQueueRef.current.shift();
+                    await handleRtcSignal(queuedSignal);
+                }
+            };
+            await processQueue();
 
             // If we are the one initiating the call, create offer
             if (isCaller) {

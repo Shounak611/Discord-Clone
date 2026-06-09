@@ -15,7 +15,12 @@ router = APIRouter(
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def check_user(request, model):
-    if not bcrypt_context.verify(request.password, model.hashed_password):
+    if not model.hashed_password:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID USER")
+    try:
+        if not bcrypt_context.verify(request.password, model.hashed_password):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID USER")
+    except Exception:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="INVALID USER")
     return True
 

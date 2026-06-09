@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -14,12 +14,14 @@ import ServerModal from '../Componennts/Server/ServerModal';
 import Displayname from '../Componennts/Home/Displayname';
 import Friends from '../Componennts/Home/Friends';
 import Chat from '../Componennts/Home/Chat';
+import OneToOneCall from '../Componennts/Chat/OneToOneCall';
 
 // CSS Stylesheets
 import '../Componennts/Home/css/LeftNav.css';
 import '../Componennts/Home/css/LeftMid.css';
 import '../Componennts/Home/css/TopNav.css';
 import '../Componennts/Home/css/RightBox.css';
+import '../Componennts/Home/css/Chat.css';
 import './css/Home.css';
 
 /**
@@ -168,7 +170,7 @@ function ConversationSidebar({ selectedOption, onSelectedOption, friends }) {
  * MainContentBox - Handles rendering the primary page workspace content
  * (displays either the Friends Dashboard or a specific active Chat room).
  */
-function MainContentBox({ selectedOption, onToggleSidebar, friends }) {
+function MainContentBox({ selectedOption, onToggleSidebar, friends, onInitiateCall }) {
     let friendName = null;
 
     if (selectedOption.startsWith("Chat:")) {
@@ -178,7 +180,13 @@ function MainContentBox({ selectedOption, onToggleSidebar, friends }) {
     return (
         <div className="rightBoxC">
             {selectedOption === "Friends" && <Friends onToggleSidebar={onToggleSidebar} friends={friends} />}
-            {friendName && <Chat frndName={friendName} onToggleSidebar={onToggleSidebar} />}
+            {friendName && (
+                <Chat 
+                    frndName={friendName} 
+                    onToggleSidebar={onToggleSidebar} 
+                    onInitiateCall={onInitiateCall} 
+                />
+            )}
         </div>
     );
 }
@@ -191,6 +199,18 @@ export default function Home() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showServerModal, setShowServerModal] = useState(false);
     const [friends, setFriends] = useState([]);
+    const [activeCall, setActiveCall] = useState(null);
+    const [callingPartner, setCallingPartner] = useState(null);
+
+    const activeCallRef = useRef(activeCall);
+    activeCallRef.current = activeCall;
+
+    const callingPartnerRef = useRef(callingPartner);
+    callingPartnerRef.current = callingPartner;
+
+    const globalWsRef = useRef(null);
+    const rtcSignalHandlerRef = useRef(null);
+
     const email = localStorage.getItem("email");
 
     useEffect(() => {
@@ -211,6 +231,7 @@ export default function Home() {
         if (!token) return;
 
         const ws = new WebSocket(`ws://localhost:8000/friend/ws?token=${encodeURIComponent(token)}`);
+        globalWsRef.current = ws;
 
         ws.onmessage = (event) => {
             const msg = JSON.parse(event.data);
@@ -223,21 +244,161 @@ export default function Home() {
                         return friend;
                     });
                 });
+            } else if (msg.type === "call_signal") {
+                const content = msg.content;
+                const sender = msg.sender_username;
+                
+                if (content.startsWith("__CALL_INITIATED__:")) {
+                    const parts = content.split(":");
+                    const type = parts[1];
+                    const channelName = parts[2];
+                    
+                    setCallingPartner(sender);
+                    setActiveCall({ type, status: 'incoming', channelName, isCaller: false });
+                } else if (content.startsWith("__CALL_ACCEPTED__:")) {
+                    const parts = content.split(":");
+                    const channelName = parts[2];
+                    if (activeCallRef.current && activeCallRef.current.channelName === channelName && activeCallRef.current.status !== 'connected') {
+                        setActiveCall(prev => ({ ...prev, status: 'connected' }));
+                    }
+                } else if (content.startsWith("__CALL_DECLINED__:") || content.startsWith("__CALL_HUNGUP__:")) {
+                    const parts = content.split(":");
+                    const channelName = parts[2];
+                    if (activeCallRef.current && activeCallRef.current.channelName === channelName) {
+                        setActiveCall(null);
+                        setCallingPartner(null);
+                    }
+                }
+            } else if (msg.type === "rtc_signal") {
+                if (rtcSignalHandlerRef.current) {
+                    rtcSignalHandlerRef.current(msg.signal);
+                }
             }
         };
 
         ws.onclose = () => {
             console.log("Status WebSocket connection closed");
+            globalWsRef.current = null;
         };
 
         return () => {
             ws.close();
+            globalWsRef.current = null;
         };
     }, [email]);
 
     const handleSelectOption = (option) => {
         setSelectedOption(option);
         setSidebarOpen(false);
+    };
+
+    const sendSignalingMessage = async (partner, content) => {
+        try {
+            await axios.post(`http://localhost:8000/chat/send`, {
+                sender_email: email,
+                receiver_username: partner,
+                content: content
+            });
+        } catch (err) {
+            console.error("Error sending signaling message:", err);
+        }
+    };
+
+    const handleInitiateCall = (type, partnerName) => {
+        const senderPrefix = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '');
+        const receiverPrefix = partnerName.replace(/[^a-zA-Z0-9]/g, '');
+        const channelName = `call_${[senderPrefix, receiverPrefix].sort().join('_')}`;
+        
+        const content = `__CALL_INITIATED__:${type}:${channelName}`;
+        
+        // Log in database
+        sendSignalingMessage(partnerName, content);
+        
+        // Send globally via status WebSocket
+        if (globalWsRef.current && globalWsRef.current.readyState === WebSocket.OPEN) {
+            globalWsRef.current.send(JSON.stringify({
+                type: "call_signal",
+                receiver_username: partnerName,
+                content: content
+            }));
+        }
+        
+        setCallingPartner(partnerName);
+        setActiveCall({ type, status: 'offering', channelName, isCaller: true });
+    };
+
+    const handleAcceptCall = () => {
+        if (!activeCall || !callingPartner) return;
+        const content = `__CALL_ACCEPTED__:${activeCall.type}:${activeCall.channelName}`;
+        
+        // Log in database
+        sendSignalingMessage(callingPartner, content);
+        
+        // Send globally via status WebSocket
+        if (globalWsRef.current && globalWsRef.current.readyState === WebSocket.OPEN) {
+            globalWsRef.current.send(JSON.stringify({
+                type: "call_signal",
+                receiver_username: callingPartner,
+                content: content
+            }));
+        }
+        
+        setActiveCall(prev => ({ ...prev, status: 'connected' }));
+        setSelectedOption(`Chat:${callingPartner}`);
+    };
+
+    const handleDeclineCall = () => {
+        if (!activeCall || !callingPartner) return;
+        const content = `__CALL_DECLINED__:${activeCall.type}:${activeCall.channelName}`;
+        
+        // Log in database
+        sendSignalingMessage(callingPartner, content);
+        
+        // Send globally via status WebSocket
+        if (globalWsRef.current && globalWsRef.current.readyState === WebSocket.OPEN) {
+            globalWsRef.current.send(JSON.stringify({
+                type: "call_signal",
+                receiver_username: callingPartner,
+                content: content
+            }));
+        }
+        
+        setActiveCall(null);
+        setCallingPartner(null);
+    };
+
+    const handleHangUp = () => {
+        if (!activeCall || !callingPartner) return;
+        const content = `__CALL_HUNGUP__:${activeCall.type}:${activeCall.channelName}`;
+        
+        // Log in database
+        sendSignalingMessage(callingPartner, content);
+        
+        // Send globally via status WebSocket
+        if (globalWsRef.current && globalWsRef.current.readyState === WebSocket.OPEN) {
+            globalWsRef.current.send(JSON.stringify({
+                type: "call_signal",
+                receiver_username: callingPartner,
+                content: content
+            }));
+        }
+        
+        setActiveCall(null);
+        setCallingPartner(null);
+    };
+
+    const sendRtcSignal = (signal) => {
+        if (globalWsRef.current && globalWsRef.current.readyState === WebSocket.OPEN) {
+            globalWsRef.current.send(JSON.stringify({
+                type: "rtc_signal",
+                receiver_username: callingPartnerRef.current,
+                signal: signal
+            }));
+        }
+    };
+
+    const registerSignalHandler = (handler) => {
+        rtcSignalHandlerRef.current = handler;
     };
 
     return (
@@ -270,10 +431,59 @@ export default function Home() {
                             selectedOption={selectedOption}
                             onToggleSidebar={() => setSidebarOpen(prev => !prev)}
                             friends={friends}
+                            onInitiateCall={handleInitiateCall}
                         />
                     </div>
                 </div>
             </div>
+
+            {/* Outgoing Calling Dialog */}
+            {activeCall && activeCall.status === 'offering' && (
+                <div className="callingOverlay" style={{ zIndex: 1001 }}>
+                    <div className="callingCard">
+                        <div className="avatarRing incomingPulse">
+                            {callingPartner ? callingPartner.charAt(0).toUpperCase() : '?'}
+                        </div>
+                        <h3>Calling {callingPartner}...</h3>
+                        <p>Waiting for response</p>
+                        <button className="declineBtn" onClick={handleHangUp} style={{ marginTop: '20px' }}>Cancel</button>
+                    </div>
+                </div>
+            )}
+
+            {/* Incoming Call Dialog */}
+            {activeCall && activeCall.status === 'incoming' && (
+                <div className="callingOverlay" style={{ zIndex: 1001 }}>
+                    <div className="callingCard">
+                        <div className="avatarRing incomingPulse">
+                            {callingPartner ? callingPartner.charAt(0).toUpperCase() : '?'}
+                        </div>
+                        <h3>Incoming {activeCall.type === 'video' ? 'Video' : 'Voice'} Call</h3>
+                        <p>from {callingPartner}</p>
+                        <div className="incomingActions">
+                            <button className="acceptBtn" onClick={handleAcceptCall}>Accept</button>
+                            <button className="declineBtn" onClick={handleDeclineCall}>Decline</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Active Connected Call Screen */}
+            {activeCall && activeCall.status === 'connected' && (
+                <div className="callingOverlay" style={{ zIndex: 1002 }}>
+                    <div style={{ width: '80%', maxWidth: '800px', background: '#1e1f22', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+                        <OneToOneCall 
+                            channelName={activeCall.channelName} 
+                            isVideo={activeCall.type === 'video'} 
+                            friendName={callingPartner} 
+                            onHangUp={handleHangUp} 
+                            isCaller={activeCall.isCaller}
+                            sendRtcSignal={sendRtcSignal}
+                            registerSignalHandler={registerSignalHandler}
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* Server Modal Overlay */}
             {showServerModal && (

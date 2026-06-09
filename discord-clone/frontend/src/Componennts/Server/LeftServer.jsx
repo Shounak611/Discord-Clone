@@ -6,7 +6,7 @@ export default function LeftServer({ servername, setSelectedChannel }) {
     const [copied, setCopied] = useState(false)
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(`http://localhost:5173/server/${servername}`)
+        navigator.clipboard.writeText(`${window.location.origin}/server/${servername}`)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
@@ -24,7 +24,7 @@ export default function LeftServer({ servername, setSelectedChannel }) {
                         <input
                             type="text"
                             readOnly
-                            value={`http://localhost:5173/server/${servername}`}
+                            value={`${window.location.origin}/server/${servername}`}
                             onClick={(e) => e.target.select()}
                             className="inviteInput"
                         />

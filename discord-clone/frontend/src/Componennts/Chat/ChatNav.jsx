@@ -38,9 +38,8 @@ export default function ChatNav({ frndName, onInitiateCall, onToggleSidebar }) {
                     style={{ cursor: 'pointer' }}
                     title="Start Video Call"
                 />
-                <img className='iconsize' src={pin} alt="pin" />
-                <img className='iconsize' src={addfriend} alt="addfriend" />
-                <img className='iconsize' src={user} alt="user" />
+                <img className='iconsize' src={pin} alt="pin" title="Pinned Messages" />
+                <img className='iconsize' src={user} alt="user" title="User Profile" />
                 <input type="text" placeholder='Search'/>
             </div>
         </div>

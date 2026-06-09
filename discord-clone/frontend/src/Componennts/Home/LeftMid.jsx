@@ -8,11 +8,11 @@ import Displayname from './Displayname';
 
 export default function LeftMid({ onSelectedOption, selectedOption }) {
     const [friends, setfriends] = useState([]);
-    
+
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const email = localStorage.getItem("email"); 
+                const email = localStorage.getItem("email");
                 if (email) {
                     const response = await axios.get(`http://localhost:8000/friend/get-friends?email=${email}`);
                     setfriends(response.data);
@@ -28,7 +28,7 @@ export default function LeftMid({ onSelectedOption, selectedOption }) {
     return (
         <div className="LeftMidC">
             <div className="leftMidScrollable">
-                <div className='leftMidheader'>
+                {/* <div className='leftMidheader'>
                     <div className='headerSearch'>
                         <div className="searchInner">
                             <svg className="searchIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -39,10 +39,10 @@ export default function LeftMid({ onSelectedOption, selectedOption }) {
                         </div>
                         <kbd className="searchShortcut">Ctrl+K</kbd>
                     </div>
-                </div>
+                </div> */}
                 <div className="opts">
-                    <div 
-                        className={`opt ${selectedOption === "Friends" ? "active" : ""}`} 
+                    <div
+                        className={`opt ${selectedOption === "Friends" ? "active" : ""}`}
                         onClick={() => onSelectedOption("Friends")}
                     >
                         <img className='leftMidIcons' src={user} alt="userIcon" /><p>Friends</p>
@@ -60,15 +60,15 @@ export default function LeftMid({ onSelectedOption, selectedOption }) {
                             friends.map((friend, index) => {
                                 const isSelected = selectedOption === `Chat:${friend.username}`;
                                 return (
-                                    <div 
-                                        key={index} 
-                                        className={`dmFriend ${isSelected ? "active" : ""}`} 
+                                    <div
+                                        key={index}
+                                        className={`dmFriend ${isSelected ? "active" : ""}`}
                                         onClick={() => onSelectedOption(`Chat:${friend.username}`)}
                                     >
                                         <div className="dmAvatarWrapper">
                                             <img className='dmAvatarIcon' src={discord} alt="discordLogo" />
-                                            <span 
-                                                className="dmOnlineStatus" 
+                                            <span
+                                                className="dmOnlineStatus"
                                                 style={{ backgroundColor: friend.status === 'online' ? '#23a55a' : '#80848e' }}
                                             ></span>
                                         </div>
@@ -80,7 +80,7 @@ export default function LeftMid({ onSelectedOption, selectedOption }) {
                     </div>
                 </div>
             </div>
-            
+
             <div className="leftMidUserProfile">
                 <Displayname />
             </div>

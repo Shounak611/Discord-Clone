@@ -23,6 +23,11 @@ def create_server(data: CreateServerRequest, db: db_dependency, current_user: cu
     db.commit()
     db.refresh(new_server)
 
+    # Automatically add the owner to the server members list
+    new_join = Server_members(server_id=new_server.id, user_id=data.owner_id, role="owner")
+    db.add(new_join)
+    db.commit()
+
     return {"message": "Server created", "server_id": new_server.id}
 
 @router.post("/join")
@@ -63,7 +68,10 @@ def get_servers(user_id: int, db: db_dependency, current_user: current_user_depe
 
     only_joined_ids = joined_ids_set - owned_ids_set
 
-    joined_servers = db.query(Server).filter(Server.id.in_(only_joined_ids)).all()
+    if only_joined_ids:
+        joined_servers = db.query(Server).filter(Server.id.in_(only_joined_ids)).all()
+    else:
+        joined_servers = []
 
     return owned_servers + joined_servers
 

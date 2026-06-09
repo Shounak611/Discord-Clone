@@ -13,6 +13,7 @@ export default function Register() {
     const navigate = useNavigate();
 
     const handleGoogleRegister = useGoogleLogin({
+        scope: "https://www.googleapis.com/auth/user.birthday.read",
         onSuccess: async (tokenResponse) => {
             console.log("Google token response:", tokenResponse);
             try {

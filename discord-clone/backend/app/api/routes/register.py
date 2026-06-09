@@ -4,6 +4,7 @@ from starlette import status
 from app.models import Users
 from app.schemas import Register_request, GoogleLoginRequest
 from app.dependencies import db_dependency, create_access_token
+from datetime import date
 import urllib.request
 import json
 
@@ -75,12 +76,37 @@ async def google_registration(db: db_dependency, req: GoogleLoginRequest):
         username = f"{original_username}{counter}"
         counter += 1
         
+    # Try to fetch birthday from Google People API
+    dob_val = None
+    try:
+        birthday_url = "https://people.googleapis.com/v1/people/me?personFields=birthdays"
+        birthday_headers = {"Authorization": f"Bearer {req.access_token}"}
+        birthday_request = urllib.request.Request(birthday_url, headers=birthday_headers)
+        with urllib.request.urlopen(birthday_request) as b_response:
+            birthday_info = json.loads(b_response.read().decode())
+        
+        birthdays = birthday_info.get("birthdays", [])
+        for b in birthdays:
+            date_data = b.get("date")
+            if date_data:
+                year = date_data.get("year")
+                month = date_data.get("month")
+                day = date_data.get("day")
+                if month and day:
+                    dob_val = date(year or 2000, month, day)
+                    break
+    except Exception as e:
+        # Fallback to None if the API request fails (e.g., missing scopes or privacy settings)
+        dob_val = None
+
+    import secrets
+    random_password = secrets.token_urlsafe(32)
     new_user = Users(
         email=email,
         display_name=display_name,
         username=username,
-        hashed_password="",
-        dob=None
+        hashed_password=bcrypt_context.hash(random_password),
+        dob=dob_val
     )
     db.add(new_user)
     db.commit()

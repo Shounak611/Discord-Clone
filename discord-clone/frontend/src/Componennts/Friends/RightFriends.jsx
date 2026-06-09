@@ -11,8 +11,8 @@ const getActivityForFriend = (friendName) => {
     const avatarColors = ["#8b5cf6", "#ec4899", "#06b6d4", "#10b981", "#f59e0b"];
     const avatarColor = avatarColors[hash % avatarColors.length];
     
-    // 0: Spotify, 1: Game, 2: Coding, 3: No activity (just online)
-    const activityType = hash % 4;
+    // 0: Spotify, 1: Game, 2: Coding (ensure every online friend has an activity to show up in Active Now)
+    const activityType = hash % 3;
     
     if (activityType === 0) {
         const tracks = [
