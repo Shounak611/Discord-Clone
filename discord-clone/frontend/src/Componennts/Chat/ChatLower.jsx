@@ -1,6 +1,7 @@
 import './css/ChatLower.css';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 export default function ChatLower({ frndName, messages = [], onSendMessage }) {
     const receiver_username = frndName;
@@ -25,7 +26,7 @@ export default function ChatLower({ frndName, messages = [], onSendMessage }) {
         if (!input.trim()) return;
 
         try {
-            await axios.post(`http://localhost:8000/chat/send`, {
+            await axios.post(`${API_URL}chat/send`, {
                 sender_email,
                 receiver_username,
                 content: input

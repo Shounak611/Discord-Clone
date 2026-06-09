@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../config";
 import "./css/ProfileSettingsModal.css";
 import discord from "../../assets/displayDiscordlogo.png";
 
@@ -55,7 +56,7 @@ export default function ProfileSettingsModal({
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await axios.put("http://localhost:8000/get_user/update", {
+            const res = await axios.put(`${API_URL}get_user/update`, {
                 display_name: cleanDisp,
                 username: cleanUsr,
             }, {

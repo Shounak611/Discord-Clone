@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 import discord from '../../assets/displayDiscordlogo.png';
 import './css/PendingRequests.css';
 
@@ -12,14 +13,14 @@ export default function PendingRequests() {
     }, []);
 
     const fetchPendingRequests = () => {
-        axios.get(`http://localhost:8000/friend/pending-requests/${currentUserEmail}`)
+        axios.get(`${API_URL}friend/pending-requests/${currentUserEmail}`)
             .then(res => setPendingRequests(res.data))
             .catch(err => console.log(err));
     };
 
     const handleAccept = async (senderEmail) => {
         try {
-            await axios.put('http://localhost:8000/friend/accept-request', {
+            await axios.put(`${API_URL}friend/accept-request`, {
                 sender_email: senderEmail,
                 receiver_email: currentUserEmail
             });
@@ -33,7 +34,7 @@ export default function PendingRequests() {
 
     const handleReject = async (senderEmail) => {
         try {
-            await axios.delete('http://localhost:8000/friend/reject-request', {
+            await axios.delete(`${API_URL}friend/reject-request`, {
                 sender_email: senderEmail,
                 receiver_email: currentUserEmail
             });

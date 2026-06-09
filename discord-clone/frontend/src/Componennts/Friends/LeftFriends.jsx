@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './css/LeftFriends.css';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 export default function LeftFriends() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -14,7 +15,7 @@ export default function LeftFriends() {
         const senderEmail = localStorage.getItem("email");
 
         try {
-            await axios.post('http://localhost:8000/friend/send-request', {
+            await axios.post(`${API_URL}friend/send-request`, {
                 sender_email: senderEmail,
                 receiver_username: searchQuery.trim(),
             });

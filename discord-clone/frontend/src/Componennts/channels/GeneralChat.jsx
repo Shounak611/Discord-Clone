@@ -1,6 +1,7 @@
 import './css/ChatLower.css';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 export default function GroupChat({ serverId, channelId }) {
     const [messages, setMessages] = useState([]);
@@ -23,7 +24,7 @@ export default function GroupChat({ serverId, channelId }) {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/ws/${serverId}/${channelId}/messages`);
+                const res = await axios.get(`${API_URL}ws/${serverId}/${channelId}/messages`);
                 setMessages(res.data); // Set past messages
             } catch (err) {
                 console.error("Failed to fetch history", err);
@@ -35,7 +36,7 @@ export default function GroupChat({ serverId, channelId }) {
         const encodedServerId = encodeURIComponent(serverId);
         const encodedChannelId = encodeURIComponent(channelId);
         const token = localStorage.getItem("token") || "";
-        const ws = new WebSocket(`ws://localhost:8000/ws/chat/${encodedServerId}/${encodedChannelId}?token=${encodeURIComponent(token)}`);
+        const ws = new WebSocket(`${API_URL.replace(/^http/, 'ws')}ws/chat/${encodedServerId}/${encodedChannelId}?token=${encodeURIComponent(token)}`);
 
         socketRef.current = ws;
 
@@ -70,7 +71,7 @@ export default function GroupChat({ serverId, channelId }) {
         formData.append('file', file);
 
         try {
-            const res = await axios.post('http://localhost:8000/upload', formData, {
+            const res = await axios.post(`${API_URL}upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -96,7 +97,7 @@ export default function GroupChat({ serverId, channelId }) {
     useEffect(() => {
         const fetchMembers = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/server/get_members/${serverId}`);
+                const res = await axios.get(`${API_URL}server/get_members/${serverId}`);
                 setMembers(res.data);
             } catch (err) {
                 console.error("Failed to fetch members", err);
@@ -110,7 +111,7 @@ export default function GroupChat({ serverId, channelId }) {
     useEffect(() => {
         const fetchOwner = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/server/get_owner/${serverId}`);
+                const res = await axios.get(`${API_URL}server/get_owner/${serverId}`);
                 setOwner(res.data);
             } catch (err) {
                 console.error("Failed to fetch owner", err);
@@ -124,7 +125,7 @@ export default function GroupChat({ serverId, channelId }) {
         if (!newRole || !newRole.trim()) return;
 
         try {
-            const res = await axios.put(`http://localhost:8000/server/update_role`, {
+            const res = await axios.put(`${API_URL}server/update_role`, {
                 member_id: memberId,
                 new_role: newRole,
                 server_id: serverId,

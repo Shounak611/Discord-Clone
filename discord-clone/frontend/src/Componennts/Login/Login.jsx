@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useGoogleLogin } from "@react-oauth/google"
+import { API_URL } from "../../config"
 import cartoon from '../../assets/inpCartoon.svg'
 
 import './Login.css'
@@ -15,7 +16,7 @@ export default function Login() {
         onSuccess: async (tokenResponse) => {
             console.log("Google token response:", tokenResponse);
             try {
-                const res = await axios.post("http://localhost:8000/login/google", {
+                const res = await axios.post(`${API_URL}login/google`, {
                     access_token: tokenResponse.access_token
                 });
                 localStorage.setItem("email", res.data.email);
@@ -36,7 +37,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:8000/login", {
+            const res = await axios.post(`${API_URL}login`, {
                 email: mail,
                 password: password,
             })

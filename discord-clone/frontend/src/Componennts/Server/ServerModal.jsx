@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { API_URL } from '../../config';
 import './css/ServerModal.css';
 
 export default function ServerModal({ onClose }) {
@@ -11,7 +12,7 @@ export default function ServerModal({ onClose }) {
   const userId = localStorage.getItem("user_id");
   const navigate = useNavigate()
 
-  const API_BASE = "http://localhost:8000/server";
+  const API_BASE = `${API_URL}server`;
 
   const handleCreateSubmit = async () => {
     if (serverName.trim() === '') {

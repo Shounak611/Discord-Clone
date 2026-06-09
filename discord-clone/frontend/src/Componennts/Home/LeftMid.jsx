@@ -4,6 +4,7 @@ import './css/LeftMid.css';
 import discord from '../../assets/displayDiscordlogo.png';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 import Displayname from './Displayname';
 
 export default function LeftMid({ onSelectedOption, selectedOption }) {
@@ -14,7 +15,7 @@ export default function LeftMid({ onSelectedOption, selectedOption }) {
             try {
                 const email = localStorage.getItem("email");
                 if (email) {
-                    const response = await axios.get(`http://localhost:8000/friend/get-friends?email=${email}`);
+                    const response = await axios.get(`${API_URL}friend/get-friends?email=${email}`);
                     setfriends(response.data);
                 }
             } catch (error) {

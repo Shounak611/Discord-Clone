@@ -3,6 +3,7 @@ import ChatNav from '../Chat/ChatNav';
 import ChatLower from '../Chat/ChatLower';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 export default function Chat({ frndName, onToggleSidebar, onInitiateCall }) {
     const senderEmail = localStorage.getItem("email");
@@ -13,7 +14,7 @@ export default function Chat({ frndName, onToggleSidebar, onInitiateCall }) {
     const fetchConversation = async () => {
         if (!senderEmail || !frndName) return;
         try {
-            const response = await axios.get(`http://localhost:8000/chat/get_msgs/${frndName}/${senderEmail}`);
+            const response = await axios.get(`${API_URL}chat/get_msgs/${frndName}/${senderEmail}`);
             setMessages(response.data);
         } catch (err) {
             console.error("Error fetching conversation in Chat.jsx:", err);
@@ -26,7 +27,7 @@ export default function Chat({ frndName, onToggleSidebar, onInitiateCall }) {
 
         const token = localStorage.getItem("token") || "";
         const encodedFrndName = encodeURIComponent(frndName);
-        const ws = new WebSocket(`ws://localhost:8000/chat/ws/${encodedFrndName}?token=${encodeURIComponent(token)}`);
+        const ws = new WebSocket(`${API_URL.replace(/^http/, 'ws')}chat/ws/${encodedFrndName}?token=${encodeURIComponent(token)}`);
 
         ws.onmessage = (event) => {
             const msg = JSON.parse(event.data);

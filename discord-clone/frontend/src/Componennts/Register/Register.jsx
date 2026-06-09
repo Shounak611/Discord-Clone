@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
+import { API_URL } from "../../config";
 import './Register.css';
 
 export default function Register() {
@@ -17,7 +18,7 @@ export default function Register() {
         onSuccess: async (tokenResponse) => {
             console.log("Google token response:", tokenResponse);
             try {
-                const res = await axios.post("http://localhost:8000/register/google", {
+                const res = await axios.post(`${API_URL}register/google`, {
                     access_token: tokenResponse.access_token
                 });
                 localStorage.setItem("email", res.data.email);
@@ -43,7 +44,7 @@ export default function Register() {
         e.preventDefault();
         const dobString = `${dob.year}-${dob.month.toString().padStart(2, "0")}-${dob.day.toString().padStart(2, "0")}`;
         try {
-            const res = await axios.post("http://localhost:8000/register/registration", {
+            const res = await axios.post(`${API_URL}register/registration`, {
                 email: email,
                 display_name: displayName,
                 username: username,

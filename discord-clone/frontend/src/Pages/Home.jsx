@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../config";
 
 // Asset Imports
 import discordIcon from '../assets/discordIcon.png';
@@ -40,7 +41,7 @@ function NavigationSidebar({ onOpenAddServerModal }) {
                 return;
             }
             try {
-                const res = await axios.get(`http://localhost:8000/server/get_servers/${userId}`);
+                const res = await axios.get(`${API_URL}server/get_servers/${userId}`);
                 setServers(res.data);
             } catch (error) {
                 console.error("Error fetching servers in NavigationSidebar:", error);
@@ -217,7 +218,7 @@ export default function Home() {
         const fetchFriends = async () => {
             try {
                 if (email) {
-                    const response = await axios.get(`http://localhost:8000/friend/get-friends?email=${email}`);
+                    const response = await axios.get(`${API_URL}friend/get-friends?email=${email}`);
                     setFriends(response.data);
                 }
             } catch (error) {
@@ -230,7 +231,7 @@ export default function Home() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const ws = new WebSocket(`ws://localhost:8000/friend/ws?token=${encodeURIComponent(token)}`);
+        const ws = new WebSocket(`${API_URL.replace(/^http/, 'ws')}friend/ws?token=${encodeURIComponent(token)}`);
         globalWsRef.current = ws;
 
         ws.onmessage = (event) => {
@@ -294,7 +295,7 @@ export default function Home() {
 
     const sendSignalingMessage = async (partner, content) => {
         try {
-            await axios.post(`http://localhost:8000/chat/send`, {
+            await axios.post(`${API_URL}chat/send`, {
                 sender_email: email,
                 receiver_username: partner,
                 content: content

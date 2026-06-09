@@ -5,6 +5,7 @@ import mute from '../../assets/muteIcon.png'
 import settings from '../../assets/settingsIcon.png'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { API_URL } from '../../config'
 import ProfileSettingsModal from './ProfileSettingsModal'
 
 export default function Displayname() {
@@ -19,7 +20,7 @@ export default function Displayname() {
         const fetchUser = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get(`http://localhost:8000/get_user?email=${encodeURIComponent(email)}`, {
+                const res = await axios.get(`${API_URL}get_user?email=${encodeURIComponent(email)}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

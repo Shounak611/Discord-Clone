@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_URL } from '../../config'
 import discord from '../../assets/discordIcon.png'
 import add from '../../assets/addIcon.png'
 import './css/LeftNav.css'
@@ -20,7 +21,7 @@ export default function LeftNav() {
             }
 
             try {
-                const res = await axios.get(`http://localhost:8000/server/get_servers/${userId}`)
+                const res = await axios.get(`${API_URL}server/get_servers/${userId}`)
                 setServers(res.data)
             } catch (error) {
                 console.error("Error fetching servers:", error)
