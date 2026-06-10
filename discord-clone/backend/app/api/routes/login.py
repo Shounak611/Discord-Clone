@@ -2,11 +2,10 @@ from fastapi import APIRouter, HTTPException
 from starlette import status
 from app.models import Users
 from app.schemas import LoginRequest, GoogleLoginRequest
-from app.dependencies import db_dependency, create_access_token
+from app.dependencies import db_dependency, create_access_token, password_hash
 import urllib.request
 import json
 import hashlib
-import bcrypt
 
 router = APIRouter(
     prefix="/login",
@@ -20,17 +19,15 @@ def check_user(request, model):
     # Try verifying with pre-hashed password first
     try:
         prehashed = hashlib.sha256(request.password.encode("utf-8")).hexdigest()
-        if bcrypt.checkpw(prehashed.encode("utf-8"), model.hashed_password.encode("utf-8")):
+        if password_hash.verify(prehashed, model.hashed_password):
             return True
     except Exception:
         pass
         
     # Fallback to verifying with the raw password for backward compatibility
     try:
-        raw_bytes = request.password.encode("utf-8")
-        if len(raw_bytes) <= 72:
-            if bcrypt.checkpw(raw_bytes, model.hashed_password.encode("utf-8")):
-                return True
+        if password_hash.verify(request.password, model.hashed_password):
+            return True
     except Exception:
         pass
 

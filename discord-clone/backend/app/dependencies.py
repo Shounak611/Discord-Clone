@@ -8,6 +8,11 @@ import os
 from dotenv import load_dotenv
 import jwt
 from datetime import datetime, timedelta
+from pwdlib import PasswordHash
+from pwdlib.hashers.bcrypt import BcryptHasher
+
+password_hash = PasswordHash((BcryptHasher(),))
+
 
 # Load environment variables from .env
 current_dir = os.path.dirname(os.path.abspath(__file__))

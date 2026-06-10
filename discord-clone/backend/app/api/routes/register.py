@@ -2,19 +2,18 @@ from fastapi import APIRouter, HTTPException
 from starlette import status
 from app.models import Users
 from app.schemas import Register_request, GoogleLoginRequest
-from app.dependencies import db_dependency, create_access_token
+from app.dependencies import db_dependency, create_access_token, password_hash
 from datetime import date
 import urllib.request
 import json
 import hashlib
-import bcrypt
 
 router = APIRouter(
     prefix="/register",
     tags=["register"]
 )
 
-# passlib.context has been replaced with direct bcrypt usage
+# passlib.context has been replaced with pwdlib.PasswordHash
 
 @router.get("/", status_code=status.HTTP_200_OK)
 async def read_all(db: db_dependency):
@@ -31,12 +30,12 @@ async def registration(db: db_dependency, reg_req: Register_request):
             raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="Invalid username or display name")
         
         prehashed = hashlib.sha256(reg_req.password.encode("utf-8")).hexdigest()
-        hashed_bytes = bcrypt.hashpw(prehashed.encode("utf-8"), bcrypt.gensalt())
+        hashed_password = password_hash.hash(prehashed)
         new_user = Users(
             email=reg_req.email.strip(),
             display_name=reg_req.display_name.strip(),
             username=reg_req.username.strip(),
-            hashed_password=hashed_bytes.decode("utf-8"),
+            hashed_password=hashed_password,
             dob=reg_req.dob,
         )
         db.add(new_user)
@@ -112,12 +111,12 @@ async def google_registration(db: db_dependency, req: GoogleLoginRequest):
     import secrets
     random_password = secrets.token_urlsafe(32)
     prehashed = hashlib.sha256(random_password.encode("utf-8")).hexdigest()
-    hashed_bytes = bcrypt.hashpw(prehashed.encode("utf-8"), bcrypt.gensalt())
+    hashed_password = password_hash.hash(prehashed)
     new_user = Users(
         email=email,
         display_name=display_name,
         username=username,
-        hashed_password=hashed_bytes.decode("utf-8"),
+        hashed_password=hashed_password,
         dob=dob_val
     )
     db.add(new_user)
